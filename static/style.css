@@ -3,7 +3,6 @@ html, body {
     margin: 0;
 }
 
-
 .outer-container {
     background-color: rgb(24, 115, 180);
     color: white;
@@ -14,7 +13,6 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
-
 
 .container-fluid {
     background-color: rgb(24, 115, 180);
@@ -101,6 +99,7 @@ html, body {
     height: 3rem;
     display: block;
     margin: 0 auto 0;
+    margin-right: 8px;
 }
 
 .form-group-login {
