@@ -3,6 +3,7 @@ html, body {
     margin: 0;
 }
 
+
 .outer-container {
     background-color: rgb(24, 115, 180);
     color: white;
@@ -13,6 +14,7 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
+
 
 .container-fluid {
     background-color: rgb(24, 115, 180);
@@ -52,12 +54,19 @@ html, body {
     text-align: center;  /* Zentriert den Text */
 }
 
+/*unterstreichen des Schriftzugs, wenn die Maus darüber hovert*/
+.nav-link.active span:hover{
+    text-decoration: underline;
+}
+
 .main-container{
     background-color: white;
     color: black;
     border-radius: 5px;
     flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
     overflow-y: auto; /* Fügt bei Bedarf einen Scrollbalken hinzu */
+    overflow: hidden;
+    padding: 5px;
 }
 
 .title{
@@ -181,6 +190,36 @@ html, body {
     background: rgb(20, 95, 148);
     border-radius: 8px;
     padding: 5px;
+}
+
+/* main Inhalt - Produktübersicht - Kundensicht*/
+
+/*Rahmen und Inhalt der Kategorien definieren*/
+.category-item {
+    padding: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+}
+.category-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+} 
+
+/*Schriftzug der Kategorien zentral auf die Bilder hinzufügen*/
+.caption {
+    padding: 3px; 
+    position: absolute;
+    background-color: rgb(20, 95, 148);
+    color: white;
+    border-radius: 10px;
 }
 
 
