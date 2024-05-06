@@ -1,19 +1,4 @@
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-.outer-container {
-    background-color: rgb(24, 115, 180);
-    color: white;
-    width: auto;
-    height: auto;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
+/* Basiscontainer für Content im Body*/
 .container-fluid {
     background-color: rgb(24, 115, 180);
     color: white;
@@ -22,6 +7,8 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
+
+/* NAVBAR: */
 
 /* Navbar SM-Name */
 .navbar-brand{
@@ -32,11 +19,6 @@ html, body {
     text-align: center;
 }
 
-
-/* für die Icons in der Navbar */
-.nav-link.active {
-    height: 100%;
-}
 /* für die Icons in der Navbar */
 .nav-link.active img {
     height: 1.5rem;
@@ -57,16 +39,13 @@ html, body {
     text-decoration: underline;
 }
 
-.main-container{
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
-    overflow-y: auto; /* Fügt bei Bedarf einen Scrollbalken hinzu */
-    overflow: hidden;
-    padding: 5px;
-}
 
+
+
+
+
+/* LOGIN-Seite: */
+/* Titelanpassungen */
 .title{
     display: block;
     font-size: 2rem;
@@ -75,6 +54,7 @@ html, body {
     margin-bottom: 40px;
 }
 
+/* Container für Email, Passwort, AGB, ... */
 .login-container {
     border-radius: 5px;
     flex: 1;
@@ -82,30 +62,19 @@ html, body {
     padding: 10px;
 }
 
-
-
+/* Logo auf der LOGIN-Seite */
 .logo_big {
     height: 10rem;
     display: block;
     margin: 55px auto 40px;
 }
 
-.logo_small {
-    height: 4rem;
-    display: block;
-    margin: 0 auto 0;
-}
-.logo_tiny {
-    height: 3rem;
-    display: block;
-    margin: 0 auto 0;
-    margin-right: 8px;
-}
-
+/* Layoutanpassung für LOGIN */
 .form-group-login {
     margin-bottom: 20px;
 }
 
+/* Layoutanpassung für LOGIN */
 .form-group-login label {
     display: block;
     font-size: 1.2rem;
@@ -113,10 +82,23 @@ html, body {
     margin-bottom: 10px;
 }
 
+
+
+/* REGISTIERUNG-Seite: */
+
+/* Logo auf der Registierungsseite */
+.logo_small {
+    height: 4rem;
+    display: block;
+    margin: 0 auto 0;
+}
+
+/* Layoutanpassung für REGISTIERUNG */
 .form-group {
     margin-bottom: 10px;
 }
 
+/* Layoutanpassung für REGISTIERUNG */
 .form-group label {
     display: block;
     font-size: 1.2rem;
@@ -124,6 +106,7 @@ html, body {
     margin-bottom: 10px;
 }
 
+/* Buttonanpassung für LOGIN/REGISTIERUNG */
 .btn-right {
     display: flex;
     justify-content: right;
@@ -133,6 +116,7 @@ html, body {
     margin-bottom: 15px;
 }
 
+/* Buttonanpassung für REGISTIERUNG */
 .btn-left {
     display: flex;
     justify-content: left;
@@ -142,25 +126,7 @@ html, body {
     margin-bottom: 15px;
 }
 
-.registration{
-    display: block;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    
-}
-
-.registration a{
-    color: rgb(163, 163, 163);
-}
-
-.registration a:hover {
-    color: rgb(200, 200, 200);
-    text-decoration: underline;
-}
-
-
+/* Baiscontainer für Registrierung-Elemente */
 .registration-container {
     border-radius: 5px;
     flex: 1;
@@ -168,31 +134,54 @@ html, body {
     padding: 10px;
 }
 
+/* Layoutanpassung für erweiterte Daten (Bezahlmethode) */
 .form-control {
     margin-bottom: 10px;
 }
-
+/* Layoutanpassung für erweiterte Daten (Bezahlmethode) */
 .form-check-agb{
     margin-top: 10px;
 }
-
+/* Linkanpassung für erweiterte Daten (Bezahlmethode) */
 .form-check-agb a {
     color: rgb(163, 163, 163);
 }
-
+/* Linkanpassung für erweiterte Daten (Bezahlmethode) */
 .form-check-agb a:hover {
     color: rgb(200, 200, 200);
     text-decoration: underline;
 }
 
+/* Layoutanpassung für erweiterte Daten (Bezahlmethode) */
 .bezahldaten{
     background: rgb(20, 95, 148);
     border-radius: 8px;
     padding: 5px;
 }
 
+
+
+
+
 /* main Inhalt - Produktübersicht - Kundensicht*/
 
+/* Basiscontainer für Inhalt unter der NAVBAR: */
+.main-container{
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
+    overflow-y: auto; /* Fügt bei Bedarf einen Scrollbalken hinzu */
+    overflow: hidden;
+    padding: 5px;
+}
+/* Logoeigenschaften für Hauptseite */
+.logo_tiny {
+    height: 3rem;
+    display: block;
+    margin: 0 auto 0;
+    margin-right: 8px;
+}
 /*Rahmen und Inhalt der Kategorien definieren*/
 .category-item {
     padding: 5px;
@@ -222,17 +211,19 @@ html, body {
 }
 
 
-/* Impressung letzte Zeile */
+/* FOOTER: */
 .linkings {
     flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
 }
 
+/* Anpassung Link */
 .linkings a {
     text-align: center;
     color: rgb(255, 255, 255);
     text-decoration: none;
 }
 
+/* Anpassung Link */
 .linkings a:hover {
     color: rgb(200, 200, 200);
     text-decoration: underline;
