@@ -22,16 +22,19 @@
 <body>
     <div class="container-fluid">
         <div class="registration-container row">
-            <div class="col-sm-6 offset-sm-3">
-                <div class="row">
-                    <div class="col-md">
-                        <img class="logo_small" src="../static/images/logo1.svg" alt="Scanner">
-                    </div>
-                    <div class="col-md text-center">
-                        <h1>Registrierung</h1>
+            <div class="col-sm-6 offset-sm-3">   
+                <div class="col-md-5 offset-md-3">
+                    <div class="row justify-content-xl-between align-items-center">
+                        <div class="col">
+                            <img class="logo_small" src="../static/images/logo1.svg" alt="Scanner">
+                        </div>
+                        <div class="col-md text-center">
+                            <h1>Registrierung:</h1>
+                        </div>
                     </div>
                 </div>
                 
+            
                 <form>
                     <div class="form-group">
                         <label for="vorname">Vorname:</label>
@@ -120,7 +123,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <!-- Flask -->
     <script src="{{ url_for('static', filename='dynamic.js') }}"></script>
+    <!-- Live Server -->
+    <script src="../static/dynamic.js"></script>
 </body>
 
 </html>
