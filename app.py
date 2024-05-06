@@ -14,9 +14,9 @@ def defaultP():
 def registrationP():
     return render_template('sm_registration.html')
 
-@app.route('/templates/nwm_login.html')
+@app.route('/templates/sm_login.html')
 def loginP():
-    return render_template('nwm_login.html')
+    return render_template('sm_login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
