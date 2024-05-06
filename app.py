@@ -4,11 +4,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('smc_default.html')
+    return render_template('sm_cust_main.html')
 
-@app.route('/templates/smc_default.html')
+@app.route('/templates/sm_cust_main.html')
 def defaultP():
-    return render_template('smc_default.html')
+    return render_template('sm_cust_main.html')
 
 @app.route('/templates/sm_registration.html')
 def registrationP():
