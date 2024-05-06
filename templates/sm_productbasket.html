@@ -64,7 +64,8 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" aria-current="page" href="../templates/nwm_login.html">
                                         <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="User Icon" class="ms-2">
+                                            <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="User Icon"
+                                                class="ms-2">
                                             <span class="ms-2" id="navbar_login">Log-In</span>
                                         </div>
                                     </a>
@@ -77,15 +78,17 @@
             <!-- Main Content -->
             <div class="main-container">
                 <div class="row">
-                    <h4 class="col mx-auto text-center">mein Einkauf:</h4>
+                    <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
                 </div>
                 <div class="row">
-                    <div class="basket-list">
-                        <!-- Hier wird die Liste dynamisch generiert -->
+                    <div class="col-sm-6 offset-sm-3">
+                        <div class="basket-list">
+                            <!-- Hier wird die Liste dynamisch generiert -->
+                        </div>
                     </div>
                 </div>
-
             </div>
+
             <!-- END Main Content -->
 
             <div class="linkings row">
@@ -94,7 +97,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz4fnFO9gybBud7RduPuemT//+jJXB16zg6i8UQD3lV5uDC3Yc7bz1Eeow"
         crossorigin="anonymous"></script>
@@ -136,6 +139,14 @@
             quantitySpan.textContent = product.quantity;
             quantityCol.appendChild(quantitySpan);
             item.appendChild(quantityCol);
+
+            var buttonCol = document.createElement("div");
+            buttonCol.classList.add("col-1", "align-items-center");
+            var button = document.createElement("button");
+            button.classList.add("mx-auto");
+            button.textContent = "+";
+            buttonCol.appendChild(button);
+            item.appendChild(buttonCol);
 
             return item;
         }

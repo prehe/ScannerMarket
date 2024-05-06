@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
 }
@@ -24,7 +25,7 @@ html, body {
 }
 
 /* Navbar SM-Name */
-.navbar-brand{
+.navbar-brand {
     color: white !important;
     display: block;
     font-size: 0.8rem;
@@ -37,11 +38,13 @@ html, body {
 .nav-link.active {
     height: 100%;
 }
+
 /* für die Icons in der Navbar */
 .nav-link.active img {
     height: 1.5rem;
     vertical-align: middle;
 }
+
 /* für die Beschreibung der Icons in der Navbar */
 .nav-link.active span {
     color: white;
@@ -49,18 +52,21 @@ html, body {
     margin-top: 0.25rem;
     font-size: 0.8rem;
     font-weight: 600;
-    text-align: center;  /* Zentriert den Text */
+    text-align: center;
+    /* Zentriert den Text */
 }
 
-.main-container{
+.main-container {
     background-color: white;
     color: black;
     border-radius: 5px;
-    flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
-    overflow-y: auto; /* Fügt bei Bedarf einen Scrollbalken hinzu */
+    flex: 1;
+    /* Füllt den verbleibenden verfügbaren Platz */
+    overflow-y: auto;
+    /* Fügt bei Bedarf einen Scrollbalken hinzu */
 }
 
-.title{
+.title {
     display: block;
     font-size: 2rem;
     font-weight: 600;
@@ -75,8 +81,6 @@ html, body {
     padding: 10px;
 }
 
-
-
 .logo_big {
     height: 10rem;
     display: block;
@@ -88,6 +92,7 @@ html, body {
     display: block;
     margin: 0 auto 0;
 }
+
 .logo_tiny {
     height: 3rem;
     display: block;
@@ -134,16 +139,15 @@ html, body {
     margin-bottom: 15px;
 }
 
-.registration{
+.registration {
     display: block;
     font-size: 1.2rem;
     font-weight: 600;
     margin-top: 10px;
     margin-bottom: 10px;
-    
 }
 
-.registration a{
+.registration a {
     color: rgb(163, 163, 163);
 }
 
@@ -164,7 +168,7 @@ html, body {
     margin-bottom: 10px;
 }
 
-.form-check-agb{
+.form-check-agb {
     margin-top: 10px;
 }
 
@@ -177,16 +181,33 @@ html, body {
     text-decoration: underline;
 }
 
-.bezahldaten{
+.bezahldaten {
     background: rgb(20, 95, 148);
     border-radius: 8px;
     padding: 5px;
 }
 
+.title-basket-list {
+    background: rgb(20, 95, 148);
+    border-radius: 8px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.basket-list {
+    background: rgb(20, 95, 148);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
 
 /* Impressung letzte Zeile */
 .linkings {
-    flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
+    flex-shrink: 0;
+    /* Fixiert die Fußzeile am unteren Rand */
 }
 
 .linkings a {
