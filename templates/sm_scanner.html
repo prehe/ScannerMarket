@@ -19,13 +19,17 @@
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-    <title>Scanner Market</title>
+    <title>ScannerMarket</title>
 </head>
 
 <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+
+    <!-- Barcode Scanner script -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
 
     <div class="container-fluid">
         <nav class="navbar navbar-expand-sm" >
@@ -76,12 +80,37 @@
                 </ul>
             </div>
         </nav>
-        <!-- Main Content -->
+        <!-- Main Content -->       
         <div class="main-container">
-            
+            <div class="row">
+                <div class="col-sm-6 offset-sm-3 mx-auto">
+                    <h4 class="title-scanner">Produkt scannen:</h4>
+                    <div id="reader" class="row" style="display: none;"></div>
+                    <div id="result" class="row mx-auto">
+                        <div class="col product-element d-flex align-items-center"> 
+                            <img src="../static/icons/user-solid.svg">
+                            <div class="product-info"> 
+                                <h5>Hersteller</h5>
+                                <h3>Produktname</h3>
+                                <p>Preis: 10,00€</p> 
+                                <p>Menge/Volumen: 500g</p>
+                            </div>
+                        </div>
+                        <div class="row mx-left justify-content-center"> 
+                            <div class="col-sm-8 offset-sm-2 product-buttons">
+                                <p>Anzahl:</p>
+                                <button class="btn btn-primary">-</button> 
+                                <p>1</p> 
+                                <button class="btn btn-primary">+</button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- END Main Content -->
     </div>
+    <script src="/static/scanner.js"></script>
 </body>
 <footer>
     <div class="linkings row">

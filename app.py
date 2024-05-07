@@ -22,6 +22,10 @@ def registrationP():
 def loginP():
     return render_template('sm_login.html')
 
+@app.route('/templates/sm_scanner.html')
+def scannerP():
+    return render_template('sm_scanner.html')
+
 # Run the Flask application
 if __name__ == '__main__':
     app.run(debug=True)
