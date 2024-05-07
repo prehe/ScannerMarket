@@ -8,6 +8,8 @@
     min-height: 100vh;
 }
 
+/* TEST */
+
 /* NAVBAR: */
 
 /* Navbar SM-Name */
@@ -80,6 +82,16 @@
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 10px;
+}
+/* Anpassung Link */
+.registration a {
+    color: rgb(163, 163, 163);
+}
+
+/* Anpassung Link */
+.registration  a:hover {
+    color: rgb(200, 200, 200);
+    text-decoration: underline;
 }
 
 
