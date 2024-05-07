@@ -3,7 +3,7 @@ const scanner = new Html5QrcodeScanner('reader', {
         width: 250,
         height: 250,
     },
-    fps: 20,
+    fps: 30,
 });
 
 scanner.render(success, error);

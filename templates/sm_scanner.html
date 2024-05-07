@@ -80,13 +80,31 @@
                 </ul>
             </div>
         </nav>
-        <!-- Main Content -->
+        <!-- Main Content -->       
         <div class="main-container">
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    scanner page:
-                    <div id="reader"></div>
-                    <div id="result"></div>
+                <div class="col-sm-6 offset-sm-3 mx-auto">
+                    <h4 class="title-scanner">Produkt scannen:</h4>
+                    <div id="reader" class="row" style="display: none;"></div>
+                    <div id="result" class="row mx-auto">
+                        <div class="col product-element d-flex align-items-center"> 
+                            <img src="../static/icons/user-solid.svg">
+                            <div class="product-info"> 
+                                <h5>Hersteller</h5>
+                                <h3>Produktname</h3>
+                                <p>Preis: 10,00€</p> 
+                                <p>Menge/Volumen: 500g</p>
+                            </div>
+                        </div>
+                        <div class="row mx-left justify-content-center"> 
+                            <div class="col-sm-8 offset-sm-2 product-buttons">
+                                <p>Anzahl:</p>
+                                <button class="btn btn-primary">-</button> 
+                                <p>1</p> 
+                                <button class="btn btn-primary">+</button> 
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
