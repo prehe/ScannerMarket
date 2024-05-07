@@ -223,6 +223,14 @@
 }
 
 
+
+/* SCANNER-Seite */
+#reader {
+    width: 600px;
+}
+
+
+
 /* FOOTER: */
 .linkings {
     flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
