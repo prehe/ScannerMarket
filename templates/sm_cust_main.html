@@ -1,190 +1,106 @@
-<!doctype html>
-<html lang="en">
+{% extends "sm_default.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Link to your CSS file -->
-    <!-- FLASK: -->
-    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='style.css') }}">
-
-    <!-- Live Server Extension: -->
-    <link rel="stylesheet" type=text/css href="../static/style.css">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- Icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-    <title>ScannerMarket</title>
-</head>
-
-<body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-sm" >
-            <div class="navbar-brand d-flex align-items-center">
-                <div class="col-md">
-                    <img class="logo_tiny" src="../static/images/logo1.svg" alt="Scanner">
+{% block content %}
+<!-- Main Content -->
+<div class="main-container">
+    <div class="row category-overview">
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">
+                <div class="category-item"> 
+                    <img src="..\static\images\kategorie-obst.jpg" alt="category-fruit" >
+                    <h4 class="caption">Obst & Gemüse</h4> 
                 </div>
-                <div class="col-md text-center">
-                    <h5 class="d-block d-sm-none">S-Market</h5>
-                    <h5 class="d-none d-sm-block">ScannerMarket</h5>
-                </div>
-            </div>
-            <div id="navbarSupportedContent" class="ms-auto">
-                <ul class="navbar-nav mb-2 mb-lg-0">
-                    <div class="row">
-                        <div class="col-4">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">
-                                    <div class="d-flex flex-column justify-content-center align-items-center">
-                                        <img src="../static/icons_weiß/user-solid.svg" alt="User Icon" class="ms-2">
-                                        <!-- <img src="{{ url_for('static', filename='icons/user-solid.svg') }}" alt="User Icon"> -->
-                                        <span class="ms-2">Profil</span>
-                                    </div>
-                                </a>
-                            </li>
-                        </div>
-                    <div class="col-4">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="../templates/sm_scanner.html">
-                                <div class="d-flex flex-column justify-content-center align-items-center">
-                                    <img src="../static/icons_weiß/basket-shopping-solid.svg" alt="User Icon" class="ms-2">
-                                    <!-- <img src="{{ url_for('static', filename='icons/basket-shopping-solid.svg') }}" alt="User Icon"> -->
-                                    <span class="ms-2">Produkte</span>
-                                </div>
-                            </a>
-                        </li>
-                    </div>
-                    <div class="col-4">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="../templates/sm_login.html">
-                                <div class="d-flex flex-column justify-content-center align-items-center">
-                                    <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="User Icon" class="ms-2">
-                                    <span class="ms-2">Log-In</span>
-                                </div>
-                            </a>
-                        </li>
-                    </div>
-                </ul>
-            </div>
-        </nav>
-        <!-- Main Content -->
-        <div class="main-container">
-            <div class="row ">
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">
-                        <div class="category-item"> 
-                            <img src="..\static\images\kategorie-obst.jpg" alt="category-fruit" >
-                            <h4 class="caption">Obst & Gemüse</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\kategorie-fleisch.jpg" alt="category-meat" >
-                            <h4 class="caption">Fleischprodukte</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                            <div class="category-item">
-                            <img src="..\static\images\muscheln.jpg" alt="category-fish" >
-                            <h4 class="caption">Fisch & Meeresfrüchte</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">  
-                            <div class="category-item">
-                            <img src="..\static\images\milchprodukte.jpg" alt="category-milk" >
-                            <h4 class="caption">Milchprodukte</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">  
-                        <div class="category-item">
-                            <img src="..\static\images\backware.jpg" alt="category-bread" >
-                            <h4 class="caption">Backwaren</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\pasta.jpg" alt="category-pasta" >
-                            <h4 class="caption">Nudeln, Reis & Nüsse</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\konserven.jpg" alt="category-can" >
-                            <h4 class="caption">Konserven & Konfitüre</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\gewürze.jpg" alt="category-herbs" >
-                            <h4 class="caption">Gewürze & Saucen</h4> 
-                        </div> 
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\süßigkeiten.jpg" alt="category-sweets" >
-                            <h4 class="caption">Süßwaren</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\kühlware.jpg" alt="category-frozen" >
-                            <h4 class="caption">Tiefkühlwaren</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">   
-                        <div class="category-item">
-                            <img src="..\static\images\getränke.jpg" alt="category-drinks" >
-                            <h4 class="caption">Getränke</h4> 
-                        </div>
-                    </a>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 p-0">
-                    <a href="#">  
-                        <div class="category-item">
-                            <img src="..\static\images\sonstiges.jpg" alt="category-coffee" >
-                            <h4 class="caption">Sonstiges</h4> 
-                        </div>
-                    </a>
-                </div>
-            </div>
+            </a>
         </div>
-        <!-- END Main Content -->
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\kategorie-fleisch.jpg" alt="category-meat" >
+                    <h4 class="caption">Fleischprodukte</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                    <div class="category-item">
+                    <img src="..\static\images\muscheln.jpg" alt="category-fish" >
+                    <h4 class="caption">Fisch & Meeresfrüchte</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">  
+                    <div class="category-item">
+                    <img src="..\static\images\milchprodukte.jpg" alt="category-milk" >
+                    <h4 class="caption">Milchprodukte</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">  
+                <div class="category-item">
+                    <img src="..\static\images\backware.jpg" alt="category-bread" >
+                    <h4 class="caption">Backwaren</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\pasta.jpg" alt="category-pasta" >
+                    <h4 class="caption">Nudeln, Reis & Nüsse</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\konserven.jpg" alt="category-can" >
+                    <h4 class="caption">Konserven & Konfitüre</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\gewürze.jpg" alt="category-herbs" >
+                    <h4 class="caption">Gewürze & Saucen</h4> 
+                </div> 
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\süßigkeiten.jpg" alt="category-sweets" >
+                    <h4 class="caption">Süßwaren</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\kühlware.jpg" alt="category-frozen" >
+                    <h4 class="caption">Tiefkühlwaren</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">   
+                <div class="category-item">
+                    <img src="..\static\images\getränke.jpg" alt="category-drinks" >
+                    <h4 class="caption">Getränke</h4> 
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3 p-0">
+            <a href="#">  
+                <div class="category-item">
+                    <img src="..\static\images\sonstiges.jpg" alt="category-coffee" >
+                    <h4 class="caption">Sonstiges</h4> 
+                </div>
+            </a>
+        </div>
     </div>
-</body>
-<footer>
-    <div class="linkings row">
-        <a href="#" class="col">Terms & Conditions</a>
-        <a href="#" class="col">Privacy Policy</a>
-    </div>
-</footer>
-
-</html>
+</div>
+<!-- END Main Content -->
+{% endblock %}

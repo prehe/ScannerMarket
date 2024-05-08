@@ -1,3 +1,19 @@
+header, body,footer{
+    
+    background-color: rgb(24, 115, 180);
+    color: white;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* center object perfect*/
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
 /* Basiscontainer für Content im Body*/
 .container-fluid {
     background-color: rgb(24, 115, 180);
@@ -13,10 +29,16 @@
 /* Navbar SM-Name */
 .navbar-brand{
     color: white !important;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 0.8rem;
     font-weight: 600;
-    text-align: center;
+}
+
+.col-md img {
+    max-height: 100px; /* Hier die gewünschte Höhe für das Bild einstellen */
+    max-width: 100%; /* Damit das Bild seine Proportionen beibehält */
 }
 
 /* für die Icons in der Navbar */
@@ -120,9 +142,6 @@
 .btn-right {
     display: flex;
     justify-content: right;
-    font-size: 1.2rem;
-    font-weight: 600;
-    height: 100%;
     margin-bottom: 15px;
 }
 
@@ -130,9 +149,6 @@
 .btn-left {
     display: flex;
     justify-content: left;
-    font-size: 1.2rem;
-    font-weight: 600;
-    height: 100%;
     margin-bottom: 15px;
 }
 
@@ -186,12 +202,26 @@
     padding: 5px;
 }
 
+/* Style für alle Button */
+.btn {
+    font-size: 1.2rem;
+    font-weight: 600;
+    height: 100%;
+}
+
 /* Logoeigenschaften für Hauptseite */
 .logo_tiny {
     height: 3rem;
     display: block;
     margin: 0 auto 0;
     margin-right: 8px;
+}
+
+/* Rahmen für Kategorien außen */
+.category-overview{
+    /* margin: 10px; */
+    padding-left: 10px;
+    padding-right: 10px;
 }
 /*Rahmen und Inhalt der Kategorien definieren*/
 .category-item {
@@ -204,7 +234,6 @@
     text-align: center;
     height: 100%;
     width: 100%;
-    margin: auto;
 }
 
 .category-item img{
@@ -230,8 +259,11 @@
 }
 
 #result {
-    text-align: center;
-    font-size: 1.5rem; 
+    font-size: 1.3rem; 
+}
+
+#result button{
+    font-size: 1rem;
 }
 
 .title-scanner{
@@ -267,11 +299,16 @@
     font-size: 1rem;
 }
 
-.product-buttons{
+.product-buttons {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    align-items: center; 
 }
+
+.product-buttons .btn{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 
 
 /* FOOTER: */
