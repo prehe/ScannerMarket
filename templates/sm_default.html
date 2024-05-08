@@ -19,6 +19,9 @@
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+    {% block header %}
+    <!-- Hier kommt der Inhalt für den Header -->
+    {% endblock %}
     <title>ScannerMarket</title>
 </head>
 
@@ -35,7 +38,7 @@
             <nav class="navbar">
                 <div class="navbar-brand">
                     <div class="col-md">
-                        <img class="logo_tiny" src="../static/images/logo1.svg" alt="Scanner">
+                        <img class="logo_tiny" src="../static/images/logo1.svg" alt="Scanner" onclick="window.location.href='../templates/sm_cust_main.html'">
                     </div>
                     <div class="col-md text-center">
                         <h5 class="d-block d-sm-none">S-Market</h5>
