@@ -9,14 +9,9 @@ const scanner = new Html5QrcodeScanner('reader', {
 scanner.render(success, error);
 
 function success(result) {
-    document.getElementById('result').innerHTML = `
-    <h2>Erfolgreich gescannt</h2>
-    <p><a href="${result}">${result}</a></p>
-    <br><br>
-    <a href="">nochmal scannen</a>
-    `;
+    document.getElementById('result').style.display = "block";
     scanner.clear();
-    document.getElementById('reader').remove();
+    document.getElementById('reader').style.display = 'none';
 }
 
 function error(err) {
