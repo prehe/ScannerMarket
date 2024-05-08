@@ -26,7 +26,15 @@ def loginP():
 def scannerP():
     return render_template('sm_scanner.html')
 
+@app.route('/templates/sm_productbasket.html')
+def prodBasketP():
+    return render_template('sm_productbasket.html')
+
 # Run the Flask application
 if __name__ == '__main__':
     app.run(debug=True)
     
+# Liveserver nicht mehr möglich mit den child templates
+# app.py ausführen mit STRG+C stoppen und mit dem folgenden Befehl dauerhaft laufen lassen 
+# python -m flask --app app.py run --debug
+# dann muss nur die Seite aktualiesiert werden und nicht immer app.py neu gestartet werden
