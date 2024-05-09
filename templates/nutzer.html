@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutzer</title>
+</head>
+<body>
+    <h1>Nutzer</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Geburtsdatum</th>
+                <th>Email</th>
+                <th>Kundenkarte</th>
+                <th>Admin</th>
+                <th>Newsletter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in nutzer_entries %}
+            <tr>
+                <td>{{ entry.ID }}</td>
+                <td>{{ entry.vorname }}</td>
+                <td>{{ entry.nachname }}</td>
+                <td>{{ entry.geb_datum }}</td>
+                <td>{{ entry.email }}</td>
+                <td>{{ entry.kundenkarte }}</td>
+                <td>{{ entry.admin }}</td>
+                <td>{{ entry.newsletter }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

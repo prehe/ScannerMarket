@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warenkorb</title>
+</head>
+<body>
+    <h1>Warenkorb</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Einkauf ID</th>
+                <th>Produkte ID</th>
+                <th>Anzahl</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for warenkorb_entry in warenkorb_entries %}
+            <tr>
+                <td>{{ warenkorb_entry.einkauf_ID }}</td>
+                <td>{{ warenkorb_entry.produkte_ID }}</td>
+                <td>{{ warenkorb_entry.anzahl }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
