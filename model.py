@@ -6,9 +6,9 @@ db = SQLAlchemy()
 # Verbindung zur Datenbank herstellen
 engine = db.create_engine('sqlite:///scannerMarket.db', echo=True)  # Passen Sie die Verbindungsdaten an
 
-Base = db.declarative_base()
+# Base = db.declarative_base()
 
-class Nutzer(Base):
+class Nutzer(db.Model):
     __tablename__ = 'nutzer'
 
     ID = db.Column(db.Integer, primary_key=True)
@@ -21,13 +21,13 @@ class Nutzer(Base):
     admin = db.Column(db.Boolean)
     newsletter = db.Column(db.Boolean)
 
-class Bezahlmöglichkeiten(Base):
+class Bezahlmöglichkeiten(db.Model):
     __tablename__ = 'bezahlmöglichkeiten'
 
     ID = db.Column(db.Integer, primary_key=True)
     methode = db.Column(db.String(45))
 
-class Bezahlung(Base):
+class Bezahlung(db.Model):
     __tablename__ = 'bezahlung'
 
     nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'), primary_key=True)
@@ -35,16 +35,16 @@ class Bezahlung(Base):
     konto_email = db.Column(db.String(45))
     karten_nr = db.Column(db.String(45))
 
-    nutzer = relationship("Nutzer", backref="bezahlungen")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
-    bezahlmöglichkeiten = relationship("Bezahlmöglichkeiten", backref="bezahlungen")
+    nutzer = relationship("Nutzer")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
+    bezahlmöglichkeiten = relationship("Bezahlmöglichkeiten")
 
-class Produktkategorien(Base):
+class Produktkategorien(db.Model):
     __tablename__ = 'produktkategorien'
 
     ID = db.Column(db.Integer, primary_key=True)
     kategorie = db.Column(db.String(45))
 
-class Produkte(Base):
+class Produkte(db.Model):
     __tablename__ = 'produkte'
 
     ID = db.Column(db.Integer, primary_key=True)
@@ -58,7 +58,7 @@ class Produkte(Base):
 
     produktkategorien = relationship("Produktkategorien")
 
-class Einkauf(Base):
+class Einkauf(db.Model):
     __tablename__ = 'einkauf'
 
     ID = db.Column(db.Integer, primary_key=True)
@@ -68,7 +68,7 @@ class Einkauf(Base):
 
     nutzer = relationship("Nutzer")
 
-class Warenkorb(Base):
+class Warenkorb(db.Model):
     __tablename__ = 'warenkorb'
 
     einkauf_ID = db.Column(db.Integer, db.ForeignKey('einkauf.ID'), primary_key=True)
@@ -79,4 +79,4 @@ class Warenkorb(Base):
     produkte = relationship("Produkte")
 
 # Tabellen erstellen
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
