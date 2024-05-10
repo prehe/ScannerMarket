@@ -1,0 +1,32 @@
+{% extends "sm_default.html" %}
+
+{% block header %}
+    <title>ScannerMarket</title>
+{% endblock %}
+
+{% block content%}
+<div class="main-container">
+    <div class="category-banner" style="background-image: url('{{banner}}');">
+        <h1 class="caption">{{category}}</h1>
+    </div>
+
+    <div class="product-container">
+        <div class="row category-overview">
+            {% for i in products %}
+                <div class="col-sm-6 col-md-4 col-lg-3 p-1">
+                    <div class="product"> 
+                        <div class="product-img">
+                            <img src="{{ i.img }}" alt="" class="product-img" >
+                        </div>
+                        <h5>{{ i.name }}</h5> 
+                        <p>Hersteller: {{ i.manufacturer }}</p>
+                        <p>Gewicht: {{ i.weight }}kg</p>
+                        <p>Preis: {{ i.price }}€</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+      
+{% endblock %}

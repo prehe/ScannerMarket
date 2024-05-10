@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bezahlungen</title>
+</head>
+<body>
+    <h1>Bezahlungen</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nutzer ID</th>
+                <th>Bezahlmöglichkeiten ID</th>
+                <th>Konto Email</th>
+                <th>Karten Nummer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bezahlung_entry in bezahlungen_entries %}
+            <tr>
+                <td>{{ bezahlung_entry.nutzer_ID }}</td>
+                <td>{{ bezahlung_entry.bezahlmöglichkeiten_ID }}</td>
+                <td>{{ bezahlung_entry.konto_email }}</td>
+                <td>{{ bezahlung_entry.karten_nr }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

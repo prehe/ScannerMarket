@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkte</title>
+</head>
+<body>
+    <h1>Produkte</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hersteller</th>
+                <th>Produktname</th>
+                <th>Gewicht/Volumen</th>
+                <th>EAN</th>
+                <th>Preis</th>
+                <th>Bild</th>
+                <th>Kategorien ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produkt_entry in produkte_entries %}
+            <tr>
+                <td>{{ produkt_entry.ID }}</td>
+                <td>{{ produkt_entry.hersteller }}</td>
+                <td>{{ produkt_entry.produkt_name }}</td>
+                <td>{{ produkt_entry.gewicht_volumen }}</td>
+                <td>{{ produkt_entry.ean }}</td>
+                <td>{{ produkt_entry.preis }}</td>
+                <td>{{ produkt_entry.bild }}</td>
+                <td>{{ produkt_entry.produktkategorien_ID }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
