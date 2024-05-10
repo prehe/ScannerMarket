@@ -1,6 +1,7 @@
 # app.py
 from flask import Flask, render_template, request
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from datetime import date
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -73,8 +74,8 @@ def categoryPage(category):
     products = [{'name': 'fertig', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'12.0', 'manufacturer':'wert' },{'name': 'roggen', 'img':'../static/images/category-sweets.jpg', 'weight': '3.0', 'price':'4.0', 'manufacturer':'hello' },{'name': 'test', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' },{'name': 'brot', 'img':'../static/images/category-sweets.jpg', 'weight': '0.5', 'price':'6.0', 'manufacturer':'gmnt' }, {'name': 'cc', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' },{'name': 'test', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' }]
     return render_template('sm_category_page.html', category= category, products=products, banner= bannerImg)
 
-# from model import db, Nutzer
-# from datetime import date
+
+
 
 @app.route('/nutzer')
 def show_nutzer():
@@ -104,6 +105,9 @@ def show_produktkategorien():
 
 @app.route('/produkte')
 def show_produkte():
+    dummyP = Produkte(hersteller = "dummy", produkt_name = "Karl", gewicht_volumen = "500g", ean = 123456789, preis = 3.23, bild = None, produktkategorien_ID = 1)
+    db.session.add(dummyP)
+    db.session.commit()
     produkte_entries = db.session.query(Produkte).all()
     return render_template('produkte.html', produkte_entries=produkte_entries)
 
