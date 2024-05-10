@@ -85,7 +85,7 @@ def show_nutzer():
 
     # nutzer_entries = Nutzer.query.all() 
     nutzer_entries = db.session.query(Nutzer).all()
-    # print(nutzer_entries[0].ID)
+    print(nutzer_entries[0].ID)
     return render_template('nutzer.html', nutzer_entries=nutzer_entries)
 
 @app.route('/bezahlmöglichkeiten')
