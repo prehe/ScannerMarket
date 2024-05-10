@@ -38,8 +38,25 @@ def scannerP():
 def prodBasketP():
     return render_template('sm_productbasket.html')
 
+
+#globale Variable
+categoryNames={
+    'category-bread' : "Backwaren",
+    'category-can': "Konserven & Konfitüren",
+    'category-coffee' : "Sonstiges",
+    'category-drinks' : "Getränke",
+    'category-fish' : "Fisch & Meeresfrüchte",
+    'category-frozen' : "Tiefkühlwaren",
+    'category-fruit' : "Obst & Gemüse",
+    'category-herbs' : "Gewürze & Saucen",
+    'category-meat' : "Fleischprodukte",
+    'category-milk' : "Milchprodukte",
+    'category-pasta' : "Pasta, Reis & Nüsse", 
+    'category-sweets' : "Süßwaren"
+}
+
+
 @app.route("/category/<category>")
-#@app.route('/templates/sm_category_page/<category>')
 def categoryPage(category):
     bannerImages={
         'category-bread' : "../static/images/category-bread.jpg",
@@ -55,24 +72,21 @@ def categoryPage(category):
         'category-pasta' : "../static/images/category-pasta.jpg", 
         'category-sweets' : "../static/images/category-sweets.jpg"
     }
-    categoryNames={
-        'category-bread' : "Backwaren",
-        'category-can': "Konserven & Konfitüre",
-        'category-coffee' : "Sonstiges",
-        'category-drinks' : "Getränke",
-        'category-fish' : "Fisch & Meeresfrüchte",
-        'category-frozen' : "Tiefkühlwaren",
-        'category-fruit' : "Obst & Gemüse",
-        'category-herbs' : "Gewürze & Saucen",
-        'category-meat' : "Fleisch",
-        'category-milk' : "Milchprodukte",
-        'category-pasta' : "Pasta, Reis & Nüsse", 
-        'category-sweets' : "Süßwaren"
-    }
     bannerImg = bannerImages[category]
-    category = categoryNames[category]
-    products = [{'name': 'fertig', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'12.0', 'manufacturer':'wert' },{'name': 'roggen', 'img':'../static/images/category-sweets.jpg', 'weight': '3.0', 'price':'4.0', 'manufacturer':'hello' },{'name': 'test', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' },{'name': 'brot', 'img':'../static/images/category-sweets.jpg', 'weight': '0.5', 'price':'6.0', 'manufacturer':'gmnt' }, {'name': 'cc', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' },{'name': 'test', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' }]
-    return render_template('sm_category_page.html', category= category, products=products, banner= bannerImg)
+    categoryName = categoryNames[category]
+    products = getProdsFromCategory(categoryName)
+    #products = [{'name': 'fertig', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'12.0', 'manufacturer':'wert' },{'name': 'roggen', 'img':'../static/images/category-sweets.jpg', 'weight': '3.0', 'price':'4.0', 'manufacturer':'hello' },{'name': 'test', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' },{'name': 'brot', 'img':'../static/images/category-sweets.jpg', 'weight': '0.5', 'price':'6.0', 'manufacturer':'gmnt' }, {'name': 'cc', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' },{'name': 'test', 'img':'../static/images/category-sweets.jpg', 'weight': '3.5', 'price':'2.0', 'manufacturer':'tt' }]
+    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg)
+
+
+def getProdsFromCategory(category):
+    products = []
+    prodsOfCategory = db.session.query(Produkte).join(Produktkategorien).filter(Produktkategorien.kategorie == category)
+    for prod in prodsOfCategory:
+        newProd = {'name': prod.produkt_name, 'img': prod.bild, 'weight' : prod.gewicht_volumen, 'price': prod.preis, 'manufacturer' : prod.hersteller}
+        products.append(newProd)
+    return products
+
 
 
 
@@ -98,16 +112,81 @@ def show_bezahlung():
     bezahlung_entries = db.session.query(Bezahlung).all()
     return render_template('bezahlung.html', bezahlungen_entries =bezahlung_entries)
 
+
+
+######## findet Produktkategorien nicht als tabelle
 @app.route('/produktkategorien')
 def show_produktkategorien():
+    #Produktkategorien zur Datenbank einmalig hinzufügen
+    for name in categoryNames:
+        category = Produktkategorien(kategorie = name)
+        db.session.add(category)
+    db.session.commit()
+
     produktkategorien_entries = db.session.query(Produktkategorien).all()
     return render_template('produktkategorien.html', produktkategorien_entries=produktkategorien_entries)
 
+import requests
+def get_and_save_product_data(barcode, categoryId):
+    url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        product_data = response.json()["product"]
+        
+        # Produktinformationen aus der API extrahieren
+        ean = product_data['id']
+        hersteller = product_data['brands']
+        produktname = product_data['product_name']
+        gewicht_volumen = product_data.get('quantity', '')  # 'quantity' könnte fehlen, daher verwenden wir 'get'
+        kategorie = categoryId
+        preis = 0  # TODO: Preis aus dem Globus Online Produktkatalog abrufen
+        bild = product_data.get('image_front_small_url', '')
+        inhaltsstoffe = product_data.get('ingredients_text_de', '')
+
+        # Produkt in die Datenbank einfügen
+        new_product = Produkte(
+            ean=ean,
+            hersteller=hersteller,
+            produktname=produktname,
+            gewicht_volumen=gewicht_volumen,
+            kategorie=kategorie,
+            preis=preis,
+            bild=bild,
+            inhaltsstoffe=inhaltsstoffe
+        )
+        db.session.add(new_product)
+        db.session.commit()
+        db.session.close()
+        
+        print("Produkt erfolgreich hinzugefügt!")
+    else:
+        print(f"Fehler beim Abrufen der Produktinformationen. Statuscode: {response.status_code}")
+
+import pandas as pd
+def getBarcodesOfCategory(category):
+    excel = "static\product_barcodes.xlsx"
+    file = pd.read_excel(excel)
+    if category in file.columns:
+        barcodesOfCat = file[category].astype(str).dropna().tolist() #chatgpt
+        return barcodesOfCat
+    else:
+        print(f"Spalte: '{category}' nicht gefunden")
+        return
+
+
 @app.route('/produkte')
 def show_produkte():
-    dummyP = Produkte(hersteller = "dummy", produkt_name = "Karl", gewicht_volumen = "500g", ean = 123456789, preis = 3.23, bild = None, produktkategorien_ID = 1)
-    db.session.add(dummyP)
-    db.session.commit()
+    #Produkte zur Datenbank hinzufügen
+    id = 1
+    for name in categoryNames.values():
+        barcodes = getBarcodesOfCategory(name)
+        
+        # for barcode in barcodes:          #timeout wegen api-Zugriff benötigt?
+        #   if barcode !='nan':
+        #     get_and_save_product_data(barcode, categoryId=id)
+        id = id+1
+       
     produkte_entries = db.session.query(Produkte).all()
     return render_template('produkte.html', produkte_entries=produkte_entries)
 
