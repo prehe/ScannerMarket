@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 
 # Initialize the Flask application
@@ -9,6 +9,8 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///scannerMarket.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+
+
 
 # Define the root route
 @app.route('/')
@@ -86,12 +88,15 @@ def getProdsFromCategory(category):
         products.append(newProd)
     return products
 
+# ####################################################################################################################################################
 
-# from model import db, Nutzer
-# from datetime import date
+from flask import render_template
+import pandas as pd
+import requests
+
 @app.route('/nutzer')
 def show_nutzer():
-    # beispiel_nutzer = Nutzer(vorname='Max', nachname='Mustermann', geb_datum=date(1990, 1, 1), email='max.mustermann@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
+    # beispiel_nutzer = Nutzer(vorname='perter', nachname='Mustermann', geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
     # db.session.add(beispiel_nutzer)
     # db.session.commit()
 
@@ -112,21 +117,22 @@ def show_bezahlung():
 
 
 
-######## findet Produktkategorien nicht als tabelle
 @app.route('/produktkategorien')
 def show_produktkategorien():
     #Produktkategorien zur Datenbank einmalig hinzufügen
-    for name in categoryNames:
-        category = Produktkategorien(kategorie = name)
-        db.session.add(category)
-    db.session.commit()
+    # for name in categoryNames.values():
+    #     category = Produktkategorien(kategorie = name)
+    #     db.session.add(category)
+    # db.session.commit()
 
     produktkategorien_entries = db.session.query(Produktkategorien).all()
+    print(produktkategorien_entries)
     return render_template('produktkategorien.html', produktkategorien_entries=produktkategorien_entries)
 
-import requests
+
 def get_and_save_product_data(barcode, categoryId):
     url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
+    print(url)
     response = requests.get(url)
     
     if response.status_code == 200:
@@ -140,33 +146,35 @@ def get_and_save_product_data(barcode, categoryId):
         kategorie = categoryId
         preis = 0  # TODO: Preis aus dem Globus Online Produktkatalog abrufen
         bild = product_data.get('image_front_small_url', '')
-        inhaltsstoffe = product_data.get('ingredients_text_de', '')
 
-        # Produkt in die Datenbank einfügen
-        new_product = Produkte(
-            ean=ean,
-            hersteller=hersteller,
-            produktname=produktname,
-            gewicht_volumen=gewicht_volumen,
-            kategorie=kategorie,
-            preis=preis,
-            bild=bild,
-            inhaltsstoffe=inhaltsstoffe
-        )
-        db.session.add(new_product)
-        db.session.commit()
-        db.session.close()
-        
+        addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie)
+              
         print("Produkt erfolgreich hinzugefügt!")
     else:
         print(f"Fehler beim Abrufen der Produktinformationen. Statuscode: {response.status_code}")
 
-import pandas as pd
+
+def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie):
+     # Produkt in die Datenbank einfügen
+        new_product = Produkte(
+            hersteller = hersteller,
+            produkt_name = produktname,
+            gewicht_volumen = gewicht_volumen,
+            ean = ean,
+            preis = preis,
+            bild = bild,
+            produktkategorien_ID = kategorie
+        )
+        db.session.add(new_product)
+        db.session.commit()
+        db.session.close()
+
 def getBarcodesOfCategory(category):
     excel = "static\product_barcodes.xlsx"
     file = pd.read_excel(excel)
     if category in file.columns:
-        barcodesOfCat = file[category].astype(str).dropna().tolist() #chatgpt
+        barcodesOfCat = file[category].dropna().astype(str).str.replace('\.0', '', regex=True).tolist() #chatgpt
+        # print(barcodesOfCat)
         return barcodesOfCat
     else:
         print(f"Spalte: '{category}' nicht gefunden")
@@ -176,14 +184,16 @@ def getBarcodesOfCategory(category):
 @app.route('/produkte')
 def show_produkte():
     #Produkte zur Datenbank hinzufügen
-    id = 1
-    for name in categoryNames.values():
-        barcodes = getBarcodesOfCategory(name)
+    # id = 1
+    # for name in categoryNames.values():
+    #     barcodes = getBarcodesOfCategory(name)
         
-        # for barcode in barcodes:          #timeout wegen api-Zugriff benötigt?
-        #   if barcode !='nan':
-        #     get_and_save_product_data(barcode, categoryId=id)
-        id = id+1
+    #     for barcode in barcodes:          #timeout wegen api-Zugriff benötigt?
+    #       if barcode !='nan':
+    #         # print(barcode)
+    #         get_and_save_product_data(str(barcode), categoryId=id)
+    #         time.sleep(2)
+    #     id = id+1
        
     produkte_entries = db.session.query(Produkte).all()
     return render_template('produkte.html', produkte_entries=produkte_entries)
@@ -198,7 +208,7 @@ def show_warenkorb():
     warenkorb_entries = db.session.query(Warenkorb).all()
     return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
 
-
+# ####################################################################################################################################################
 
 # Run the Flask application
 if __name__ == '__main__':
