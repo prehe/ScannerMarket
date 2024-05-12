@@ -21,7 +21,7 @@ header, body,footer{
     height: auto;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 90vh;
 }
 
 /* NAVBAR: */
@@ -420,6 +420,26 @@ header, body,footer{
     padding-left: 10px;
 }
 
+/*admin-Main-Seite*/
+.admin-categories {
+    padding: 5px; 
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: relative;
+    margin: auto;
+}
+
+.admin-categories img {
+    object-position: 50% 50%;
+    width: 75vw;
+    height:  25vh;
+    object-fit: cover;
+
+}
+
+
+
 /* SCANNER-Seite */
 #reader {
     width: auto;
@@ -481,6 +501,7 @@ header, body,footer{
 /* FOOTER: */
 .linkings {
     flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
+
 }
 
 /* Anpassung Link */

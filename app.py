@@ -1,6 +1,9 @@
 # app.py
 from flask import Flask, render_template
+import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+import db_service as service
+from datetime import date
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -39,6 +42,21 @@ def scannerP():
 def prodBasketP():
     return render_template('sm_productbasket.html')
 
+@app.route('/productcatalog')
+def productcatalog():
+    return render_template('sm_cust_main.html')
+
+@app.route('/admin')
+def adminMain():
+    return render_template('sm_admin_main.html')
+
+@app.route('/admin/newProduct')
+def newProduct():
+    return render_template('sm_admin_newProduct.html')
+
+@app.route('/admin/analysis')
+def analysis():
+    return render_template('sm_admin_analysis.html')
 
 #globale Variable
 categoryNames={
@@ -89,18 +107,13 @@ def getProdsFromCategory(category):
     return products
 
 # ####################################################################################################################################################
-
-from flask import render_template
-import pandas as pd
-import requests
+#dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
 
 @app.route('/nutzer')
 def show_nutzer():
-    # beispiel_nutzer = Nutzer(vorname='perter', nachname='Mustermann', geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
-    # db.session.add(beispiel_nutzer)
-    # db.session.commit()
-
-    # nutzer_entries = Nutzer.query.all() 
+    #Kunden hinzufügen
+    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    
     nutzer_entries = db.session.query(Nutzer).all()
     # print(nutzer_entries[0].ID)
     return render_template('nutzer.html', nutzer_entries=nutzer_entries)
@@ -120,10 +133,7 @@ def show_bezahlung():
 @app.route('/produktkategorien')
 def show_produktkategorien():
     #Produktkategorien zur Datenbank einmalig hinzufügen
-    # for name in categoryNames.values():
-    #     category = Produktkategorien(kategorie = name)
-    #     db.session.add(category)
-    # db.session.commit()
+    #service.addProductCategories(categoryNames)
 
     produktkategorien_entries = db.session.query(Produktkategorien).all()
     print(produktkategorien_entries)
@@ -183,18 +193,8 @@ def getBarcodesOfCategory(category):
 
 @app.route('/produkte')
 def show_produkte():
-    #Produkte zur Datenbank hinzufügen
-    # id = 1
-    # for name in categoryNames.values():
-    #     barcodes = getBarcodesOfCategory(name)
-        
-    #     for barcode in barcodes:          #timeout wegen api-Zugriff benötigt?
-    #       if barcode !='nan':
-    #         # print(barcode)
-    #         get_and_save_product_data(str(barcode), categoryId=id)
-    #         time.sleep(2)
-    #     id = id+1
-       
+    #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
+    #service.addAllProductsFromExcel(categoryNames)  
     produkte_entries = db.session.query(Produkte).all()
     return render_template('produkte.html', produkte_entries=produkte_entries)
 
