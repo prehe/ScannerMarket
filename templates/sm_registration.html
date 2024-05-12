@@ -1,132 +1,110 @@
-<!doctype html>
-<html lang="en">
+{% extends "sm_default_import_only.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block header %}
+<title>Registrierung - ScannerMarket</title>
+{% endblock %}
 
-    <!-- Link to your CSS file -->
-    <!-- FLASK: -->
-    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='style.css') }}">
-
-    <!-- Live Server Extension: -->
-    <link rel="stylesheet" type=text/css href="../static/style.css">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-        <title>Registrierung - ScannerMarket</title>
-</head>
-
-<body>
-    <div class="container-fluid">
-        <div class="registration-container row">
-            <div class="col-sm-6 offset-sm-3">   
-                <div class="col-md-5 offset-md-3">
-                    <div class="row justify-content-xl-between align-items-center">
-                        <div class="col">
-                            <img class="logo_small" src="../static/images/logo1.svg" alt="Scanner">
-                        </div>
-                        <div class="col-md text-center">
-                            <h1>Registrierung:</h1>
-                        </div>
+{% block content %}
+<!-- Main Content -->
+<div class="container-fluid">
+    <div class="registration-container row">
+        <div class="col-sm-6 offset-sm-3">   
+            <div class="col-md-5 offset-md-3">
+                <div class="row justify-content-xl-between align-items-center">
+                    <div class="col">
+                        <img class="logo_small" src="../static/images/logo1.svg" alt="Scanner">
+                    </div>
+                    <div class="col-md text-center">
+                        <h1>Registrierung:</h1>
                     </div>
                 </div>
-                
-            
-                <form>
-                    <div class="form-group">
-                        <label for="vorname">Vorname:</label>
-                        <input type="text" id="vorname" class="form-control" placeholder="Vorname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="nachname">Nachname:</label>
-                        <input type="text" id="nachname" class="form-control" placeholder="Nachname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gebdatum">Geburtsdatum:</label>
-                        <input type="date" id="gebdatum" class="form-control" placeholder="Geburtsdatum" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" class="form-control" placeholder="Email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="passwort">Passwort:</label>
-                        <input type="password" id="passwort" class="form-control" placeholder="Passwort" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="bezahlmethode">Bezahlmethode:</label>
-                        <select id="bezahlmethode" class="form-control" required>
-                            <option value="">Bitte auswählen</option>
-                            <option value="paypal">PayPal</option>
-                            <option value="kreditkarte">Kreditkarte</option>
-                        </select>
-                    </div>
-                    <div id="paypal-details" style="display: none;" class="bezahldaten">
-                        <div class="form-group">
-                            <label for="paypal-email">PayPal-Konto:</label>
-                            <input type="email" id="paypal-email" name="paypal-email" class="form-control" placeholder="PayPal-E-Mail"
-                                maxlength="255" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Gültige E-Mail-Adresse" required>
-                        </div>
-                    </div>
-                    <div id="kreditkarte-details" style="display: none;" class="bezahldaten">
-                        <div class="form-group">
-                            <label for="kreditkarte-nummer">Kreditkartennummer:</label>
-                            <input type="text" id="kreditkarte-nummer" name="kreditkarte-nummer" class="form-control"
-                                placeholder="Kreditkartennummer" maxlength="16" pattern="[0-9]{16}" title="Gültige Kreditkartennummer"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="kreditkarte-gültig-bis">Gültig bis:</label>
-                            <input type="month" id="kreditkarte-gültig-bis" name="kreditkarte-gültig-bis" class="form-control"
-                                placeholder="Gültig bis" maxlength="7" pattern="[0-9]{4}-[0-9]{2}" title="Gültiges Ablaufdatum" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="kreditkarte-cvv">Kartenprüfnummer (CVC):</label>
-                            <input type="text" id="kreditkarte-cvv" name="kreditkarte-cvv" class="form-control" placeholder="CVC" 
-                                maxlength="4" pattern="[0-9]{3,4}" title="Gültiger CVV" required>
-                        </div>
-                    </div>
-
-                    <p class="form-check-agb">
-                        <input class="form-check-input" type="checkbox" value="" id="newsletterCheckbox">
-                        <label class="form-check-label" for="newsletterCheckbox">Newsletter aktivieren.</label>
-                    </p>
-
-                    <p class="form-check-agb">
-                        <input class="form-check-input" type="checkbox" value="" id="agbCheckbox" required>
-                        <label class="form-check-label" for="agbCheckbox">Zustimmung der ScannerMarket <a href="#" class="linkings">AGBs</a>.</label>
-                    </p>
-
-
-                    <div class="row">
-                        <div class="col btn-left">
-                            <a href="../templates/sm_login.html">
-                                <button type="button" class="btn btn-secondary">zurück</button>
-                            </a>
-                        </div>
-                        <div class="col btn-right">
-                            <button type="submit" class="btn btn-secondary" id="register-button">Registrieren</button>
-                        </div>
-                    </div>
-                </form>
             </div>
+            
+        
+            <form>
+                <div class="form-group">
+                    <label for="vorname">Vorname:</label>
+                    <input type="text" id="vorname" class="form-control" placeholder="Vorname" required>
+                </div>
+                <div class="form-group">
+                    <label for="nachname">Nachname:</label>
+                    <input type="text" id="nachname" class="form-control" placeholder="Nachname" required>
+                </div>
+                <div class="form-group">
+                    <label for="gebdatum">Geburtsdatum:</label>
+                    <input type="date" id="gebdatum" class="form-control" placeholder="Geburtsdatum" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="passwort">Passwort:</label>
+                    <input type="password" id="passwort" class="form-control" placeholder="Passwort" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bezahlmethode">Bezahlmethode:</label>
+                    <select id="bezahlmethode" class="form-control" required>
+                        <option value="">Bitte auswählen</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="kreditkarte">Kreditkarte</option>
+                    </select>
+                </div>
+                <div id="paypal-details" style="display: none;" class="bezahldaten">
+                    <div class="form-group">
+                        <label for="paypal-email">PayPal-Konto:</label>
+                        <input type="email" id="paypal-email" name="paypal-email" class="form-control" placeholder="PayPal-E-Mail"
+                            maxlength="255" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Gültige E-Mail-Adresse" required>
+                    </div>
+                </div>
+                <div id="kreditkarte-details" style="display: none;" class="bezahldaten">
+                    <div class="form-group">
+                        <label for="kreditkarte-nummer">Kreditkartennummer:</label>
+                        <input type="text" id="kreditkarte-nummer" name="kreditkarte-nummer" class="form-control"
+                            placeholder="Kreditkartennummer" maxlength="16" pattern="[0-9]{16}" title="Gültige Kreditkartennummer"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kreditkarte-gültig-bis">Gültig bis:</label>
+                        <input type="month" id="kreditkarte-gültig-bis" name="kreditkarte-gültig-bis" class="form-control"
+                            placeholder="Gültig bis" maxlength="7" pattern="[0-9]{4}-[0-9]{2}" title="Gültiges Ablaufdatum" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kreditkarte-cvv">Kartenprüfnummer (CVC):</label>
+                        <input type="text" id="kreditkarte-cvv" name="kreditkarte-cvv" class="form-control" placeholder="CVC" 
+                            maxlength="4" pattern="[0-9]{3,4}" title="Gültiger CVV" required>
+                    </div>
+                </div>
+
+                <p class="form-check-agb">
+                    <input class="form-check-input" type="checkbox" value="" id="newsletterCheckbox">
+                    <label class="form-check-label" for="newsletterCheckbox">Newsletter aktivieren.</label>
+                </p>
+
+                <p class="form-check-agb">
+                    <input class="form-check-input" type="checkbox" value="" id="agbCheckbox" required>
+                    <label class="form-check-label" for="agbCheckbox">Zustimmung der ScannerMarket <a href="#" class="linkings">AGBs</a>.</label>
+                </p>
+
+
+                <div class="row">
+                    <div class="col btn-left">
+                        <a href="../templates/sm_login.html">
+                            <button type="button" class="btn btn-secondary">zurück</button>
+                        </a>
+                    </div>
+                    <div class="col btn-right">
+                        <button type="submit" class="btn btn-secondary" id="register-button">Registrieren</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz4fnFO9gybBud7RduPuemT//+jJXB16zg6i8UQD3lV5uDC3Yc7bz1Eeow"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <!-- Flask -->
-    <script src="{{ url_for('static', filename='dynamic.js') }}"></script>
-    <!-- Live Server -->
-    <script src="../static/dynamic.js"></script>
-</body>
-
-</html>
+</div>
+<!-- Flask -->
+<script src="{{ url_for('static', filename='dynamic.js') }}"></script>
+<!-- Live Server -->
+<script src="../static/dynamic.js"></script>
+<!-- END Main Content -->
+{% endblock %}

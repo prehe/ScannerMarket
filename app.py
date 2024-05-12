@@ -1,11 +1,15 @@
 # app.py
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from flask_cors import CORS
+import pandas as pd
+import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date
 
 # Initialize the Flask application
 app = Flask(__name__)
+CORS(app)  # Aktiviere CORS für alle Routen
 
 # Verbindung zur Datenbank herstellen
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///scannerMarket.db"
@@ -207,13 +211,16 @@ def show_warenkorb():
     warenkorb_entries = db.session.query(Warenkorb).all()
     return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
 
-import db_service
 
-@app.route('/DB')
-def getData():
-    produkte_entries = db_service.getProductFromEAN(4061458042918)
+
+@app.route('/getProductFromEan', methods=["GET", "POST"])
+def getProductFromEan():
+    search_ean = request.args.get('ean')  # Use request.args for query parameters
+    print(search_ean)
+    produkte_entries = db.session.query(Produkte).filter_by(ean=search_ean).all()
     print(produkte_entries)
-    # return render_template('produkte.html', produkte_entries=produkte_entries)
+    return produkte_entries
+
 
 # ####################################################################################################################################################
 
