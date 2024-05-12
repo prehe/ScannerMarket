@@ -1,6 +1,5 @@
 # app.py
 from flask import Flask, render_template
-import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date
