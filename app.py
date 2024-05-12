@@ -208,6 +208,14 @@ def show_warenkorb():
     warenkorb_entries = db.session.query(Warenkorb).all()
     return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
 
+import db_service
+
+@app.route('/DB')
+def getData():
+    produkte_entries = db_service.getProductFromEAN(4061458042918)
+    print(produkte_entries)
+    # return render_template('produkte.html', produkte_entries=produkte_entries)
+
 # ####################################################################################################################################################
 
 # Run the Flask application
