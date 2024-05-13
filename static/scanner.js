@@ -16,7 +16,7 @@ function success(result) {
     result = "4013752019004"
 
     $.ajax({
-        url: "http://127.0.0.1:5000/getProductFromEan",
+        url: "https://127.0.0.1:5000/getProductFromEan",
         type: "POST",
         data: { ean: result },
         success: function(response) {

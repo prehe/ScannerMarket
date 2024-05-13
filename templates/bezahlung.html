@@ -15,6 +15,8 @@
                 <th>Bezahlmöglichkeiten ID</th>
                 <th>Konto Email</th>
                 <th>Karten Nummer</th>
+                <th>Karte Gültigkeitsdatum</th>
+                <th>Karten Prüfnummer</th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +26,8 @@
                 <td>{{ bezahlung_entry.bezahlmöglichkeiten_ID }}</td>
                 <td>{{ bezahlung_entry.konto_email }}</td>
                 <td>{{ bezahlung_entry.karten_nr }}</td>
+                <td>{{ bezahlung_entry.karte_gültigkeitsdatum }}</td>
+                <td>{{ bezahlung_entry.karten_prüfnummer }}</td>
             </tr>
             {% endfor %}
         </tbody>

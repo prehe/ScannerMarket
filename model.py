@@ -34,6 +34,8 @@ class Bezahlung(db.Model):
     bezahlmöglichkeiten_ID = db.Column(db.Integer, db.ForeignKey('bezahlmöglichkeiten.ID'), primary_key=True)
     konto_email = db.Column(db.String(45))
     karten_nr = db.Column(db.String(45))
+    karte_gültingkeitsdatum = db.Column(db.DateTime)
+    karten_prüfnummer = db.Column(db.Integer)
 
     nutzer = relationship("Nutzer")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
     bezahlmöglichkeiten = relationship("Bezahlmöglichkeiten")

@@ -25,7 +25,7 @@ def index():
     return render_template('sm_cust_main.html')
 
 # Define the route for the default page
-@app.route('/templates/sm_cust_main.html')
+@app.route('/main')
 def defaultP():
     return render_template('sm_cust_main.html')
 
@@ -41,9 +41,9 @@ def loginP():
 def scannerP():
     return render_template('sm_scanner.html')
 
-@app.route('/templates/sm_productbasket.html')
+@app.route('/templates/sm_shopping_list.html')
 def prodBasketP():
-    return render_template('sm_productbasket.html')
+    return render_template('sm_shopping_list.html')
 
 @app.route('/productcatalog')
 def productcatalog():
@@ -115,8 +115,7 @@ def getProdsFromCategory(category):
 @app.route('/nutzer')
 def show_nutzer():
     #Kunden hinzufügen
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
-    
+
     nutzer_entries = db.session.query(Nutzer).all()
     # print(nutzer_entries[0].ID)
     return render_template('nutzer.html', nutzer_entries=nutzer_entries)
@@ -212,6 +211,41 @@ def show_warenkorb():
     return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
 
 
+##################### besondere URLs/Funktionen:
+
+@app.route('/insertDB')
+def insertDB():
+    # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    # service.addNewCustomer(vorname="Paulchen", nachname="Kleiner", geb_datum=date(1990, 1, 1), email='p.kleiner@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
+    # paymethod = Bezahlmöglichkeiten(methode="Paypal")
+    # db.session.add(paymethod)
+    # db.session.commit()
+    # paymethod = Bezahlmöglichkeiten(methode="Kreditkarte")
+    # db.session.add(paymethod)
+    # db.session.commit()
+
+    # pay = Bezahlung(nutzer_ID = 1, bezahlmöglichkeiten_ID = 1, konto_email = "p.kleiner@example.com")
+    # db.session.add(pay)
+    # db.session.commit()
+    # service.addAllProductsFromExcel(categoryNames)
+    # prod = Produkte(hersteller = 'ABC GmbH', produkt_name = "dummy3", produktkategorien_ID = 2)
+    # db.session.add(prod)
+    # db.session.commit()
+
+    # something = Einkauf(nutzer_ID = 2)
+    # db.session.add(something)
+    # db.session.commit()
+
+    # something = Warenkorb(einkauf_ID=1, produkte_ID = 3, anzahl = 5)
+    # db.session.add(something)
+    # # something2 = Warenkorb(einkauf_ID=1, produkte_ID = 2, anzahl = 2)
+    # # db.session.add(something2)
+    # db.session.commit()
+
+    produkte_entries = db.session.query(Produkte).all()
+    return render_template('produkte.html', produkte_entries=produkte_entries)
+
+
 
 @app.route('/getProductFromEan', methods=["GET", "POST"])
 def getProductFromEan():
@@ -220,6 +254,19 @@ def getProductFromEan():
     produkte_entries = db.session.query(Produkte).filter_by(ean=search_ean).all()
     print(produkte_entries)
     return produkte_entries
+
+
+@app.route('/startOrEndShopping', methods=["GET", "POST"])
+def startShopping():
+    # peudo code:
+    # if last tmst_end = none & nutzer_id = nutzer_id:
+        # add tmst_end
+    # else: 
+        # set new shopping(nutzer_id, tmst_start)
+        # return shopping_id
+        return None
+
+
 
 
 # ####################################################################################################################################################
