@@ -12,30 +12,31 @@ class Nutzer(db.Model):
     __tablename__ = 'nutzer'
 
     ID = db.Column(db.Integer, primary_key=True)
-    vorname = db.Column(db.String(45))
-    nachname = db.Column(db.String(45))
-    geb_datum = db.Column(db.Date)
-    email = db.Column(db.String(45), nullable=False, unique=True)
-    passwort = db.Column(db.String(45), nullable=False)
-    kundenkarte = db.Column(db.Boolean)
-    admin = db.Column(db.Boolean)
-    newsletter = db.Column(db.Boolean)
+    Vorname = db.Column(db.String(45))
+    Nachname = db.Column(db.String(45))
+    Geburtsdatum = db.Column(db.Date)
+    Email = db.Column(db.String(45), nullable=False, unique=True)
+    Passwort = db.Column(db.String(45), nullable=False)
+    Kundenkarte = db.Column(db.Boolean)
+    Admin = db.Column(db.Boolean)
+    Newsletter = db.Column(db.Boolean)
+    Registriert_am = db.Column(db.DateTime)
 
 class Bezahlmöglichkeiten(db.Model):
     __tablename__ = 'bezahlmöglichkeiten'
 
     ID = db.Column(db.Integer, primary_key=True)
-    methode = db.Column(db.String(45))
+    Methode = db.Column(db.String(45))
 
 class Bezahlung(db.Model):
     __tablename__ = 'bezahlung'
 
-    nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'), primary_key=True)
-    bezahlmöglichkeiten_ID = db.Column(db.Integer, db.ForeignKey('bezahlmöglichkeiten.ID'), primary_key=True)
-    konto_email = db.Column(db.String(45))
-    karten_nr = db.Column(db.String(45))
-    karte_gültingkeitsdatum = db.Column(db.DateTime)
-    karten_prüfnummer = db.Column(db.Integer)
+    Nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'), primary_key=True)
+    Bezahlmöglichkeiten_ID = db.Column(db.Integer, db.ForeignKey('bezahlmöglichkeiten.ID'), primary_key=True)
+    PP_Email = db.Column(db.String(45))
+    Karten_Nr = db.Column(db.String(45))
+    Karte_Gültingkeitsdatum = db.Column(db.DateTime)
+    Karte_Prüfnummer = db.Column(db.Integer)
 
     nutzer = relationship("Nutzer")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
     bezahlmöglichkeiten = relationship("Bezahlmöglichkeiten")
@@ -44,19 +45,19 @@ class Produktkategorien(db.Model):
     __tablename__ = 'produktkategorien'
 
     ID = db.Column(db.Integer, primary_key=True)
-    kategorie = db.Column(db.String(45))
+    Kategorie = db.Column(db.String(45))
 
 class Produkte(db.Model):
     __tablename__ = 'produkte'
 
     ID = db.Column(db.Integer, primary_key=True)
-    hersteller = db.Column(db.String(45))
-    produkt_name = db.Column(db.String(45))
-    gewicht_volumen = db.Column(db.String(45))
-    ean = db.Column(db.Integer)
-    preis = db.Column(db.Float)
-    bild = db.Column(db.String)  # BLOB-Typ wird nicht direkt unterstützt, kann jedoch als String behandelt werden
-    produktkategorien_ID = db.Column(db.Integer, db.ForeignKey('produktkategorien.ID'))
+    Hersteller = db.Column(db.String(45))
+    Name = db.Column(db.String(45))
+    Gewicht_Volumen = db.Column(db.String(45))
+    EAN = db.Column(db.Integer)
+    Preis = db.Column(db.Float)
+    Bild = db.Column(db.String)  # BLOB-Typ wird nicht direkt unterstützt, kann jedoch als String behandelt werden
+    Kategorie_ID = db.Column(db.Integer, db.ForeignKey('produktkategorien.ID'))
 
     produktkategorien = relationship("Produktkategorien")
 
@@ -64,21 +65,18 @@ class Einkauf(db.Model):
     __tablename__ = 'einkauf'
 
     ID = db.Column(db.Integer, primary_key=True)
-    nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'))
-    zeitstempel_start = db.Column(db.DateTime)
-    zeitstempel_ende = db.Column(db.DateTime)
+    Nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'))
+    Zeitstempel_start = db.Column(db.DateTime)
+    Zeitstempel_ende = db.Column(db.DateTime)
 
     nutzer = relationship("Nutzer")
 
 class Warenkorb(db.Model):
     __tablename__ = 'warenkorb'
 
-    einkauf_ID = db.Column(db.Integer, db.ForeignKey('einkauf.ID'), primary_key=True)
-    produkte_ID = db.Column(db.Integer, db.ForeignKey('produkte.ID'), primary_key=True)
-    anzahl = db.Column(db.Integer)
+    Einkauf_ID = db.Column(db.Integer, db.ForeignKey('einkauf.ID'), primary_key=True)
+    Produkt_ID = db.Column(db.Integer, db.ForeignKey('produkte.ID'), primary_key=True)
+    Anzahl = db.Column(db.Integer)
 
     einkauf = relationship("Einkauf")
     produkte = relationship("Produkte")
-
-# Tabellen erstellen
-# Base.metadata.create_all(engine)

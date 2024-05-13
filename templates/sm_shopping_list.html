@@ -11,68 +11,34 @@
     <div class="row">
         <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
     </div>
-    <div class="row">
         <div class="col-sm-6 offset-sm-3">
-            <div class="basket-list">
-                <!-- Hier wird die Liste dynamisch generiert -->
+            <div class="item row">
+                <div class="col-8">
+                    <h5>Produktname</h5>
+                </div>
+                <div class="col-1 align-items-center">
+                    <h5>Anzahl</h5>
+                </div>
             </div>
+            <div class="row">
+            {% for product in product_list %}
+            <div class="item row">
+                <div class="col-8">
+                    <p>{{ product.name }}</p>
+                </div>
+                <div class="col-1">
+                    <button class="mx-1 warenkorb-btn" id="decrease">-</button>
+                </div>
+                <div class="col-1 text-center">
+                    <span>{{ product.amount }}</span>
+                </div>
+                <div class="col-1">
+                    <button class="mx-1 warenkorb-btn" id="increase">+</button>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
-
-
-<script>
-    // Beispiel-Produktliste
-    var products = [
-        { name: "Beispielprodukt 1", quantity: 1 },
-        { name: "Beispielprodukt 2", quantity: 3 },
-        // Weitere Produkte hier hinzufügen...
-    ];
-
-    // Funktion zum Erstellen eines Listenelements für ein Produkt
-    function createProductItem(product) {
-        var item = document.createElement("div");
-        item.classList.add("item", "row");
-
-        var productNameCol = document.createElement("div");
-        productNameCol.classList.add("col-8");
-        var productName = document.createElement("p");
-        productName.textContent = product.name;
-        productNameCol.appendChild(productName);
-        item.appendChild(productNameCol);
-
-        var buttonCol = document.createElement("div");
-        buttonCol.classList.add("col-1", "align-items-center");
-        var button = document.createElement("button");
-        button.classList.add("mx-auto");
-        button.textContent = "-";
-        buttonCol.appendChild(button);
-        item.appendChild(buttonCol);
-
-        var quantityCol = document.createElement("div");
-        quantityCol.classList.add("col-1", "text-center");
-        var quantitySpan = document.createElement("span");
-        quantitySpan.textContent = product.quantity;
-        quantityCol.appendChild(quantitySpan);
-        item.appendChild(quantityCol);
-
-        var buttonCol = document.createElement("div");
-        buttonCol.classList.add("col-1", "align-items-center");
-        var button = document.createElement("button");
-        button.classList.add("mx-auto");
-        button.textContent = "+";
-        buttonCol.appendChild(button);
-        item.appendChild(buttonCol);
-
-        return item;
-    }
-
-    // Die Liste dynamisch erstellen
-    var basketList = document.querySelector(".basket-list");
-    products.forEach(function (product) {
-        var productItem = createProductItem(product);
-        basketList.appendChild(productItem);
-    });
-</script>
 {% endblock %}
 <!-- END Main Content -->

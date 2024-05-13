@@ -1,5 +1,4 @@
-header, body,footer{
-    
+header, body, footer{
     background-color: rgb(24, 115, 180);
     color: white;
     height: auto;
@@ -21,7 +20,7 @@ header, body,footer{
     height: auto;
     display: flex;
     flex-direction: column;
-    min-height: 90vh;
+    min-height: 100vh;
 }
 
 /* NAVBAR: */
@@ -495,6 +494,9 @@ header, body,footer{
     margin-right: 10px;
     margin-left: 10px;
 }
+
+/* WARENKORB-Seite */
+
 
 
 

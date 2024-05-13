@@ -6,6 +6,7 @@ import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date
+from sqlalchemy.orm import joinedload
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -29,21 +30,21 @@ def index():
 def defaultP():
     return render_template('sm_cust_main.html')
 
-@app.route('/templates/sm_registration.html')
+@app.route('/registration')
 def registrationP():
     return render_template('sm_registration.html')
 
-@app.route('/templates/sm_login.html')
+@app.route('/login')
 def loginP():
     return render_template('sm_login.html')
 
-@app.route('/templates/sm_scanner.html')
+@app.route('/scanner')
 def scannerP():
     return render_template('sm_scanner.html')
 
-@app.route('/templates/sm_shopping_list.html')
+@app.route('/shoppinglist')
 def prodBasketP():
-    return render_template('sm_shopping_list.html')
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
 
 @app.route('/productcatalog')
 def productcatalog():
@@ -106,6 +107,19 @@ def getProdsFromCategory(category):
     prodsOfCategory = db.session.query(Produkte).join(Produktkategorien).filter(Produktkategorien.kategorie == category)
     for prod in prodsOfCategory:
         newProd = {'name': prod.produkt_name, 'img': prod.bild, 'weight' : prod.gewicht_volumen, 'price': prod.preis, 'manufacturer' : prod.hersteller}
+        products.append(newProd)
+    return products
+
+def getProdsFromShoppingList(shopping_id):
+    products = []
+    prodsOfCategory = db.session.query(Warenkorb).\
+        outerjoin(Warenkorb.einkauf).\
+        join(Warenkorb.produkte).\
+        filter(Warenkorb.einkauf_ID == shopping_id).\
+        options(joinedload(Warenkorb.produkte))  # Optional: Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
+
+    for prod in prodsOfCategory:
+        newProd = {'name': prod.produkte.produkt_name, 'amount': prod.anzahl}
         products.append(newProd)
     return products
 
