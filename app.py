@@ -104,7 +104,7 @@ def categoryPage(category):
 
 def getProdsFromCategory(category):
     products = []
-    prodsOfCategory = db.session.query(Produkte).join(Produktkategorien).filter(Produktkategorien.kategorie == category)
+    prodsOfCategory = db.session.query(Produkte).join(Produktkategorien).filter(Produktkategorien.Kategorie == category)
     for prod in prodsOfCategory:
         newProd = {'name': prod.produkt_name, 'img': prod.bild, 'weight' : prod.gewicht_volumen, 'price': prod.preis, 'manufacturer' : prod.hersteller}
         products.append(newProd)
@@ -119,7 +119,7 @@ def getProdsFromShoppingList(shopping_id):
     prodsOfCategory = db.session.query(Warenkorb).\
         outerjoin(Warenkorb.einkauf).\
         join(Warenkorb.produkte).\
-        filter(Warenkorb.einkauf_ID == shopping_id).\
+        filter(Warenkorb.Einkauf_ID == shopping_id).\
         options(joinedload(Warenkorb.produkte))  # Optional: Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
 
     for prod in prodsOfCategory:
@@ -142,7 +142,7 @@ def show_nutzer():
     return render_template('db_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
 
 @app.route('/produktkategorien')
-def show_produktkategorien():
+def show_produktkategorie():
     #Produktkategorien zur Datenbank einmalig hinzufügen
     #service.addProductCategories(categoryNames)
 
@@ -181,34 +181,12 @@ def show_bezahlung():
     return render_template('bezahlung.html', bezahlungen_entries =bezahlung_entries)
 
 
-
-@app.route('/produktkategorien')
-def show_produktkategorien():
-    #Produktkategorien zur Datenbank einmalig hinzufügen
-    #service.addProductCategories(categoryNames)
-
-    produktkategorien_entries = db.session.query(Produktkategorien).all()
-    print(produktkategorien_entries)
-    return render_template('produktkategorien.html', produktkategorien_entries=produktkategorien_entries)
-
-
 @app.route('/produkte')
 def show_produkte():
     #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
     #service.addAllProductsFromExcel(categoryNames)  
     produkte_entries = db.session.query(Produkte).all()
     return render_template('produkte.html', produkte_entries=produkte_entries)
-
-@app.route('/einkauf')
-def show_einkauf():
-    einkauf_entries = db.session.query(Einkauf).all()
-    return render_template('einkauf.html', einkauf_entries=einkauf_entries)
-
-@app.route('/warenkorb')
-def show_warenkorb():
-    warenkorb_entries = db.session.query(Warenkorb).all()
-    return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
-
 
 ##################### besondere URLs/Funktionen:
 
