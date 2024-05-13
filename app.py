@@ -142,7 +142,7 @@ def show_nutzer():
     return render_template('db_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
 
 @app.route('/produktkategorien')
-def show_produktkategorie():
+def show_produktkategorieDB():
     #Produktkategorien zur Datenbank einmalig hinzufügen
     #service.addProductCategories(categoryNames)
 
@@ -161,28 +161,28 @@ def show_produkte():
 
 ####ToDo: auf Tabellenanzeige Template anpassen
 @app.route('/einkauf')
-def show_einkauf():
+def show_einkaufDB():
     einkauf_entries = db.session.query(Einkauf).all()
     return render_template('einkauf.html', einkauf_entries=einkauf_entries)
 
 @app.route('/warenkorb')
-def show_warenkorb():
+def show_warenkorbDB():
     warenkorb_entries = db.session.query(Warenkorb).all()
     return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
 
 @app.route('/bezahlmöglichkeiten')
-def show_bezahlmöglichkeiten():
+def show_bezahlmöglichkeitenDB():
     bezahlmoeglichkeiten_entries = db.session.query(Bezahlmöglichkeiten).all()
     return render_template('bezahlmöglichkeiten.html', bezahlmoeglichkeiten_entries=bezahlmoeglichkeiten_entries)
 
 @app.route('/bezahlung')
-def show_bezahlung():
+def show_bezahlungDB():
     bezahlung_entries = db.session.query(Bezahlung).all()
     return render_template('bezahlung.html', bezahlungen_entries =bezahlung_entries)
 
 
 @app.route('/produkte')
-def show_produkte():
+def show_produkteDB():
     #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
     #service.addAllProductsFromExcel(categoryNames)  
     produkte_entries = db.session.query(Produkte).all()
