@@ -1,0 +1,44 @@
+{% extends "sm_default.html" %}
+
+{% block header %}
+    <title>Einkauf - ScannerMarket</title>
+{% endblock %}
+
+
+{% block content %}
+<!-- Main Content -->
+<div class="main-container">
+    <div class="row">
+        <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
+    </div>
+        <div class="col-sm-6 offset-sm-3">
+            <div class="item row">
+                <div class="col-8">
+                    <h5>Produktname</h5>
+                </div>
+                <div class="col-1 align-items-center">
+                    <h5>Anzahl</h5>
+                </div>
+            </div>
+            <div class="row">
+            {% for product in product_list %}
+            <div class="item row">
+                <div class="col-8">
+                    <p>{{ product.name }}</p>
+                </div>
+                <div class="col-1">
+                    <button class="mx-1 warenkorb-btn" id="decrease">-</button>
+                </div>
+                <div class="col-1 text-center">
+                    <span>{{ product.amount }}</span>
+                </div>
+                <div class="col-1">
+                    <button class="mx-1 warenkorb-btn" id="increase">+</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- END Main Content -->

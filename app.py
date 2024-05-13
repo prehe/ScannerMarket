@@ -1,11 +1,16 @@
 # app.py
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from flask_cors import CORS
+import pandas as pd
+import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date
+from sqlalchemy.orm import joinedload
 
 # Initialize the Flask application
 app = Flask(__name__)
+CORS(app)  # Aktiviere CORS für alle Routen
 
 # Verbindung zur Datenbank herstellen
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///scannerMarket.db"
@@ -21,25 +26,25 @@ def index():
     return render_template('sm_cust_main.html')
 
 # Define the route for the default page
-@app.route('/templates/sm_cust_main.html')
+@app.route('/main')
 def defaultP():
     return render_template('sm_cust_main.html')
 
-@app.route('/templates/sm_registration.html')
+@app.route('/registration')
 def registrationP():
     return render_template('sm_registration.html')
 
-@app.route('/templates/sm_login.html')
+@app.route('/login')
 def loginP():
     return render_template('sm_login.html')
 
-@app.route('/templates/sm_scanner.html')
+@app.route('/scanner')
 def scannerP():
     return render_template('sm_scanner.html')
 
-@app.route('/templates/sm_productbasket.html')
+@app.route('/shoppinglist')
 def prodBasketP():
-    return render_template('sm_productbasket.html')
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
 
 @app.route('/productcatalog')
 def productcatalog():
@@ -109,6 +114,19 @@ def getProdsFromCategory(category):
 def impressum ():
     return render_template('sm_impressum.html')
 
+def getProdsFromShoppingList(shopping_id):
+    products = []
+    prodsOfCategory = db.session.query(Warenkorb).\
+        outerjoin(Warenkorb.einkauf).\
+        join(Warenkorb.produkte).\
+        filter(Warenkorb.einkauf_ID == shopping_id).\
+        options(joinedload(Warenkorb.produkte))  # Optional: Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
+
+    for prod in prodsOfCategory:
+        newProd = {'name': prod.produkte.produkt_name, 'amount': prod.anzahl}
+        products.append(newProd)
+    return products
+
 # ####################################################################################################################################################
 #dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
 
@@ -117,6 +135,7 @@ def show_nutzer():
     #Kunden hinzufügen
     #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
     
+
     nutzer_entries = db.session.query(Nutzer).all()
     # print(nutzer_entries[0].ID)
     column_names = ["ID", "vorname", "nachname", "geb_datum", "email", "passwort", "kundenkarte", "admin", "newsletter"]
@@ -160,6 +179,94 @@ def show_bezahlmöglichkeiten():
 def show_bezahlung():
     bezahlung_entries = db.session.query(Bezahlung).all()
     return render_template('bezahlung.html', bezahlungen_entries =bezahlung_entries)
+
+
+
+@app.route('/produktkategorien')
+def show_produktkategorien():
+    #Produktkategorien zur Datenbank einmalig hinzufügen
+    #service.addProductCategories(categoryNames)
+
+    produktkategorien_entries = db.session.query(Produktkategorien).all()
+    print(produktkategorien_entries)
+    return render_template('produktkategorien.html', produktkategorien_entries=produktkategorien_entries)
+
+
+@app.route('/produkte')
+def show_produkte():
+    #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
+    #service.addAllProductsFromExcel(categoryNames)  
+    produkte_entries = db.session.query(Produkte).all()
+    return render_template('produkte.html', produkte_entries=produkte_entries)
+
+@app.route('/einkauf')
+def show_einkauf():
+    einkauf_entries = db.session.query(Einkauf).all()
+    return render_template('einkauf.html', einkauf_entries=einkauf_entries)
+
+@app.route('/warenkorb')
+def show_warenkorb():
+    warenkorb_entries = db.session.query(Warenkorb).all()
+    return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
+
+
+##################### besondere URLs/Funktionen:
+
+@app.route('/insertDB')
+def insertDB():
+    # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    # service.addNewCustomer(vorname="Paulchen", nachname="Kleiner", geb_datum=date(1990, 1, 1), email='p.kleiner@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
+    # paymethod = Bezahlmöglichkeiten(methode="Paypal")
+    # db.session.add(paymethod)
+    # db.session.commit()
+    # paymethod = Bezahlmöglichkeiten(methode="Kreditkarte")
+    # db.session.add(paymethod)
+    # db.session.commit()
+
+    # pay = Bezahlung(nutzer_ID = 1, bezahlmöglichkeiten_ID = 1, konto_email = "p.kleiner@example.com")
+    # db.session.add(pay)
+    # db.session.commit()
+    # service.addAllProductsFromExcel(categoryNames)
+    # prod = Produkte(hersteller = 'ABC GmbH', produkt_name = "dummy3", produktkategorien_ID = 2)
+    # db.session.add(prod)
+    # db.session.commit()
+
+    # something = Einkauf(nutzer_ID = 2)
+    # db.session.add(something)
+    # db.session.commit()
+
+    # something = Warenkorb(einkauf_ID=1, produkte_ID = 3, anzahl = 5)
+    # db.session.add(something)
+    # # something2 = Warenkorb(einkauf_ID=1, produkte_ID = 2, anzahl = 2)
+    # # db.session.add(something2)
+    # db.session.commit()
+
+    produkte_entries = db.session.query(Produkte).all()
+    return render_template('produkte.html', produkte_entries=produkte_entries)
+
+
+
+@app.route('/getProductFromEan', methods=["GET", "POST"])
+def getProductFromEan():
+    search_ean = request.args.get('ean')  # Use request.args for query parameters
+    print(search_ean)
+    produkte_entries = db.session.query(Produkte).filter_by(ean=search_ean).all()
+    print(produkte_entries)
+    return produkte_entries
+
+
+@app.route('/startOrEndShopping', methods=["GET", "POST"])
+def startShopping():
+    # peudo code:
+    # if last tmst_end = none & nutzer_id = nutzer_id:
+        # add tmst_end
+    # else: 
+        # set new shopping(nutzer_id, tmst_start)
+        # return shopping_id
+        return None
+
+
+
 
 # ####################################################################################################################################################
 

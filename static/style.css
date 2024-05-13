@@ -1,5 +1,4 @@
-header, body,footer{
-    
+header, body, footer{
     background-color: rgb(24, 115, 180);
     color: white;
     height: auto;
@@ -532,6 +531,9 @@ td, th{
     margin-right: 10px;
     margin-left: 10px;
 }
+
+/* WARENKORB-Seite */
+
 
 
 

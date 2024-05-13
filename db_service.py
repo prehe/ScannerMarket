@@ -1,4 +1,3 @@
-
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import pandas as pd
 import requests
