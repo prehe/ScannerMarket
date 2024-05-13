@@ -21,7 +21,7 @@ header, body,footer{
     height: auto;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 90vh;
 }
 
 /* NAVBAR: */
@@ -186,9 +186,6 @@ header, body,footer{
 }
 
 
-
-
-
 /* main Inhalt - Produktübersicht - Kundensicht*/
 
 /* Basiscontainer für Inhalt unter der NAVBAR: */
@@ -343,6 +340,46 @@ header, body,footer{
     margin-right: 10px;
     margin-left: 10px;
 }
+/* Impressum-Seite*/
+.impressum {
+    padding-left : 5px;
+}
+
+.impressum h6{
+   padding-top: 10px;
+}
+.impressum a{
+    color:rgb(200, 200, 200);;
+    padding: 10px; 
+}
+
+/* Anpassung Link */
+.impressum a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+/*Analysen-Seite & Datenbankübersicht-Seite*/
+.table-container{
+    overflow-y: auto;
+    overflow-x: auto;
+    max-width: 100%;
+    max-height: 75vh;
+    margin: 5px;
+
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+td, th{
+    padding : 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 
 /* SCANNER-Seite */
@@ -420,6 +457,26 @@ header, body,footer{
     padding-left: 10px;
 }
 
+/*admin-Main-Seite*/
+.admin-categories {
+    padding: 5px; 
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: relative;
+    margin: auto;
+}
+
+.admin-categories img {
+    object-position: 50% 50%;
+    width: 75vw;
+    height:  25vh;
+    object-fit: cover;
+
+}
+
+
+
 /* SCANNER-Seite */
 #reader {
     width: auto;
@@ -481,6 +538,7 @@ header, body,footer{
 /* FOOTER: */
 .linkings {
     flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
+
 }
 
 /* Anpassung Link */
