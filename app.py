@@ -110,6 +110,10 @@ def getProdsFromCategory(category):
         products.append(newProd)
     return products
 
+@app.route("/impressum")
+def impressum ():
+    return render_template('sm_impressum.html')
+
 def getProdsFromShoppingList(shopping_id):
     products = []
     prodsOfCategory = db.session.query(Warenkorb).\
@@ -129,10 +133,42 @@ def getProdsFromShoppingList(shopping_id):
 @app.route('/nutzer')
 def show_nutzer():
     #Kunden hinzufügen
+    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    
 
     nutzer_entries = db.session.query(Nutzer).all()
     # print(nutzer_entries[0].ID)
-    return render_template('nutzer.html', nutzer_entries=nutzer_entries)
+    column_names = ["ID", "vorname", "nachname", "geb_datum", "email", "passwort", "kundenkarte", "admin", "newsletter"]
+    return render_template('db_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
+
+@app.route('/produktkategorien')
+def show_produktkategorien():
+    #Produktkategorien zur Datenbank einmalig hinzufügen
+    #service.addProductCategories(categoryNames)
+
+    produktkategorien_entries = db.session.query(Produktkategorien).all()
+    column_names = ["ID", "kategorie"]
+    return render_template('db_table_view.html',entries=produktkategorien_entries, column_names= column_names, title = "Produktkategorien")
+
+@app.route('/produkte')
+def show_produkte():
+    #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
+    #service.addAllProductsFromExcel(categoryNames)  
+    produkte_entries = db.session.query(Produkte).all()
+    column_names = ["ID", "hersteller", "produkt_name", "gewicht_volumen", "ean", "preis","bild", "produktkategorien_ID"]
+    return render_template('db_table_view.html', entries=produkte_entries, column_names= column_names, title = "Produkte")
+
+
+####ToDo: auf Tabellenanzeige Template anpassen
+@app.route('/einkauf')
+def show_einkauf():
+    einkauf_entries = db.session.query(Einkauf).all()
+    return render_template('einkauf.html', einkauf_entries=einkauf_entries)
+
+@app.route('/warenkorb')
+def show_warenkorb():
+    warenkorb_entries = db.session.query(Warenkorb).all()
+    return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
 
 @app.route('/bezahlmöglichkeiten')
 def show_bezahlmöglichkeiten():
@@ -154,57 +190,6 @@ def show_produktkategorien():
     produktkategorien_entries = db.session.query(Produktkategorien).all()
     print(produktkategorien_entries)
     return render_template('produktkategorien.html', produktkategorien_entries=produktkategorien_entries)
-
-
-def get_and_save_product_data(barcode, categoryId):
-    url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
-    print(url)
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        product_data = response.json()["product"]
-        
-        # Produktinformationen aus der API extrahieren
-        ean = product_data['id']
-        hersteller = product_data['brands']
-        produktname = product_data['product_name']
-        gewicht_volumen = product_data.get('quantity', '')  # 'quantity' könnte fehlen, daher verwenden wir 'get'
-        kategorie = categoryId
-        preis = 0  # TODO: Preis aus dem Globus Online Produktkatalog abrufen
-        bild = product_data.get('image_front_small_url', '')
-
-        addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie)
-              
-        print("Produkt erfolgreich hinzugefügt!")
-    else:
-        print(f"Fehler beim Abrufen der Produktinformationen. Statuscode: {response.status_code}")
-
-
-def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie):
-     # Produkt in die Datenbank einfügen
-        new_product = Produkte(
-            hersteller = hersteller,
-            produkt_name = produktname,
-            gewicht_volumen = gewicht_volumen,
-            ean = ean,
-            preis = preis,
-            bild = bild,
-            produktkategorien_ID = kategorie
-        )
-        db.session.add(new_product)
-        db.session.commit()
-        db.session.close()
-
-def getBarcodesOfCategory(category):
-    excel = "static\product_barcodes.xlsx"
-    file = pd.read_excel(excel)
-    if category in file.columns:
-        barcodesOfCat = file[category].dropna().astype(str).str.replace('\.0', '', regex=True).tolist() #chatgpt
-        # print(barcodesOfCat)
-        return barcodesOfCat
-    else:
-        print(f"Spalte: '{category}' nicht gefunden")
-        return
 
 
 @app.route('/produkte')

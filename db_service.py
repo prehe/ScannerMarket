@@ -53,7 +53,7 @@ def get_and_save_product_data(barcode, categoryId):
               
         print("Produkt erfolgreich hinzugefügt!")
     else:
-        print(f"Fehler beim Abrufen der Produktinformationen. {response.status_code}")
+        print(f"Fehler beim Abrufen der Produktinformationen. Statuscode: {response.status_code}")
 
 #barcodes einer Produktkategorie aus einer Excel-Liste auslesen
 def getBarcodesOfCategory(category):
