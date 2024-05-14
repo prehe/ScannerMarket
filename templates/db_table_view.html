@@ -32,9 +32,10 @@
                 <tbody>
                     {% for entry in entries %}
                         <tr>
-                            <th scope="row">{{ entry.ID }}</th>
                             {% for identifier in column_names %}
-                                {% if identifier != "ID" %}
+                                {% if identifier == "ID" %}
+                                    <th scope="row">{{ entry.ID }}</th>
+                                {% else %}
                                     <td>{{ entry[identifier]  }}</td>
                                 {% endif%}
                             {% endfor %}
