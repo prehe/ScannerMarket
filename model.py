@@ -56,7 +56,7 @@ class Produkte(db.Model):
     Gewicht_Volumen = db.Column(db.String(45))
     EAN = db.Column(db.Integer)
     Preis = db.Column(db.Float)
-    Bild = db.Column(db.String)  # BLOB-Typ wird nicht direkt unterstützt, kann jedoch als String behandelt werden
+    Bild = db.Column(db.String)  
     Kategorie_ID = db.Column(db.Integer, db.ForeignKey('produktkategorien.ID'))
 
     produktkategorien = relationship("Produktkategorien")
