@@ -153,7 +153,7 @@ def show_produktkategorie():
 @app.route('/Produkte')
 def show_produkte():
     #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
-    service.addAllProductsFromExcel(categoryNames)  
+    # service.addAllProductsFromExcel(categoryNames)  
     produkte_entries = db.session.query(Produkte).all()
     column_names = ["ID", "Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis","Bild", "Kategorie_ID"]
     return render_template('db_table_view.html', entries=produkte_entries, column_names= column_names, title = "Produkte")
@@ -188,7 +188,7 @@ def show_bezahlung():
 
 @app.route('/insertDB')
 def insertDB():
-    # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    # service.addNewCustomer(Vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
     # service.addNewCustomer(vorname="Paulchen", nachname="Kleiner", geb_datum=date(1990, 1, 1), email='p.kleiner@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
     # paymethod = Bezahlmöglichkeiten(methode="Paypal")
     # db.session.add(paymethod)
@@ -214,6 +214,9 @@ def insertDB():
     # # something2 = Warenkorb(einkauf_ID=1, produkte_ID = 2, anzahl = 2)
     # # db.session.add(something2)
     # db.session.commit()
+
+    # service.addProductCategories(categoryNames)
+    # service.addAllProductsFromExcel(categoryNames)
 
     produkte_entries = db.session.query(Produkte).all()
     return render_template('produkte.html', produkte_entries=produkte_entries)
