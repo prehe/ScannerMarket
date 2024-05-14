@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, render_template, request
-from flask_cors import CORS
+#from flask_cors import CORS
 import pandas as pd
 import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
@@ -10,7 +10,7 @@ from sqlalchemy.orm import joinedload
 
 # Initialize the Flask application
 app = Flask(__name__)
-CORS(app)  # Aktiviere CORS für alle Routen
+#CORS(app)  # Aktiviere CORS für alle Routen
 
 # Verbindung zur Datenbank herstellen
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///scannerMarket.db"
@@ -106,7 +106,8 @@ def getProdsFromCategory(category):
     products = []
     prodsOfCategory = db.session.query(Produkte).join(Produktkategorien).filter(Produktkategorien.Kategorie == category)
     for prod in prodsOfCategory:
-        newProd = {'name': prod.produkt_name, 'img': prod.bild, 'weight' : prod.gewicht_volumen, 'price': prod.preis, 'manufacturer' : prod.hersteller}
+        print(prod)
+        newProd = {'name': prod.Name, 'img': prod.Bild, 'weight' : prod.Gewicht_Volumen, 'price': prod.Preis, 'manufacturer' : prod.Hersteller}
         products.append(newProd)
     return products
 
@@ -130,63 +131,58 @@ def getProdsFromShoppingList(shopping_id):
 # ####################################################################################################################################################
 #dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
 
-@app.route('/nutzer')
+@app.route('/Kunden')
 def show_nutzer():
     #Kunden hinzufügen
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='ma.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am= date(2024, 5, 14)) 
     
-
     nutzer_entries = db.session.query(Nutzer).all()
     # print(nutzer_entries[0].ID)
-    column_names = ["ID", "vorname", "nachname", "geb_datum", "email", "passwort", "kundenkarte", "admin", "newsletter"]
+    column_names = ["ID", "Vorname", "Nachname", "Geburtsdatum", "Email", "Passwort", "Kundenkarte", "Admin", "Newsletter", " Registriert_am"]
     return render_template('db_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
 
-@app.route('/produktkategorien')
-def show_produktkategorieDB():
+@app.route('/Produktkategorien')
+def show_produktkategorie():
     #Produktkategorien zur Datenbank einmalig hinzufügen
     #service.addProductCategories(categoryNames)
 
     produktkategorien_entries = db.session.query(Produktkategorien).all()
-    column_names = ["ID", "kategorie"]
+    column_names = ["ID", "Kategorie"]
     return render_template('db_table_view.html',entries=produktkategorien_entries, column_names= column_names, title = "Produktkategorien")
 
-@app.route('/produkte')
+@app.route('/Produkte')
 def show_produkte():
     #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
-    #service.addAllProductsFromExcel(categoryNames)  
+    service.addAllProductsFromExcel(categoryNames)  
     produkte_entries = db.session.query(Produkte).all()
-    column_names = ["ID", "hersteller", "produkt_name", "gewicht_volumen", "ean", "preis","bild", "produktkategorien_ID"]
+    column_names = ["ID", "Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis","Bild", "Kategorie_ID"]
     return render_template('db_table_view.html', entries=produkte_entries, column_names= column_names, title = "Produkte")
 
 
 ####ToDo: auf Tabellenanzeige Template anpassen
-@app.route('/einkauf')
-def show_einkaufDB():
+@app.route('/Einkauf')
+def show_einkauf():
     einkauf_entries = db.session.query(Einkauf).all()
-    return render_template('einkauf.html', einkauf_entries=einkauf_entries)
+    column_names =["ID", "Nutzer_ID",  "Zeitstempel_start","Zeitstempel_ende" ]
+    return render_template('db_table_view.html', entries=einkauf_entries, column_names=column_names, title = "Einkauf")
 
-@app.route('/warenkorb')
-def show_warenkorbDB():
+@app.route('/Warenkorb')
+def show_warenkorb():
     warenkorb_entries = db.session.query(Warenkorb).all()
-    return render_template('warenkorb.html', warenkorb_entries=warenkorb_entries)
+    column_names = ["Einkauf_ID", "Produkt_ID", "Anzahl"]
+    return render_template('db_table_view.html', entries=warenkorb_entries, column_names=column_names, title = "Warenkorb")
 
-@app.route('/bezahlmöglichkeiten')
-def show_bezahlmöglichkeitenDB():
+@app.route('/Bezahlmöglichkeiten')
+def show_bezahlmöglichkeiten():
     bezahlmoeglichkeiten_entries = db.session.query(Bezahlmöglichkeiten).all()
-    return render_template('bezahlmöglichkeiten.html', bezahlmoeglichkeiten_entries=bezahlmoeglichkeiten_entries)
+    column_names = ["ID", "Methode"]
+    return render_template('db_table_view.html', entries=bezahlmoeglichkeiten_entries, column_names=column_names, title="Bezahlmöglichkeiten")
 
-@app.route('/bezahlung')
-def show_bezahlungDB():
+@app.route('/Bezahlung')
+def show_bezahlung():
     bezahlung_entries = db.session.query(Bezahlung).all()
-    return render_template('bezahlung.html', bezahlungen_entries =bezahlung_entries)
-
-
-@app.route('/produkte')
-def show_produkteDB():
-    #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
-    #service.addAllProductsFromExcel(categoryNames)  
-    produkte_entries = db.session.query(Produkte).all()
-    return render_template('produkte.html', produkte_entries=produkte_entries)
+    column_names = ["Nutzer_ID", "Bezahlmöglichkeiten_ID", "PP_Email", "Karten_Nr", "Karte_Gültingkeitsdatum", "Karte_Prüfnummer" ]
+    return render_template('db_table_view.html', entries =bezahlung_entries, column_names=column_names, title = "Bezahlung")
 
 ##################### besondere URLs/Funktionen:
 

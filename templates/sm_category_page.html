@@ -1,7 +1,7 @@
 {% extends "sm_default.html" %}
 
 {% block header %}
-    <title>ScannerMarket</title>
+    <title>SM - {{category}}</title>
 {% endblock %}
 
 {% block content%}
@@ -15,8 +15,8 @@
             {% for i in products %}
                 <div class="col-sm-6 col-md-4 col-lg-3 p-1">
                     <div class="product"> 
-                        <div class="product-img">
-                            <img src="{{ i.img }}" alt="" class="product-img" >
+                        <div class="product-img ">
+                            <img src="{{ i.img }}" alt=""  >
                         </div>
                         <h5>{{ i.name }}</h5> 
                         <p>Hersteller: {{ i.manufacturer }}</p>

@@ -3,29 +3,29 @@ import pandas as pd
 import requests
 import time
 
-def addNewCustomer (vorname, nachname, geb_datum, email, passwort, kundenkarte, admin, newsletter):
+def addNewCustomer (vorname, nachname, geb_datum, email, passwort, kundenkarte, admin, newsletter, reg_am):
     #einen neuen Kunden in die Datenbank einfügen
-    customer = Nutzer(vorname=vorname, nachname=nachname, geb_datum=geb_datum, email=email, passwort=passwort, kundenkarte=kundenkarte, admin=admin, newsletter=newsletter)
+    customer = Nutzer(Vorname=vorname, Nachname=nachname, Geburtsdatum=geb_datum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am = reg_am)
     db.session.add(customer)
     db.session.commit()
 
 def addProductCategories (categoryNames):
     #Kategorien in die Datenbank einfügen
     for name in categoryNames.values():
-        category = Produktkategorien(kategorie = name)
+        category = Produktkategorien(Kategorie = name)
         db.session.add(category)
     db.session.commit()
 
 def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie):
      # Produkt in die Datenbank einfügen
         new_product = Produkte(
-            hersteller = hersteller,
-            produkt_name = produktname,
-            gewicht_volumen = gewicht_volumen,
-            ean = ean,
-            preis = preis,
-            bild = bild,
-            produktkategorien_ID = kategorie
+            Hersteller = hersteller,
+            Name = produktname,
+            Gewicht_Volumen = gewicht_volumen,
+            EAN = ean,
+            Preis = preis,
+            Bild = bild,
+            Kategorie_ID = kategorie
         )
         db.session.add(new_product)
         db.session.commit()
