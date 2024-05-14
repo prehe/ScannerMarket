@@ -60,7 +60,7 @@ def newProduct():
 
 @app.route('/admin/analysis')
 def analysis():
-    return render_template('sm_admin_analysis.html')
+    return render_template('sm_admin_analysis.html', analyse_page= "/Produktkategorien")
 
 #globale Variable
 categoryNames={
@@ -106,7 +106,6 @@ def getProdsFromCategory(category):
     products = []
     prodsOfCategory = db.session.query(Produkte).join(Produktkategorien).filter(Produktkategorien.Kategorie == category)
     for prod in prodsOfCategory:
-        print(prod)
         newProd = {'name': prod.Name, 'img': prod.Bild, 'weight' : prod.Gewicht_Volumen, 'price': prod.Preis, 'manufacturer' : prod.Hersteller}
         products.append(newProd)
     return products

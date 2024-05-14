@@ -9,46 +9,50 @@
 
 {% block content%}
     <div class = "main-container">
-        <div class = "navigation">
+        <div class = "analysis-navigation">
+            <label for="dropdownMenuButton">Analyse:</label>
             <div class="dropdown show">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dropdown button
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Umsatz</a>
-                            <a class="dropdown-item" href="#">Neukunden</a>
-                            <a class="dropdown-item" href="#">Produktdatenbank</a>
-                            <a class="dropdown-item" href="#">Produktkategorien</a>
-                            <a class="dropdown-item" href="#">Kundendatenbank</a>
-                            <a class="dropdown-item" href="#">Einkäufe</a>
-                            <a class="dropdown-item" href="#">Warenkorb</a>
-                            <a class="dropdown-item" href="#">Bezahlung</a>
-                            <a class="dropdown-item" href="#">Bezahlmöglichkeiten</a>
+                        <option value="Umsatz">Umsatz</option>
+                        <option value="Neukunden">Neukunden</option>
+                        <option value="Produktdatenbank">Produktdatenbank</option>
+                        <option value="Produktkategorien">Produktkategorien</option>
+                        <option value="Kundendatenbank">Kundendatenbank</option>
+                        <option value="Einkäufe">Einkäufe</option>
+                        <option value="Warenkorb">Warenkorb</option>
+                        <option value="Bezahlung">Bezahlung</option>
+                        <option value="Bezahlmöglichkeiten">Bezahlmöglichkeiten</option>
                     </div>
                 </div>
             </div>
         </div>
+        
          <!-- Analysen Content -->
-         {% if analyse_page == "/Produktkategorien" %}
-            <iframe src="/Produktkategorien" ></iframe>
-         {% elsif analyse_page== "/Produkte" %}
-            <iframe src="/Produkte" ></iframe>
-        {% elsif analyse_page== "/Kunden" %}
-            <iframe src="/Kunden" ></iframe>
-        {% elsif analyse_page== "/Einkauf" %}
-            <iframe src="/Einkauf" ></iframe>
-        {% elsif analyse_page== "/Warenkorb" %}
-            <iframe src="/Warenkorb" ></iframe>
-        {% elsif analyse_page== "/Bezahlung" %}
-            <iframe src="/Bezahlung" ></iframe>
-        {% elsif analyse_page== "/Bezahlmöglichkeiten" %}
-            <iframe src="/Bezahlmöglichkeiten" ></iframe>
-        {% elsif analyse_page== "/Umsatz" %}
-            <iframe src="/Umsatz" ></iframe>
-        {% elsif analyse_page== "/Neukunden" %}
-            <iframe src="/Neukunden" ></iframe>
-        {% endif %}
+         <div class="analysis-container">
+            {% if analyse_page == "/Produktkategorien" %}
+                <iframe src="{{url_for('show_produktkategorie')}}"></iframe>
+            {% elif analyse_page== "/Produkte" %}
+                <iframe src="/Produkte" ></iframe>
+            {% elif analyse_page== "/Kunden" %}
+                <iframe src="/Kunden" ></iframe>
+            {% elif analyse_page== "/Einkauf" %}
+                <iframe src="/Einkauf" ></iframe>
+            {% elif analyse_page== "/Warenkorb" %}
+                <iframe src="/Warenkorb" ></iframe>
+            {% elif analyse_page== "/Bezahlung" %}
+                <iframe src="/Bezahlung" ></iframe>
+            {% elif analyse_page== "/Bezahlmöglichkeiten" %}
+                <iframe src="/Bezahlmöglichkeiten" ></iframe>
+            {% elif analyse_page== "/Umsatz" %}
+                <iframe src="/Umsatz" ></iframe>
+            {% elif analyse_page== "/Neukunden" %}
+                <iframe src="/Neukunden" ></iframe>
+            {% endif %}
+         </div>
          <!-- END Analysen Content -->
     </div>
    
