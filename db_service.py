@@ -34,7 +34,6 @@ def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, ka
 #Daten eines Produktes über den barcode aus der Datenbank abfragen
 def get_and_save_product_data(barcode, categoryId):
     url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
-    print(url)
     response = requests.get(url)
     
     if response.status_code == 200:
