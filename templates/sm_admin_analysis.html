@@ -10,50 +10,32 @@
 {% block content%}
     <div class = "main-container">
         <div class = "analysis-navigation">
-            <label for="dropdownMenuButton">Analyse:</label>
-            <div class="dropdown show">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown button
-                    </button>
+            <div class="form-group">
+                <label for="dropdownMenuButton">Analyse:</label>
+                <select id="dropdownMenuButton" class="form-control" required>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <option value="Umsatz">Umsatz</option>
                         <option value="Neukunden">Neukunden</option>
-                        <option value="Produktdatenbank">Produktdatenbank</option>
+                        <option value="Produkte">Produktdatenbank</option>
                         <option value="Produktkategorien">Produktkategorien</option>
-                        <option value="Kundendatenbank">Kundendatenbank</option>
+                        <option value="Kunden">Kundendatenbank</option>
                         <option value="Einkäufe">Einkäufe</option>
                         <option value="Warenkorb">Warenkorb</option>
                         <option value="Bezahlung">Bezahlung</option>
                         <option value="Bezahlmöglichkeiten">Bezahlmöglichkeiten</option>
                     </div>
-                </div>
+                </select>
             </div>
         </div>
         
+        
          <!-- Analysen Content -->
          <div class="analysis-container">
-            {% if analyse_page == "/Produktkategorien" %}
-                <iframe src="{{url_for('show_produkte')}}"></iframe>
-            {% elif analyse_page== "/Produkte" %}
-                <iframe src="/Produkte" ></iframe>
-            {% elif analyse_page== "/Kunden" %}
-                <iframe src="/Kunden" ></iframe>
-            {% elif analyse_page== "/Einkauf" %}
-                <iframe src="/Einkauf" ></iframe>
-            {% elif analyse_page== "/Warenkorb" %}
-                <iframe src="/Warenkorb" ></iframe>
-            {% elif analyse_page== "/Bezahlung" %}
-                <iframe src="/Bezahlung" ></iframe>
-            {% elif analyse_page== "/Bezahlmöglichkeiten" %}
-                <iframe src="/Bezahlmöglichkeiten" ></iframe>
-            {% elif analyse_page== "/Umsatz" %}
-                <iframe src="/Umsatz" ></iframe>
-            {% elif analyse_page== "/Neukunden" %}
-                <iframe src="/Neukunden" ></iframe>
-            {% endif %}
+            <iframe id = "Analysen-Feld" src="{{url_for('show_umsatz')}}"></iframe>
          </div>
          <!-- END Analysen Content -->
     </div>
-   
+
+<!-- Flask -->
+<script src="{{ url_for('static', filename='analysen.js') }}"></script>
 {% endblock %}

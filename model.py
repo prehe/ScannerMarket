@@ -18,7 +18,7 @@ class Nutzer(db.Model):
     Kundenkarte = db.Column(db.Boolean)
     Admin = db.Column(db.Boolean)
     Newsletter = db.Column(db.Boolean)
-    Registriert_am = db.Column(db.DateTime)
+    Registriert_am = db.Column(db.Date)
 
 class Bezahlmöglichkeiten(db.Model):
     __tablename__ = 'bezahlmöglichkeiten'
