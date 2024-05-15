@@ -33,7 +33,7 @@ class Bezahlung(db.Model):
     Bezahlmöglichkeiten_ID = db.Column(db.Integer, db.ForeignKey('bezahlmöglichkeiten.ID'), primary_key=True)
     PP_Email = db.Column(db.String(45))
     Karten_Nr = db.Column(db.String(45))
-    Karte_Gültingkeitsdatum = db.Column(db.DateTime)
+    Karte_Gültingkeitsdatum = db.Column(db.Date)
     Karte_Prüfnummer = db.Column(db.Integer)
 
     nutzer = relationship("Nutzer")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
@@ -69,6 +69,8 @@ class Einkauf(db.Model):
 
     nutzer = relationship("Nutzer")
 
+
+
 class Warenkorb(db.Model):
     __tablename__ = 'warenkorb'
 
@@ -77,4 +79,33 @@ class Warenkorb(db.Model):
     Anzahl = db.Column(db.Integer)
 
     einkauf = relationship("Einkauf")
-    produkte = relationship("Produkte")
+    produkt = relationship("Produkte")
+
+    @classmethod
+    def add_to_cart(cls, einkauf_id, produkt_id, anzahl):
+        """Fügt ein Produkt zum Warenkorb hinzu."""
+        warenkorb = cls(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id, Anzahl=anzahl)
+        db.session.add(warenkorb)
+        db.session.commit()
+
+    @classmethod
+    def update_quantity(cls, einkauf_id, produkt_id, neue_anzahl):
+        """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
+        ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
+        if ware:
+            ware.Anzahl = neue_anzahl
+            db.session.commit()
+
+    @classmethod
+    def remove_from_cart(cls, einkauf_id, produkt_id):
+        """Entfernt ein Produkt aus dem Warenkorb."""
+        ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
+        if ware:
+            db.session.delete(ware)
+            db.session.commit()
+
+    @classmethod
+    def get_cart_contents(cls, einkauf_id):
+        """Gibt den Inhalt des Warenkorbs für einen bestimmten Einkauf zurück."""
+        return cls.query.filter_by(Einkauf_ID=einkauf_id).all()
+

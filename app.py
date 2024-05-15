@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
-from datetime import date
+import datetime
 from sqlalchemy.orm import joinedload
 
 # Initialize the Flask application
@@ -123,7 +123,7 @@ def getProdsFromShoppingList(shopping_id):
         options(joinedload(Warenkorb.produkte))  # Optional: Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
 
     for prod in prodsOfCategory:
-        newProd = {'name': prod.produkte.produkt_name, 'amount': prod.anzahl}
+        newProd = {'shoppingCard_id': prod.Einkauf_ID,'prod_id': prod.Produkt_ID,'name': prod.produkte.Name, 'amount': prod.Anzahl}
         products.append(newProd)
     return products
 
@@ -187,37 +187,53 @@ def show_bezahlung():
 
 @app.route('/insertDB')
 def insertDB():
-    service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am=date(2000, 1, 1)) 
-    service.addNewCustomer(vorname="Paulchen", nachname="Kleiner", geb_datum=date(1990, 1, 1), email='p.kleiner@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am=date(2000, 1, 1))
-    paymethod = Bezahlmöglichkeiten(Methode="Paypal")
-    db.session.add(paymethod)
-    db.session.commit()
-    paymethod = Bezahlmöglichkeiten(Methode="Kreditkarte")
-    db.session.add(paymethod)
-    db.session.commit()
+    # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=datetime.date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am=datetime.datetime(2001, 1, 1,12,45,32)) 
+    # service.addNewCustomer(vorname="Paulchen", nachname="Kleiner", geb_datum=datetime.date(1990, 1, 1), email='p.kleiner@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am=datetime.datetime(2001, 1, 1,12,45,32))
+    # paymethod = Bezahlmöglichkeiten(Methode="Paypal")
+    # db.session.add(paymethod)
+    # db.session.commit()
+    # paymethod = Bezahlmöglichkeiten(Methode="Kreditkarte")
+    # db.session.add(paymethod)
+    # db.session.commit()
 
-    pay = Bezahlung(Nutzer_ID= 1, Bezahlmöglichkeiten_ID= 1, PP_Email = "p.kleiner@example.com")
-    db.session.add(pay)
-    db.session.commit()
+    # pay = Bezahlung(Nutzer_ID= 2, Bezahlmöglichkeiten_ID= 1, PP_Email = "max.musn@example.com")
+    # db.session.add(pay)
+    # db.session.commit()
 
-    something = Einkauf(nutzer_ID = 2)
+    something = Einkauf(Nutzer_ID = 2)
     db.session.add(something)
     db.session.commit()
 
-    something = Warenkorb(einkauf_ID=1, produkte_ID = 3, anzahl = 5)
+    something = Warenkorb(Einkauf_ID=1, Produkt_ID = 3, Anzahl = 5)
     db.session.add(something)
-    something2 = Warenkorb(einkauf_ID=1, produkte_ID = 2, anzahl = 2)
+    something2 = Warenkorb(Einkauf_ID=1, Produkt_ID = 2, Anzahl = 2)
     db.session.add(something2)
+    
+
+    products_to_add = [
+    (7, 1),  # Tuple of (produkte_ID, quantity)
+    (8, 2),
+    (9, 1),
+    (10, 3),
+    (11, 1),
+    (12, 2),
+    (13, 1),
+    (14, 1),
+    (15, 2),
+    (16, 1)]
+
+    # Loop through the list of products and add them to the shopping cart
+    for produkte_ID, quantity in products_to_add:
+        new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
+        db.session.add(new_item)
     db.session.commit()
 
     # service.addProductCategories(categoryNames)
     # service.addAllProductsFromExcel(categoryNames)
 
-    # service.addProductCategories(categoryNames)
-    # service.addAllProductsFromExcel(categoryNames)
-
-    produkte_entries = db.session.query(Produkte).all()
-    return render_template('produkte.html', produkte_entries=produkte_entries)
+    
+    print("Daten erfolgreich hinzugefügt")
+    return render_template('sm_cust_main.html')
 
 
 

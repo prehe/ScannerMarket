@@ -23,18 +23,20 @@
             <div class="row">
             {% for product in product_list %}
             <div class="item row">
-                <div class="col-8">
-                    <p>{{ product.name }}</p>
-                </div>
-                <div class="col-1">
-                    <button class="mx-1 warenkorb-btn" id="decrease">-</button>
-                </div>
-                <div class="col-1 text-center">
-                    <span>{{ product.amount }}</span>
-                </div>
-                <div class="col-1">
-                    <button class="mx-1 warenkorb-btn" id="increase">+</button>
-                </div>
+                <div class="item row" id="product_{{ product.prod_id }}">
+                    <div class="col-8">
+                        <p>{{ product.name }}</p>
+                    </div>
+                    <div class="col-1">
+                        <button class="mx-1 warenkorb-btn decrease-btn" id="decrease_{{ product.prod_id }}" onclick="decreaseAmount({{ product.shoppingID }},{{ product.prod_id }})" >-</button>
+                    </div>
+                    <div class="col-1 text-center">
+                        <span>{{ product.amount }}</span>
+                    </div>
+                    <div class="col-1">
+                        <button class="mx-1 warenkorb-btn increase-btn" id="increase_{{ product.prod_id }}" onclick="increaseAmount({{ product.prod_id }})">+</button>
+                    </div>
+                </div>                
             </div>
             {% endfor %}
         </div>
@@ -42,3 +44,5 @@
 </div>
 {% endblock %}
 <!-- END Main Content -->
+
+<script src="/static/dynamic.js"></script>
