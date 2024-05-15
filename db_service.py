@@ -86,3 +86,9 @@ def addAllProductsFromExcel (categoryNames):
                 print("Fehler bei: ", barcode, price)
 
         id = id+1
+
+def addShopping():
+    pass
+
+def addProductsToShoppingList():
+    pass

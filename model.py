@@ -6,8 +6,6 @@ db = SQLAlchemy()
 # Verbindung zur Datenbank herstellen
 engine = db.create_engine('sqlite:///scannerMarket.db', echo=True)  # Passen Sie die Verbindungsdaten an
 
-# Base = db.declarative_base()
-
 class Nutzer(db.Model):
     __tablename__ = 'nutzer'
 
