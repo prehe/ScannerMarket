@@ -168,7 +168,6 @@ def getProdsFromShoppingList(shopping_id):
         products.append(newProd)
     print(products)
     return products
-
  
 # ####################################################################################################################################################
 #dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
@@ -176,8 +175,8 @@ def getProdsFromShoppingList(shopping_id):
 @app.route('/Kunden')
 def show_nutzer():
     #Kunden hinzufügen
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='ma.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am= date(2024, 5, 14)) 
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='peter.muster@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
+    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='ma.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am= date(2024, 5, 14))
+    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='peter.muster@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15))
    
     nutzer_entries = db.session.query(Nutzer).all()
     # print(nutzer_entries[0].ID)
