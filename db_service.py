@@ -2,6 +2,7 @@ from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien
 import pandas as pd
 import requests
 import time
+import math
 
 def addNewCustomer (vorname, nachname, geb_datum, email, passwort, kundenkarte, admin, newsletter, reg_am):
     #einen neuen Kunden in die Datenbank einfügen
@@ -32,7 +33,7 @@ def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, ka
         db.session.close()
 
 #Daten eines Produktes über den barcode aus der Datenbank abfragen
-def get_and_save_product_data(barcode, categoryId):
+def get_and_save_product_data(barcode, price, categoryId):
     url = f"https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
     response = requests.get(url)
     
@@ -45,7 +46,7 @@ def get_and_save_product_data(barcode, categoryId):
         produktname = product_data['product_name']
         gewicht_volumen = product_data.get('quantity', '')  # 'quantity' könnte fehlen, daher verwenden wir 'get'
         kategorie = categoryId
-        preis = 0  # TODO: Preis aus dem Globus Online Produktkatalog abrufen
+        preis = price
         bild = product_data.get('image_front_small_url', '')
 
         addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie)
@@ -55,26 +56,33 @@ def get_and_save_product_data(barcode, categoryId):
         print(f"Fehler beim Abrufen der Produktinformationen. Statuscode: {response.status_code}")
 
 #barcodes einer Produktkategorie aus einer Excel-Liste auslesen
-def getBarcodesOfCategory(category):
+def getDataFromExcel(category):
     excel = "static\product_barcodes.xlsx"
     file = pd.read_excel(excel)
     if category in file.columns:
         barcodesOfCat = file[category].dropna().astype(str).str.replace('\.0', '', regex=True).tolist() #chatgpt
+        pricesOfCat = file['Preis_'+category].tolist()
         # print(barcodesOfCat)
-        return barcodesOfCat
+        return barcodesOfCat, pricesOfCat
     else:
         print(f"Spalte: '{category}' nicht gefunden")
         return
 
  #Produkte aus Excel-Liste zur Datenbank hinzufügen
 def addAllProductsFromExcel (categoryNames):
-   
     id = 1
     for name in categoryNames.values():
-        barcodes = getBarcodesOfCategory(name)
-        
-        for barcode in barcodes:         
-          if barcode !='nan':
-            get_and_save_product_data(str(barcode), categoryId=id)
-            time.sleep(2) #timeout wegen API-Zugriff
+        output = getDataFromExcel(name)
+        eans = [value for value in output[0] if not isinstance(value, float) or not math.isnan(value)]
+        prices = [value for value in output[1] if not isinstance(value, float) or not math.isnan(value)]
+        modified_output = (eans, prices)
+        print(modified_output)
+
+        for barcode, price in zip(modified_output[0], modified_output[1]):
+            try:
+                get_and_save_product_data(str(barcode), price, categoryId=id)
+                time.sleep(1)  # Timeout wegen API-Zugriff
+            except:
+                print("Fehler bei: ", barcode, price)
+
         id = id+1
