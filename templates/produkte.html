@@ -25,13 +25,13 @@
             {% for produkt_entry in produkte_entries %}
             <tr>
                 <td>{{ produkt_entry.ID }}</td>
-                <td>{{ produkt_entry.hersteller }}</td>
-                <td>{{ produkt_entry.produkt_name }}</td>
-                <td>{{ produkt_entry.gewicht_volumen }}</td>
-                <td>{{ produkt_entry.ean }}</td>
-                <td>{{ produkt_entry.preis }}</td>
-                <td>{{ produkt_entry.bild }}</td>
-                <td>{{ produkt_entry.produktkategorien_ID }}</td>
+                <td>{{ produkt_entry.Hersteller }}</td>
+                <td>{{ produkt_entry.Name }}</td>
+                <td>{{ produkt_entry.Gewicht_Volumen }}</td>
+                <td>{{ produkt_entry.EAN }}</td>
+                <td>{{ produkt_entry.Preis }}</td>
+                <td>{{ produkt_entry.Bild }}</td>
+                <td>{{ produkt_entry.Kategorie_ID }}</td>
             </tr>
             {% endfor %}
         </tbody>
