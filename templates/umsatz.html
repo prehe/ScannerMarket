@@ -26,7 +26,7 @@
                             {% if bestSellers|length > 1%}
                                 {% for Prod in bestSellers %}
                                     {% if not loop.first %}
-                                        <button type="button" data-bs-target="#carouselProds" data-bs-slide-to={{loop.index}}></button>
+                                        <button type="button" data-bs-target="#carouselProds" data-bs-slide-to={{Prod[0]}}></button>
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
@@ -84,9 +84,8 @@
                 interval:2000,
                 wrap:true
             });
-           
+            console.log("test");
             console.log(carousel);
-            
         }
     });
 </script>

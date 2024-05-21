@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, session, redirect, url_for, session, flash
+from flask import Flask, render_template, request, session, redirect, url_for, session
 import formulare as formulare
 #from flask_cors import CORS
 import pandas as pd
@@ -33,50 +33,31 @@ def index():
     return render_template('sm_cust_main.html')
  
 # Define the route for the default page
-# @app.route('/main')
-# def defaultP():
-#     return render_template('sm_cust_main.html')
+@app.route('/main')
+def defaultP():
+    return render_template('sm_cust_main.html')
  
-@app.route('/registration', methods=['GET', 'POST'])
-def register():
-    form = formulare.RegistrationForm()
-    if form.validate_on_submit():
-        # Hier Logik für die Registrierung hinzufügen
-        flash('Registrierung erfolgreich!', 'success')
-        session['type'] = 'customer'
-        service.addNewCustomer(vorname=form.vorname.data, nachname=form.nachname.data, geb_datum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
-        customer = db.session.query('Nutzer').filter(Email=form.email.data)
-        paying = db.session.query('Bezahlmöglichkeiten').filter(Methode=form.bezahlmethode.data)
-        if form.bezahlmethode == 'paypal':
-           payment= Bezahlung(customer.ID, paying.ID, PP_Email=form.paypal_email.data )
-        else:
-           payment= Bezahlung(customer.ID, paying.ID, Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültigkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer= form.kreditkarte_cvv.data )
-        db.session.add(payment)
-        db.session.commit()
-        return redirect(url_for('productcatalog')) 
-    return render_template('sm_registration.html', form=form)
- 
+@app.route('/registration')
+def registrationP():
 
-@app.route('/login', methods=['GET', 'POST'])      
-def login():
-    form = formulare.LoginForm()
+    return render_template('sm_registration.html')
+ 
+@app.route('/login')
+def loginP():
+    form = formulare.addProductForm()     ######### neues Formular hinterlegen
+   
     if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
         ##hier checken, ob login Daten aus Formular in Datenbank und valide sind:    
-        user = db.session.query(Nutzer).filter_by(Email=email, Passwort=password).first()
-        if user: 
-            ##wenn valide:
-            session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
-            customer =  session.get('logged_in', None)
-            if customer.admin:
-                session['type'] = "admin"
-                return redirect(url_for('adminMain'))
-            else:
-                session['type'] = "customer"
-                return redirect(url_for('productcatalog'))
+
+        ##wenn valide:
+        session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
+        customer =  session.get('logged_in', None)
+        if customer.admin:
+            session['type'] = "admin"
+            return redirect(url_for('adminMain'))
         else:
-             flash('Invalid username or password')
+            session['type'] = "customer"
+            return redirect(url_for('productcatalog'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -99,6 +80,7 @@ def productcatalog():
 def adminMain():
     return render_template('sm_admin_main.html')
  
+
  
 @app.route('/admin/analysis')
 def analysis():
@@ -159,14 +141,13 @@ def getProdsFromShoppingList(shopping_id):
     products = []
     prodsOfCategory = db.session.query(Warenkorb).\
         outerjoin(Warenkorb.einkauf).\
-        join(Warenkorb.produkt).\
+        join(Warenkorb.produkte).\
         filter(Warenkorb.Einkauf_ID == shopping_id).\
-        options(joinedload(Warenkorb.produkt)).all()  # Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
-    
+        options(joinedload(Warenkorb.produkte))  # Optional: Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
+ 
     for prod in prodsOfCategory:
-        newProd = {'shoppingCard_id': prod.Einkauf_ID, 'product_id': prod.Produkt_ID,'name': prod.produkt.Name, 'amount': prod.Anzahl}
+        newProd = {'shoppingCard_id': prod.Einkauf_ID,'prod_id': prod.Produkt_ID,'name': prod.produkte.Name, 'amount': prod.Anzahl}
         products.append(newProd)
-    print(products)
     return products
  
 # ####################################################################################################################################################
@@ -231,30 +212,19 @@ def show_umsatz():
     dates = curr_Date()
     curr_month = dates["Monat"]
     curr_year = dates["Jahr"]
-
-    #Umsatz vom aktuellen Monat
     salesOfCurrMonth=salesVolume_per_month( curr_year , curr_month)
-    
-    # Umsatz vom aktuellen Jahr
+    month = 1
     salesOfCurrYear = 0
-    for month in range(1, int(curr_month) + 1):
-        salesOfCurrYear += salesVolume_per_month(curr_year, month)
-    
-    #am meisten gekaufte Produkte
+    bestSellers = []
+    while month <= int(curr_month):
+        sales=salesVolume_per_month(curr_year, month)
+        salesOfCurrYear+= sales
+        month +=1
     bestSellers = get_best_seller(curr_year, curr_month)
-    bestSellers = [
-        ("Apfel", "../static/images/category-frozen.jpg", 100),
-        ("Birnen", "../static/images/category-meat.jpg", 10),
-        ("Birnen", "../static/images/category-meat.jpg", 10)
-    ]
-
-    # monatsaktuelle Einkaufszahlen und wieviele Produkte verkauft wurden
+    bestSellers = [("Apfel", "..\static\images\category-frozen.jpg" , 100), ("Birnen", "..\static\images\category-meat.jpg" , 10),("Birnen", "..\static\images\category-meat.jpg" , 10)]
     selledProds = numberOfSelledProducts(curr_year, curr_month)
     sells = numberOfSells(curr_year, curr_month)
-
-    return render_template('umsatz.html', title="Umsatz", salesOfYear=salesOfCurrYear, 
-                           salesOfMonth=salesOfCurrMonth, year=curr_year, month=dates["Monatsname"],
-                           bestSellers=bestSellers, selledProds=selledProds, sells=sells)
+    return render_template('umsatz.html',title = "Umsatz", salesOfYear=salesOfCurrYear, salesOfMonth=salesOfCurrMonth, year = curr_year, month=dates["Monatsname"], bestSellers=bestSellers, selledProds=selledProds, sells=sells)
 
 #ChatGPT
 def getStartEndDates(year, month):
@@ -362,33 +332,33 @@ def insertDB():
     # db.session.add(paymethod)
     # db.session.commit()
 
-    # something = Einkauf(Nutzer_ID = 2)
-    # db.session.add(something)
-    # db.session.commit()
+    something = Einkauf(Nutzer_ID = 2)
+    db.session.add(something)
+    db.session.commit()
 
-    # something = Warenkorb(Einkauf_ID=1, Produkt_ID = 3, Anzahl = 5)
-    # db.session.add(something)
-    # something2 = Warenkorb(Einkauf_ID=1, Produkt_ID = 2, Anzahl = 2)
-    # db.session.add(something2)
+    something = Warenkorb(Einkauf_ID=1, Produkt_ID = 3, Anzahl = 5)
+    db.session.add(something)
+    something2 = Warenkorb(Einkauf_ID=1, Produkt_ID = 2, Anzahl = 2)
+    db.session.add(something2)
     
 
-    # products_to_add = [
-    # (7, 1),  # Tuple of (produkte_ID, quantity)
-    # (8, 2),
-    # (9, 1),
-    # (10, 3),
-    # (11, 1),
-    # (12, 2),
-    # (13, 1),
-    # (14, 1),
-    # (15, 2),
-    # (16, 1)]
+    products_to_add = [
+    (7, 1),  # Tuple of (produkte_ID, quantity)
+    (8, 2),
+    (9, 1),
+    (10, 3),
+    (11, 1),
+    (12, 2),
+    (13, 1),
+    (14, 1),
+    (15, 2),
+    (16, 1)]
 
-    # # Loop through the list of products and add them to the shopping cart
-    # for produkte_ID, quantity in products_to_add:
-    #     new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
-    #     db.session.add(new_item)
-    # db.session.commit()
+    # Loop through the list of products and add them to the shopping cart
+    for produkte_ID, quantity in products_to_add:
+        new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
+        db.session.add(new_item)
+    db.session.commit()
 
     # service.addProductCategories(categoryNames)
     # service.addAllProductsFromExcel(categoryNames)
@@ -414,7 +384,7 @@ def insertDB():
  
  
  
-@app.route('/getProductFromEan', methods=["POST"])
+@app.route('/getProductFromEan', methods=["GET", "POST"])
 def getProductFromEan():
     search_ean = request.args.get('ean')  # Use request.args for query parameters
     print(search_ean)
@@ -423,35 +393,16 @@ def getProductFromEan():
     return produkte_entries
  
  
-# @app.route('/startOrEndShopping', methods=["GET", "POST"])
-# def startShopping():
-#     # peudo code:
-#     # if last tmst_end = none & nutzer_id = nutzer_id:
-#         # add tmst_end
-#     # else:
-#         # set new shopping(nutzer_id, tmst_start)
-#         # return shopping_id
-#         return None
-
-
-#############################################################################################################################################
-# funktions-URLs:
-@app.route("/increase_cart_amount", methods=["POST"])
-def increase_cart_amount():
-    einkauf_id = request.form["einkauf_id"]
-    produkt_id = request.form["produkt_id"]
-    print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
-    response = Warenkorb.increase_cart_amount(einkauf_id, produkt_id)
-    return response
-
-@app.route("/decrease_cart_amount", methods=["POST"])
-def decrease_cart_amount():
-    einkauf_id = request.form["einkauf_id"]
-    produkt_id = request.form["produkt_id"]
-    print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
-    response = Warenkorb.decrease_cart_amount(einkauf_id, produkt_id)
-    return response
-
+@app.route('/startOrEndShopping', methods=["GET", "POST"])
+def startShopping():
+    # peudo code:
+    # if last tmst_end = none & nutzer_id = nutzer_id:
+        # add tmst_end
+    # else:
+        # set new shopping(nutzer_id, tmst_start)
+        # return shopping_id
+        return None
+ 
  
  
  
