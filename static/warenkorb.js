@@ -12,6 +12,7 @@ function increaseAmount(einkaufId, productId) {
             var spanElement = document.getElementById("quantity_" + productId);
             var currentAmount = parseInt(spanElement.innerText);
             spanElement.innerText = currentAmount + 1;
+            console.log("Quantity increased successfully");
         },
         error: function(xhr, status, error) {
             // Handle error
@@ -31,11 +32,11 @@ function decreaseAmount(einkaufId, productId) {
         },
         success: function(response) {
             // Handle success, update the quantity display
+            console.log(response)
             var spanElement = document.getElementById("quantity_" + productId);
             var currentAmount = parseInt(spanElement.innerText);
-            if (currentAmount >  1){
-                spanElement.innerText = currentAmount - 1;
-            }
+            spanElement.innerText = currentAmount - 1;
+            // console.log("Quantity decreased successfully");
         },
         error: function(xhr, status, error) {
             // Handle error
