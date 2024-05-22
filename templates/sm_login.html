@@ -9,25 +9,26 @@
 <div class="container-fluid">
     <div class="row login-container">
         <div class="col-sm-6 offset-sm-3">
-            <div class="logo_big" onclick="window.location.href='../productcatalog'">
-                <img class="logo_big" src="../static/images/logo1.svg" alt="Scanner">
+            <div class="logo_big" onclick="window.location.href='{{ url_for('main') }}'">
+                <img class="logo_big" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner">
             </div>
-            <form>
+            <form method="POST" action="{{ url_for('login') }}">
+                {{ form.csrf_token }}
                 <div class="title">
                     <h1>ScannerMarket - Login:</h1>
                 </div>
                 <div class="form-group-login">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control", placeholder="Enter email") }}
                 </div>
                 <div class="form-group-login">
-                    <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" placeholder="Enter password">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", placeholder="Enter password") }}
                 </div>
                 <div class="btn-right">
-                    <button type="submit" class="btn btn-secondary btn-right">Anmelden</button>
+                    {{ form.submit(class="btn btn-secondary btn-right") }}
                 </div>
-                <p class="registration">Noch kein Kunde? <a href="/registration" class="linkings" >Registrieren</a></p>
+                <p class="registration">Noch kein Kunde? <a href="{{ url_for('register') }}" class="linkings">Registrieren</a></p>
             </form>
         </div>
     </div>

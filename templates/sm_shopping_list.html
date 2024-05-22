@@ -1,3 +1,4 @@
+
 {% extends "sm_default.html" %}
 
 {% block header %}
@@ -6,7 +7,6 @@
 
 
 {% block content %}
-<script src="/static/dynamic.js"></script>
 <!-- Main Content -->
 <div class="main-container">
     <div class="row">
@@ -24,18 +24,18 @@
             <div class="row">
             {% for product in product_list %}
             <div class="item row">
-                <div class="item row" id="product_{{ product.product_id }}">
+                <div class="item row" id="product_{{ product.shoppingCard_id }}_{{ product.product_id }}">
                     <div class="col-8">
                         <p>{{ product.name }}</p>
                     </div>
                     <div class="col-1">
-                        <button class="mx-1 warenkorb-btn decrease-btn" id="decrease_{{ product.prod_id }}" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})" >-</button>
+                        <button class="mx-1 warenkorb-btn decrease-btn" id="decrease_{{ product.product_id }}" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})" >-</button>
                     </div>
                     <div class="col-1 text-center">
-                        <span id="quantity_{{ product.prod_id }}">{{ product.amount }}</span>
+                        <span>{{ product.amount }}</span>
                     </div>
                     <div class="col-1">
-                        <button class="mx-1 warenkorb-btn increase-btn" id="increase_{{ product.prod_id }}" onclick="increaseAmount({{ product.shoppingCard_id }}, {{ product.product_id }})">+</button>
+                        <button class="mx-1 warenkorb-btn increase-btn" id="increase_{{ product.product_id }}" onclick="increaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})">+</button>
                     </div>
                 </div>                
             </div>
@@ -43,9 +43,53 @@
         </div>
     </div>
 </div>
+<!-- <script src="../static/dynamic.js"></script> -->
+<script>
+    // Funktion, die beim Klicken auf den "+"-Button aufgerufen wird
+    function increaseAmount(einkaufId, productId) {
+        $.ajax({
+            url: "/increase_cart_amount",
+            type: "POST",
+            data: {
+                einkauf_id: einkaufId,
+                produkt_id: productId
+            },
+            success: function(response) {
+                var spanElement = document.getElementById("quantity_" + productId);
+                var currentAmount = parseInt(spanElement.innerText);
+                spanElement.innerText = currentAmount + 1;
+                console.log("Quantity increased successfully");
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
 
-
-
-<script src="../static/dynamic.js"></script>
+    // Funktion, die beim Klicken auf den "-"-Button aufgerufen wird
+    function decreaseAmount(einkaufId, productId) {
+        $.ajax({
+            url: "/decrease_cart_amount",
+            type: "POST",
+            data: {
+                einkauf_id: einkaufId,
+                produkt_id: productId
+            },
+            success: function(response) {
+                // Handle success, update the quantity display
+                console.log(response)
+                var spanElement = document.getElementById("quantity_" + productId);
+                var currentAmount = parseInt(spanElement.innerText);
+                spanElement.innerText = currentAmount - 1;
+                // console.log("Quantity decreased successfully");
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
+</script>
 {% endblock %}
 <!-- END Main Content -->
