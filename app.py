@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, session, redirect, url_for, session
+from flask import Flask, render_template, request, session, redirect, url_for, session, flash
 import formulare as formulare
 #from flask_cors import CORS
 import pandas as pd
@@ -33,31 +33,50 @@ def index():
     return render_template('sm_cust_main.html')
  
 # Define the route for the default page
-@app.route('/main')
-def defaultP():
-    return render_template('sm_cust_main.html')
+# @app.route('/main')
+# def defaultP():
+#     return render_template('sm_cust_main.html')
  
-@app.route('/registration')
-def registrationP():
-
-    return render_template('sm_registration.html')
- 
-@app.route('/login')
-def loginP():
-    form = formulare.addProductForm()     ######### neues Formular hinterlegen
-   
+@app.route('/registration', methods=['GET', 'POST'])
+def register():
+    form = formulare.RegistrationForm()
     if form.validate_on_submit():
-        ##hier checken, ob login Daten aus Formular in Datenbank und valide sind:    
-
-        ##wenn valide:
-        session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
-        customer =  session.get('logged_in', None)
-        if customer.admin:
-            session['type'] = "admin"
-            return redirect(url_for('adminMain'))
+        # Hier Logik für die Registrierung hinzufügen
+        flash('Registrierung erfolgreich!', 'success')
+        session['type'] = 'customer'
+        service.addNewCustomer(vorname=form.vorname.data, nachname=form.nachname.data, geb_datum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
+        customer = db.session.query('Nutzer').filter(Email=form.email.data)
+        paying = db.session.query('Bezahlmöglichkeiten').filter(Methode=form.bezahlmethode.data)
+        if form.bezahlmethode == 'paypal':
+           payment= Bezahlung(customer.ID, paying.ID, PP_Email=form.paypal_email.data )
         else:
-            session['type'] = "customer"
-            return redirect(url_for('productcatalog'))
+           payment= Bezahlung(customer.ID, paying.ID, Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültigkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer= form.kreditkarte_cvv.data )
+        db.session.add(payment)
+        db.session.commit()
+        return redirect(url_for('productcatalog')) 
+    return render_template('sm_registration.html', form=form)
+ 
+
+@app.route('/login', methods=['GET', 'POST'])      
+def login():
+    form = formulare.LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        ##hier checken, ob login Daten aus Formular in Datenbank und valide sind:    
+        user = db.session.query(Nutzer).filter_by(Email=email, Passwort=password).first()
+        if user: 
+            ##wenn valide:
+            session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
+            customer =  session.get('logged_in', None)
+            if customer.admin:
+                session['type'] = "admin"
+                return redirect(url_for('adminMain'))
+            else:
+                session['type'] = "customer"
+                return redirect(url_for('productcatalog'))
+        else:
+             flash('Invalid username or password')
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -212,19 +231,30 @@ def show_umsatz():
     dates = curr_Date()
     curr_month = dates["Monat"]
     curr_year = dates["Jahr"]
+
+    #Umsatz vom aktuellen Monat
     salesOfCurrMonth=salesVolume_per_month( curr_year , curr_month)
-    month = 1
+    
+    # Umsatz vom aktuellen Jahr
     salesOfCurrYear = 0
-    bestSellers = []
-    while month <= int(curr_month):
-        sales=salesVolume_per_month(curr_year, month)
-        salesOfCurrYear+= sales
-        month +=1
+    for month in range(1, int(curr_month) + 1):
+        salesOfCurrYear += salesVolume_per_month(curr_year, month)
+    
+    #am meisten gekaufte Produkte
     bestSellers = get_best_seller(curr_year, curr_month)
-    bestSellers = [("Apfel", "..\static\images\category-frozen.jpg" , 100), ("Birnen", "..\static\images\category-meat.jpg" , 10),("Birnen", "..\static\images\category-meat.jpg" , 10)]
+    bestSellers = [
+        ("Apfel", "../static/images/category-frozen.jpg", 100),
+        ("Birnen", "../static/images/category-meat.jpg", 10),
+        ("Birnen", "../static/images/category-meat.jpg", 10)
+    ]
+
+    # monatsaktuelle Einkaufszahlen und wieviele Produkte verkauft wurden
     selledProds = numberOfSelledProducts(curr_year, curr_month)
     sells = numberOfSells(curr_year, curr_month)
-    return render_template('umsatz.html',title = "Umsatz", salesOfYear=salesOfCurrYear, salesOfMonth=salesOfCurrMonth, year = curr_year, month=dates["Monatsname"], bestSellers=bestSellers, selledProds=selledProds, sells=sells)
+
+    return render_template('umsatz.html', title="Umsatz", salesOfYear=salesOfCurrYear, 
+                           salesOfMonth=salesOfCurrMonth, year=curr_year, month=dates["Monatsname"],
+                           bestSellers=bestSellers, selledProds=selledProds, sells=sells)
 
 #ChatGPT
 def getStartEndDates(year, month):
