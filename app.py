@@ -29,8 +29,6 @@ def index():
     session['type'] = "default"
     return render_template('sm_cust_main.html')
  
- 
-
 
 # Run the Flask application
 if __name__ == '__main__':

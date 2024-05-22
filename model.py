@@ -117,15 +117,14 @@ class Warenkorb(db.Model):
     def decrease_cart_amount(cls, einkauf_id, produkt_id):
         """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
-        if ware > 1:
+        if ware is None:
+            return "error"  # handle case where the item is not found
+        if ware.Anzahl > 1:
             ware.Anzahl -= 1
             db.session.commit()
             return "decreased"
-        elif ware == 1:
-            cls.remove_from_cart(einkauf_id, produkt_id)
-            return "removed"
         else:
-            return "error"
+            return "no change"  # indicate that no change was made because the amount is already 1
 
     @classmethod
     def get_cart_contents(cls, einkauf_id):
