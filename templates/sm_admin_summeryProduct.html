@@ -1,0 +1,43 @@
+{% extends "sm_default_import_only.html" %}
+
+{% block header %}
+    <title>Login - ScannerMarket</title>
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="container-fluid">
+    <div class="registration-container row">
+        <div class="col-sm-6 offset-sm-3">   
+            <div class="col-md-5 offset-md-3">
+                <div class="row justify-content-xl-between align-items-center">
+                    <div class="col">
+                        <img class="logo_small" src="../static/images/logo1.svg" alt="Scanner" onclick="window.location.href='../admin'">
+                    </div>
+                    <div class="col-md text-center">
+                        <h1>Produkt erfolgreich hinzugefügt:</h1>
+                    </div>
+                </div>
+            </div>
+      
+            <div class="col-md-5 offset-md-3">
+                <div class="product"> 
+                    <div class="product-img ">
+                        <img src="{{ product.img }}" alt=""  >
+                    </div>
+                    <h5>{{ product.name }}</h5> 
+                    <p>Hersteller: {{ product.manufacturer }}</p>
+                    <p>Gewicht: {{ product.weight }}</p>
+                    <p>Preis: {{ product.price }} €</p>
+                </div>
+                <div class="buttons-inline">
+                    <a href="{{url_for('adminMain')}}">
+                        <button type="button" >Zurück</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Main Content -->
+{% endblock %}

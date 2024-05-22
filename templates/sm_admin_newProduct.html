@@ -1,1 +1,69 @@
 <!-- Formular erstellen -->
+{% extends "sm_default_import_only.html" %}
+
+{% block header %}
+    <title>Login - ScannerMarket</title>
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="container-fluid">
+    <div class="registration-container row">
+        <div class="col-sm-6 offset-sm-3">   
+            <div class="col-md-5 offset-md-3">
+                <div class="row justify-content-xl-between align-items-center">
+                    <div class="col">
+                        <img class="logo_small" src="../static/images/logo1.svg" alt="Scanner" onclick="window.location.href='../admin'">
+                    </div>
+                    <div class="col-md text-center">
+                        <h1>Produkt hinzufügen:</h1>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="">
+                {{form.csrf_token}}
+                <div class="form-group">
+                    {{form.name.label(class="form-control-label")}}
+                    {{form.name(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.manufacturer.label(class="form-control-label")}}
+                    {{form.manufacturer(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.price.label(class="form-control-label")}}
+                    {{form.price(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.weight.label(class="form-control-label")}}
+                    {{form.weight(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.unit.label(class="form-control-label")}}
+                    {{form.unit(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.ean.label(class="form-control-label")}}
+                    {{form.ean(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.img_url.label(class="form-control-label")}}
+                    {{form.img_url(class="form-control")}}
+                </div>
+                <div class="form-group">
+                    {{form.category_ID.label(class="form-control-label")}}
+                    {{form.category_ID(class="form-control")}}
+                </div>
+                <div class="buttons-inline">
+                    <a href="{{url_for('adminMain')}}">
+                        <button class="btn btn-secondary" type="button" >Zurück</button> 
+                    </a>
+                    {{form.submit(class = "btn btn-secondary")}}
+                </div>
+            </form>
+           
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -31,6 +31,7 @@ def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, ka
         db.session.add(new_product)
         db.session.commit()
         db.session.close()
+        print("erfolgreich hinzugefügt")
 
 #Daten eines Produktes über den barcode aus der Datenbank abfragen
 def get_and_save_product_data(barcode, price, categoryId):
