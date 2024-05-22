@@ -20,7 +20,7 @@ app.config['SECRET_KEY'] = 'mysecretkey'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///scannerMarket.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
+#abc
 db.init_app(app)
  
  
