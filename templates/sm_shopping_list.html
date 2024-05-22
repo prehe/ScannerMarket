@@ -6,6 +6,7 @@
 
 
 {% block content %}
+<script src="/static/dynamic.js"></script>
 <!-- Main Content -->
 <div class="main-container">
     <div class="row">
@@ -23,18 +24,18 @@
             <div class="row">
             {% for product in product_list %}
             <div class="item row">
-                <div class="item row" id="product_{{ product.prod_id }}">
+                <div class="item row" id="product_{{ product.product_id }}">
                     <div class="col-8">
                         <p>{{ product.name }}</p>
                     </div>
                     <div class="col-1">
-                        <button class="mx-1 warenkorb-btn decrease-btn" id="decrease_{{ product.prod_id }}" onclick="decreaseAmount({{ product.shoppingID }},{{ product.prod_id }})" >-</button>
+                        <button class="mx-1 warenkorb-btn decrease-btn" id="decrease_{{ product.prod_id }}" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})" >-</button>
                     </div>
                     <div class="col-1 text-center">
-                        <span>{{ product.amount }}</span>
+                        <span id="quantity_{{ product.prod_id }}">{{ product.amount }}</span>
                     </div>
                     <div class="col-1">
-                        <button class="mx-1 warenkorb-btn increase-btn" id="increase_{{ product.prod_id }}" onclick="increaseAmount({{ product.prod_id }})">+</button>
+                        <button class="mx-1 warenkorb-btn increase-btn" id="increase_{{ product.prod_id }}" onclick="increaseAmount({{ product.shoppingCard_id }}, {{ product.product_id }})">+</button>
                     </div>
                 </div>                
             </div>

@@ -105,6 +105,29 @@ class Warenkorb(db.Model):
             db.session.commit()
 
     @classmethod
+    def increase_cart_amount(cls, einkauf_id, produkt_id):
+        """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
+        ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
+        if ware:
+            ware.Anzahl = ware.Anzahl + 1
+            db.session.commit()
+            return "increased"
+    
+    @classmethod
+    def decrease_cart_amount(cls, einkauf_id, produkt_id):
+        """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
+        ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
+        if ware > 1:
+            ware.Anzahl -= 1
+            db.session.commit()
+            return "decreased"
+        elif ware == 1:
+            cls.remove_from_cart(einkauf_id, produkt_id)
+            return "removed"
+        else:
+            return "error"
+
+    @classmethod
     def get_cart_contents(cls, einkauf_id):
         """Gibt den Inhalt des Warenkorbs für einen bestimmten Einkauf zurück."""
         return cls.query.filter_by(Einkauf_ID=einkauf_id).all()

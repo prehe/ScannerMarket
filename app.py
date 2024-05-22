@@ -159,14 +159,16 @@ def getProdsFromShoppingList(shopping_id):
     products = []
     prodsOfCategory = db.session.query(Warenkorb).\
         outerjoin(Warenkorb.einkauf).\
-        join(Warenkorb.produkte).\
+        join(Warenkorb.produkt).\
         filter(Warenkorb.Einkauf_ID == shopping_id).\
-        options(joinedload(Warenkorb.produkte))  # Optional: Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
- 
+        options(joinedload(Warenkorb.produkt)).all()  # Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
+    
     for prod in prodsOfCategory:
-        newProd = {'shoppingCard_id': prod.Einkauf_ID,'prod_id': prod.Produkt_ID,'name': prod.produkte.Name, 'amount': prod.Anzahl}
+        newProd = {'shoppingCard_id': prod.Einkauf_ID, 'product_id': prod.Produkt_ID,'name': prod.produkt.Name, 'amount': prod.Anzahl}
         products.append(newProd)
+    print(products)
     return products
+
  
 # ####################################################################################################################################################
 #dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
@@ -361,33 +363,33 @@ def insertDB():
     # db.session.add(paymethod)
     # db.session.commit()
 
-    something = Einkauf(Nutzer_ID = 2)
-    db.session.add(something)
-    db.session.commit()
+    # something = Einkauf(Nutzer_ID = 2)
+    # db.session.add(something)
+    # db.session.commit()
 
-    something = Warenkorb(Einkauf_ID=1, Produkt_ID = 3, Anzahl = 5)
-    db.session.add(something)
-    something2 = Warenkorb(Einkauf_ID=1, Produkt_ID = 2, Anzahl = 2)
-    db.session.add(something2)
+    # something = Warenkorb(Einkauf_ID=1, Produkt_ID = 3, Anzahl = 5)
+    # db.session.add(something)
+    # something2 = Warenkorb(Einkauf_ID=1, Produkt_ID = 2, Anzahl = 2)
+    # db.session.add(something2)
     
 
-    products_to_add = [
-    (7, 1),  # Tuple of (produkte_ID, quantity)
-    (8, 2),
-    (9, 1),
-    (10, 3),
-    (11, 1),
-    (12, 2),
-    (13, 1),
-    (14, 1),
-    (15, 2),
-    (16, 1)]
+    # products_to_add = [
+    # (7, 1),  # Tuple of (produkte_ID, quantity)
+    # (8, 2),
+    # (9, 1),
+    # (10, 3),
+    # (11, 1),
+    # (12, 2),
+    # (13, 1),
+    # (14, 1),
+    # (15, 2),
+    # (16, 1)]
 
-    # Loop through the list of products and add them to the shopping cart
-    for produkte_ID, quantity in products_to_add:
-        new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
-        db.session.add(new_item)
-    db.session.commit()
+    # # Loop through the list of products and add them to the shopping cart
+    # for produkte_ID, quantity in products_to_add:
+    #     new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
+    #     db.session.add(new_item)
+    # db.session.commit()
 
     # service.addProductCategories(categoryNames)
     # service.addAllProductsFromExcel(categoryNames)
@@ -413,7 +415,7 @@ def insertDB():
  
  
  
-@app.route('/getProductFromEan', methods=["GET", "POST"])
+@app.route('/getProductFromEan', methods=["POST"])
 def getProductFromEan():
     search_ean = request.args.get('ean')  # Use request.args for query parameters
     print(search_ean)
@@ -422,16 +424,35 @@ def getProductFromEan():
     return produkte_entries
  
  
-@app.route('/startOrEndShopping', methods=["GET", "POST"])
-def startShopping():
-    # peudo code:
-    # if last tmst_end = none & nutzer_id = nutzer_id:
-        # add tmst_end
-    # else:
-        # set new shopping(nutzer_id, tmst_start)
-        # return shopping_id
-        return None
- 
+# @app.route('/startOrEndShopping', methods=["GET", "POST"])
+# def startShopping():
+#     # peudo code:
+#     # if last tmst_end = none & nutzer_id = nutzer_id:
+#         # add tmst_end
+#     # else:
+#         # set new shopping(nutzer_id, tmst_start)
+#         # return shopping_id
+#         return None
+
+
+#############################################################################################################################################
+# funktions-URLs:
+@app.route("/increase_cart_amount", methods=["POST"])
+def increase_cart_amount():
+    einkauf_id = request.form["einkauf_id"]
+    produkt_id = request.form["produkt_id"]
+    print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
+    response = Warenkorb.increase_cart_amount(einkauf_id, produkt_id)
+    return response
+
+@app.route("/decrease_cart_amount", methods=["POST"])
+def decrease_cart_amount():
+    einkauf_id = request.form["einkauf_id"]
+    produkt_id = request.form["produkt_id"]
+    print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
+    response = Warenkorb.decrease_cart_amount(einkauf_id, produkt_id)
+    return response
+
  
  
  
