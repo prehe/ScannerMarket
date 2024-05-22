@@ -12,7 +12,7 @@
             <div class="col-md-5 offset-md-3">
                 <div class="row justify-content-xl-between align-items-center">
                     <div class="col">
-                        <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner" onclick="window.location.href='{{ url_for('main') }}'">
+                        <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner" onclick="window.location.href='{{ url_for('app_cust.productcatalog') }}'">
                     </div>
                     <div class="col-md text-center">
                         <h1>Registrierung:</h1>
@@ -20,7 +20,7 @@
                 </div>
             </div>
             
-            <form method="POST" action="{{ url_for('register') }}">
+            <form method="POST" action="{{ url_for('app_cust.registration') }}">
                 {{form.csrf_token}}
                 <div class="form-group">
                     {{ form.vorname.label(class="form-label") }}
@@ -76,7 +76,7 @@
                 </div>
                 <div class="row">
                     <div class="col btn-left">
-                        <a href="{{ url_for('login') }}">
+                        <a href="{{ url_for('app_cust.login') }}">
                             <button type="button" class="btn btn-secondary">zurück</button>
                         </a>
                     </div>
