@@ -1,9 +1,8 @@
 from flask import Blueprint, Flask, render_template, request, session, redirect, url_for, session, flash
-from app_customer import getProdsFromShoppingList
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb, Einkauf
+from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -13,7 +12,7 @@ cust = Blueprint(__name__, import_name="app_cust")
 
 
 @cust.route('/registration', methods=['GET', 'POST'])
-def registration():
+def register():
     form = formulare.RegistrationForm()
     if form.validate_on_submit():
         # Hier Logik für die Registrierung hinzufügen
@@ -28,7 +27,7 @@ def registration():
            payment= Bezahlung(customer.ID, paying.ID, Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültigkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer= form.kreditkarte_cvv.data )
         db.session.add(payment)
         db.session.commit()
-        return redirect(url_for('app_customer.productcatalog')) 
+        return redirect(url_for('productcatalog')) 
     return render_template('sm_registration.html', form=form)
  
 
@@ -46,11 +45,10 @@ def login():
             customer =  session.get('logged_in', None)
             if customer.admin:
                 session['type'] = "admin"
-                return redirect(url_for('app_admin.adminMain'))
+                return redirect(url_for('adminMain'))
             else:
                 session['type'] = "customer"
-                session['shoppingID'] = None
-                return redirect(url_for('app_customer.productcatalog'))
+                return redirect(url_for('productcatalog'))
         else:
              flash('Invalid username or password')
     else:
@@ -61,22 +59,15 @@ def login():
  
 @cust.route('/scanner')
 def scannerP():
-    return render_template('sm_scanner.html',logStatus=session.get('type', None))
+    return render_template('sm_scanner.html')
  
-
 @cust.route('/shoppinglist')
 def prodBasketP():
-    session['shoppingID'] = None        # temporär
-    if session['shoppingID'] == None:
-        # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
-        session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
-        print(session.get(['shoppingID'], None))
-    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get(['shoppingID'], None)), logStatus=session.get('type', None))
-    # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
  
 @cust.route('/productcatalog')
 def productcatalog():
-    return render_template('sm_cust_main.html',logStatus=session.get('type', None))
+    return render_template('sm_cust_main.html')
 
 #globale Variable
 categoryNames={
@@ -114,7 +105,7 @@ def categoryPage(category):
     bannerImg = bannerImages[category]
     categoryName = categoryNames[category]
     products = getProdsFromCategory(categoryName)
-    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg,logStatus=session.get('type', None))
+    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg)
  
  
 def getProdsFromCategory(category):
@@ -127,7 +118,7 @@ def getProdsFromCategory(category):
  
 @cust.route("/impressum")
 def impressum ():
-    return render_template('sm_impressum.html',logStatus=session.get('type', None))
+    return render_template('sm_impressum.html')
  
 def getProdsFromShoppingList(shopping_id):
     products = []
@@ -142,8 +133,3 @@ def getProdsFromShoppingList(shopping_id):
         products.append(newProd)
     print(products)
     return products
-
-@cust.route("/logout")
-def logout ():
-    session['type'] = "default"
-    return redirect(url_for('app_customer.productcatalog'))

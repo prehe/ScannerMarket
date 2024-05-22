@@ -9,10 +9,10 @@
 <div class="container-fluid">
     <div class="row login-container">
         <div class="col-sm-6 offset-sm-3">
-            <div class="logo_big" onclick="window.location.href='/productcatalog'">
+            <div class="logo_big" onclick="window.location.href='{{ url_for('main') }}'">
                 <img class="logo_big" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner">
             </div>
-            <form method="POST" action="{{ url_for('app_customer.login') }}">
+            <form method="POST" action="{{ url_for('login') }}">
                 {{ form.csrf_token }}
                 <div class="title">
                     <h1>ScannerMarket - Login:</h1>
@@ -28,7 +28,7 @@
                 <div class="btn-right">
                     {{ form.submit(class="btn btn-secondary btn-right") }}
                 </div>
-                <p class="registration">Noch kein Kunde? <a href="{{ url_for('app_customer.registration') }}" class="linkings">Registrieren</a></p>
+                <p class="registration">Noch kein Kunde? <a href="{{ url_for('register') }}" class="linkings">Registrieren</a></p>
             </form>
         </div>
     </div>
