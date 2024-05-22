@@ -12,7 +12,7 @@ cust = Blueprint(__name__, import_name="app_cust")
 
 
 @cust.route('/registration', methods=['GET', 'POST'])
-def register():
+def registration():
     form = formulare.RegistrationForm()
     if form.validate_on_submit():
         # Hier Logik für die Registrierung hinzufügen
