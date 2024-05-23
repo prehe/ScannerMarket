@@ -27,7 +27,7 @@ def registration():
            payment= Bezahlung(customer.ID, paying.ID, Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültigkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer= form.kreditkarte_cvv.data )
         db.session.add(payment)
         db.session.commit()
-        return redirect(url_for('productcatalog')) 
+        return redirect(url_for('app_customer.productcatalog')) 
     return render_template('sm_registration.html', form=form)
  
 
@@ -41,14 +41,12 @@ def login():
         user = db.session.query(Nutzer).filter_by(Email=email, Passwort=password).first()
         if user: 
             ##wenn valide:
-            session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
-            customer =  session.get('logged_in', None)
-            if customer.admin:
+            if user.Admin:
                 session['type'] = "admin"
-                return redirect(url_for('adminMain'))
+                return redirect(url_for('app_admin.adminMain'))
             else:
                 session['type'] = "customer"
-                return redirect(url_for('productcatalog'))
+                return redirect(url_for('app_customer.productcatalog'))
         else:
              flash('Invalid username or password')
     else:
@@ -59,15 +57,15 @@ def login():
  
 @cust.route('/scanner')
 def scannerP():
-    return render_template('sm_scanner.html')
+    return render_template('sm_scanner.html',logStatus=session.get('type', None))
  
 @cust.route('/shoppinglist')
 def prodBasketP():
-    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1),logStatus=session.get('type', None))
  
 @cust.route('/productcatalog')
 def productcatalog():
-    return render_template('sm_cust_main.html')
+    return render_template('sm_cust_main.html',logStatus=session.get('type', None))
 
 #globale Variable
 categoryNames={
@@ -105,7 +103,7 @@ def categoryPage(category):
     bannerImg = bannerImages[category]
     categoryName = categoryNames[category]
     products = getProdsFromCategory(categoryName)
-    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg)
+    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg,logStatus=session.get('type', None))
  
  
 def getProdsFromCategory(category):
@@ -118,7 +116,7 @@ def getProdsFromCategory(category):
  
 @cust.route("/impressum")
 def impressum ():
-    return render_template('sm_impressum.html')
+    return render_template('sm_impressum.html',logStatus=session.get('type', None))
  
 def getProdsFromShoppingList(shopping_id):
     products = []
@@ -133,3 +131,8 @@ def getProdsFromShoppingList(shopping_id):
         products.append(newProd)
     print(products)
     return products
+
+@cust.route("/logout")
+def logout ():
+    session['type'] = "default"
+    return redirect(url_for('app_customer.productcatalog'))

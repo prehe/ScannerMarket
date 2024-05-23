@@ -1,14 +1,20 @@
 from flask import Blueprint, Flask, render_template, request, session, redirect, url_for, session, flash
 import formulare as formulare
+import pandas as pd
+import requests
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+import db_service as service
+from datetime import date, datetime
+from sqlalchemy.orm import joinedload
+
 
 func = Blueprint(__name__, import_name="app_func")
 
 
 @func.route('/insertDB')
 def insertDB():
-    # service.addNewCustomer(Vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='max.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
-    # service.addNewCustomer(vorname="Paulchen", nachname="Kleiner", geb_datum=date(1990, 1, 1), email='p.kleiner@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True)
+    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
+    #service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
     # paymethod = Bezahlmöglichkeiten(methode="Paypal")
     # db.session.add(paymethod)
     # db.session.commit()
@@ -78,8 +84,10 @@ def insertDB():
     #     db.session.add(produkt)
     # db.session.commit()
  
-    produkte_entries = db.session.query(Produkte).all()
-    return render_template('produkte.html', produkte_entries=produkte_entries)
+    #produkte_entries = db.session.query(Produkte).all()
+    #return render_template('produkte.html', produkte_entries=produkte_entries)
+    #produkte_entries = db.session.query(Produkte).all()
+    return redirect(url_for('app_customer.productcatalog'))
  
  
  

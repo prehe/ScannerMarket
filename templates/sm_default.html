@@ -36,7 +36,11 @@
             <nav class="navbar">
                 <div class="navbar-brand">
                     <div class="col-md">
-                        <img class="logo_tiny" src="../static/images/logo1.svg" alt="Scanner" onclick="window.location.href='../productcatalog'">
+                        {% if logStatus == 'admin' %}
+                            <img class="logo_tiny" src="../static/images/logo1.svg" alt="Scanner" onclick="window.location.href='../admin'">
+                        {% else %}
+                            <img class="logo_tiny" src="../static/images/logo1.svg" alt="Scanner" onclick="window.location.href='../productcatalog'">
+                        {% endif %}
                     </div>
                     <div class="col-md text-center">
                         <h5 class="d-block d-sm-none">S-Market</h5>
@@ -45,27 +49,44 @@
                 </div>
                 <ul class="navbar-nav">
                     <div class="row align-items-center">
-                        <li class="nav-item col-4">
-                            <a class="nav-link active" aria-current="page" href="../scanner">
-                                <img src="../static/icons_weiß/user-solid.svg" alt="User Icon" class="center">
-                                <span>Profil</span>
-                            </a>
-                        </li>
-                        <li class="nav-item col-4">
-                            <a class="nav-link active" aria-current="page" href="../shoppinglist">
-                                <img src="../static/icons_weiß/basket-shopping-solid.svg" alt="Basket Icon" class="center">
-                                <span>Einkauf</span>
-                            </a>
-                        </li>
-                        <li class="nav-item col-4">
-                            <a class="nav-link active" aria-current="page" href="../login">
-                                <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="Login Icon">
-                                <span class="d-inline-block">Log-In</span>
-                            </a>
-                        </li>
+                        {% if logStatus == 'customer' %}
+                            <li class="nav-item col-4">
+                                <a class="nav-link active" aria-current="page" href="../scanner">
+                                    <img src="../static/icons_weiß/user-solid.svg" alt="User Icon" class="center">
+                                    <span>Profil</span>
+                                </a>
+                            </li>
+                            <li class="nav-item col-4">
+                                <a class="nav-link active" aria-current="page" href="../shoppinglist">
+                                    <img src="../static/icons_weiß/basket-shopping-solid.svg" alt="Basket Icon" class="center">
+                                    <span>Einkauf</span>
+                                </a>
+                            </li>
+                            <li class="nav-item col-4">
+                                <a class="nav-link active" aria-current="page" href="../logout">
+                                    <img src="../static/icons_weiß/right-from-bracket-solid.svg" alt="Logout Icon">
+                                    <span class="d-inline-block">Log-Out</span>
+                                </a>
+                            </li>
+                        {% elif logStatus == 'default' %}
+                            <li class="nav-item col-4">
+                                <a class="nav-link active" aria-current="page" href="../login">
+                                    <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="Login Icon">
+                                    <span class="d-inline-block">Log-In</span>
+                                </a>
+                            </li>
+                        {% elif logStatus =='admin'%}
+                            <li class="nav-item col-4">
+                                <a class="nav-link active" aria-current="page" href="../logout">
+                                    <img src="../static/icons_weiß/right-from-bracket-solid.svg" alt="Logout Icon">
+                                    <span class="d-inline-block">Log-Out</span>
+                                </a>
+                            </li>
+                        {% endif %}
                     </div>
                 </ul>
             </nav>
+        
             <!-- Main Content -->
             {% block content %}
 
