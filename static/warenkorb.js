@@ -44,3 +44,30 @@ function decreaseAmount(einkaufId, productId) {
     });
 }
 
+function purchase() {
+    $.ajax({
+        url: "/purchase",
+        method: "POST",
+        success: function(response) {
+            if (response.success) {
+                console.log("Operation successful");
+
+                // modal öffnen und fragen ob einkauf beendet werden soll
+
+            } else {
+                console.log("Operation failed");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+}
+
+
+
+function scanProduct(){
+    document.getElementById('result').style.display = "none";
+    document.getElementById('reader').style.display = 'block';
+    scanner.render(success, error); 
+}

@@ -6,6 +6,8 @@
 
 
 {% block content %}
+<script src="../static/warenkorb.js"></script>
+<script src="/static/scanner.js"></script>
 <!-- Main Content -->
 <div class="main-container">
     <div class="row">
@@ -49,15 +51,14 @@
         <!-- Button "Produkt scannen" -->
         <div class="row">
             <div class="col-6 text-center">
-                <button class="btn btn-primary" id="scan-product-btn">Produkt scannen</button>
+                <button class="btn btn-primary" id="scan-product-btn" onclick="scanProduct()">Produkt scannen</button>
             </div>
             <!-- Button zum Beenden des Einkaufs -->
             <div class="col-6 text-center">
-                <button class="btn btn-success" id="finish-shopping-btn">Einkauf beenden</button>
+                <button class="btn btn-success" id="finish-shopping-btn" onclick="purchase()">Einkauf beenden</button>
             </div>
         </div>
     </div>
 </div>
-<script src="../static/warenkorb.js"></script>
 {% endblock %}
 <!-- END Main Content -->

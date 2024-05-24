@@ -27,6 +27,13 @@ class Bezahlmöglichkeiten(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
     Methode = db.Column(db.String(45))
 
+    @classmethod
+    def add_paymentmethod(cls, method):
+        """Fügt ein Produkt zum Warenkorb hinzu."""
+        paymentmethod = cls(Methode=method)
+        db.session.add(paymentmethod)
+        db.session.commit()
+
 class Bezahlung(db.Model):
     __tablename__ = 'bezahlung'
 
@@ -84,6 +91,16 @@ class Einkauf(db.Model):
         db.session.add(neuer_einkauf)
         db.session.commit()
         return neuer_einkauf.ID
+    
+    @classmethod
+    def add_endTimestamp(cls, einkauf_id):
+        einkauf = cls.query.filter_by(ID=einkauf_id).first()
+        if einkauf:
+            einkauf.Zeitstempel_ende = datetime.now()
+            db.session.commit()
+            return True
+        else:
+            return False
 
 
 

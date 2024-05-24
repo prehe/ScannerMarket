@@ -68,9 +68,9 @@ def prodBasketP():
     if session['shoppingID'] == None:
         # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
         session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
-        print(session.get(['shoppingID'], None))
-    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get(['shoppingID'], None)))
-    # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
+        print(session.get('shoppingID', None))
+    # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get('shoppingID', None)))
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
  
 @cust.route('/productcatalog')
 def productcatalog():
@@ -138,5 +138,4 @@ def getProdsFromShoppingList(shopping_id):
     for prod in prodsOfCategory:
         newProd = {'shoppingCard_id': prod.Einkauf_ID, 'product_id': prod.Produkt_ID,'name': prod.produkt.Name, 'amount': prod.Anzahl}
         products.append(newProd)
-    print(products)
     return products
