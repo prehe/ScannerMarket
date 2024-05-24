@@ -12,34 +12,50 @@
     <div class="row">
         <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
     </div>
-        <div class="col-sm-6 offset-sm-3">
-            <div class="item row">
-                <div class="col-8">
+    <div class="col-sm-6 offset-sm-3">
+        <!-- Warenkorbliste -->
+        <div class="item-list">
+            <div class="item-header row">
+                <div class="col-9">
                     <h5>Produktname</h5>
                 </div>
-                <div class="col-1 align-items-center">
+                <div class="col-3 text-right">
                     <h5>Anzahl</h5>
                 </div>
             </div>
-            <div class="row">
-            {% for product in product_list %}
-            <div class="item row">
-                <div class="item row" id="product_{{ product.shoppingCard_id }}_{{ product.product_id }}">
+            <div class="item-list-content">
+                {% for product in product_list %}
+                <div class="item row">
+                    <div class="col-1">
+                        <button class="mx-1" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }},{{ product.product_id }})" >X</button>
+                    </div>
                     <div class="col-8">
                         <p>{{ product.name }}</p>
                     </div>
-                    <div class="col-1">
-                        <button class="mx-1 warenkorb-btn decrease-btn" id="decrease_{{ product.product_id }}" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})" >-</button>
+                    <div class="col-3 text-right">
+                        <button class="mx-1 btn btn-outline-warning decrease-btn" id="decrease_{{ product.product_id }}" aria-label="Decrease quantity" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})" >-</button>
+                        <span id="quantity_{{ product.product_id }}">{{ product.amount }}</span>
+                        <button class="mx-1 btn btn-outline-success increase-btn" id="increase_{{ product.product_id }}" aria-label="Increase quantity" onclick="increaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})">+</button>
                     </div>
-                    <div class="col-1 text-center">
-                        <span>{{ product.amount }}</span>
-                    </div>
-                    <div class="col-1">
-                        <button class="mx-1 warenkorb-btn increase-btn" id="increase_{{ product.product_id }}" onclick="increaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})">+</button>
-                    </div>
-                </div>                
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+        <!-- Gesamtpreis -->
+        <div class="row total-price">
+            <div class="col-12">
+                <p>Gesamtpreis: <span id="total-price">0.00</span> €</p>
+            </div>
+        </div>
+        <!-- Button "Produkt scannen" -->
+        <div class="row">
+            <div class="col-6 text-center">
+                <button class="btn btn-primary" id="scan-product-btn">Produkt scannen</button>
+            </div>
+            <!-- Button zum Beenden des Einkaufs -->
+            <div class="col-6 text-center">
+                <button class="btn btn-success" id="finish-shopping-btn">Einkauf beenden</button>
+            </div>
         </div>
     </div>
 </div>

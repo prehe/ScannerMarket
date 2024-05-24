@@ -17,18 +17,20 @@
                 <div class="col product-element d-flex align-items-center"> 
                     <img src="../static/icons/user-solid.svg">
                     <div class="product-info"> 
-                        <h5>Hersteller</h5>
-                        <h3>Produktname</h3>
-                        <p>Preis: 10,00€</p> 
-                        <p>Menge/Volumen: 500g</p>
+                        <h5 id="manufacturer">Hersteller</h5>
+                        <h3 id="product">Produktname</h3>
+                        <p id="price">Preis: 10,00€</p> 
+                        <p id="weight">Menge/Volumen: 500g</p>
                     </div>
                 </div>
-                <div class="col product-buttons mx-left"> 
+                <div class="col product-buttons mx-left my-auto">
                     <p>Anzahl:</p>
-                    <button class="btn btn-secondary">-</button> 
-                    <p>1</p> 
-                    <button class="btn btn-secondary">+</button> 
+                    <button class="btn btn-secondary" onclick="decreaseQuantity()">-</button>
+                    <p id="quantity">1</p>
+                    <button class="btn btn-secondary" onclick="increaseQuantity()">+</button>
                 </div>
+                <button class="btn btn-secondary" onclick="rescan()">Produkt erneut scannen</button>
+                <button class="btn btn-secondary" onclick="addProdToBasket()">Produkt zum Warenkorb hinzufügen</button>
             </div>
         </div>
     </div>

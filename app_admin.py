@@ -77,9 +77,6 @@ def show_bezahlung():
     column_names = ["Nutzer_ID", "Bezahlmöglichkeiten_ID", "PP_Email", "Karten_Nr", "Karte_Gültingkeitsdatum", "Karte_Prüfnummer" ]
     return render_template('db_table_view.html', entries =bezahlung_entries, column_names=column_names, title = "Bezahlung")
 
- 
-
-
 @admin.route('/Umsatz')
 def show_umsatz():
     dates = curr_Date()

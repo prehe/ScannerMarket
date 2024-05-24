@@ -1,8 +1,9 @@
 from flask import Blueprint, Flask, render_template, request, session, redirect, url_for, session, flash
+from app_customer import getProdsFromShoppingList
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb, Einkauf
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -41,11 +42,14 @@ def login():
         user = db.session.query(Nutzer).filter_by(Email=email, Passwort=password).first()
         if user: 
             ##wenn valide:
-            if user.Admin:
+            session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
+            customer =  session.get('logged_in', None)
+            if customer.admin:
                 session['type'] = "admin"
                 return redirect(url_for('app_admin.adminMain'))
             else:
                 session['type'] = "customer"
+                session['shoppingID'] = None
                 return redirect(url_for('app_customer.productcatalog'))
         else:
              flash('Invalid username or password')
@@ -59,9 +63,16 @@ def login():
 def scannerP():
     return render_template('sm_scanner.html',logStatus=session.get('type', None))
  
+
 @cust.route('/shoppinglist')
 def prodBasketP():
-    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1),logStatus=session.get('type', None))
+    session['shoppingID'] = None        # temporär
+    if session['shoppingID'] == None:
+        # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
+        session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
+        print(session.get(['shoppingID'], None))
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get(['shoppingID'], None)), logStatus=session.get('type', None))
+    # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
  
 @cust.route('/productcatalog')
 def productcatalog():

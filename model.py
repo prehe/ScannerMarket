@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
@@ -69,6 +70,21 @@ class Einkauf(db.Model):
 
     nutzer = relationship("Nutzer")
 
+    @classmethod
+    def add_einkauf(cls, nutzer_id, zeitstempel_start=None, zeitstempel_ende=None):
+        if zeitstempel_start is None:
+            zeitstempel_start = datetime.now()
+
+        neuer_einkauf = cls(
+            Nutzer_ID=nutzer_id,
+            Zeitstempel_start=zeitstempel_start,
+            Zeitstempel_ende=zeitstempel_ende
+        )
+
+        db.session.add(neuer_einkauf)
+        db.session.commit()
+        return neuer_einkauf.ID
+
 
 
 class Warenkorb(db.Model):
@@ -117,15 +133,14 @@ class Warenkorb(db.Model):
     def decrease_cart_amount(cls, einkauf_id, produkt_id):
         """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
-        if ware > 1:
+        if ware is None:
+            return "error"  # handle case where the item is not found
+        if ware.Anzahl > 1:
             ware.Anzahl -= 1
             db.session.commit()
             return "decreased"
-        elif ware == 1:
-            cls.remove_from_cart(einkauf_id, produkt_id)
-            return "removed"
         else:
-            return "error"
+            return "no change"  # indicate that no change was made because the amount is already 1
 
     @classmethod
     def get_cart_contents(cls, einkauf_id):
