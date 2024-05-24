@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
@@ -68,6 +69,21 @@ class Einkauf(db.Model):
     Zeitstempel_ende = db.Column(db.DateTime)
 
     nutzer = relationship("Nutzer")
+
+    @classmethod
+    def add_einkauf(cls, nutzer_id, zeitstempel_start=None, zeitstempel_ende=None):
+        if zeitstempel_start is None:
+            zeitstempel_start = datetime.now()
+
+        neuer_einkauf = cls(
+            Nutzer_ID=nutzer_id,
+            Zeitstempel_start=zeitstempel_start,
+            Zeitstempel_ende=zeitstempel_ende
+        )
+
+        db.session.add(neuer_einkauf)
+        db.session.commit()
+        return neuer_einkauf.ID
 
 
 

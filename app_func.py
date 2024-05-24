@@ -109,7 +109,7 @@ def getProductFromEan():
 def increase_cart_amount():
     einkauf_id = request.form["einkauf_id"]
     produkt_id = request.form["produkt_id"]
-    print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
+    # print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
     response = Warenkorb.increase_cart_amount(einkauf_id, produkt_id)
     return response
 
@@ -117,6 +117,6 @@ def increase_cart_amount():
 def decrease_cart_amount():
     einkauf_id = request.form["einkauf_id"]
     produkt_id = request.form["produkt_id"]
-    print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
+    # print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
     response = Warenkorb.decrease_cart_amount(einkauf_id, produkt_id)
     return response
