@@ -27,7 +27,7 @@ db.init_app(app)
 def index():
     # Render the default template
     session['type'] = "default"
-    return render_template('sm_cust_main.html')
+    return render_template('sm_cust_main.html', logStatus=session.get('type', None))
  
  
 

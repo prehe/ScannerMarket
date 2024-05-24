@@ -13,15 +13,14 @@ admin = Blueprint(__name__, import_name="app_admin")
 
 
 #dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
- 
+
 @admin.route('/admin')
 def adminMain():
-    return render_template('sm_admin_main.html')
- 
+    return render_template('sm_admin_main.html',logStatus=session.get('type', None))
  
 @admin.route('/admin/analysis')
 def analysis():
-    return render_template('sm_admin_analysis.html', analyse_page= "/Produktkategorien")
+    return render_template('sm_admin_analysis.html',logStatus=session.get('type', None))
 
 
 @admin.route('/Kunden')
@@ -77,6 +76,9 @@ def show_bezahlung():
     bezahlung_entries = db.session.query(Bezahlung).all()
     column_names = ["Nutzer_ID", "Bezahlmöglichkeiten_ID", "PP_Email", "Karten_Nr", "Karte_Gültingkeitsdatum", "Karte_Prüfnummer" ]
     return render_template('db_table_view.html', entries =bezahlung_entries, column_names=column_names, title = "Bezahlung")
+
+ 
+
 
 @admin.route('/Umsatz')
 def show_umsatz():
@@ -185,7 +187,7 @@ def newProduct():
         for field, errors in form.errors.items():
             for error in errors:
                 print(f"Fehler im Feld '{getattr(form, field).label.text}': {error}")
-    return render_template('sm_admin_newProduct.html', form = form)
+    return render_template('sm_admin_newProduct.html', form = form,logStatus=session.get('type', None))
 
 @admin.route('/admin/summeryNewProduct')
 def summeryNewProduct():
@@ -197,4 +199,4 @@ def summeryNewProduct():
     gewicht = product['weight'] + ' ' + product['unit']
     product['weight'] = gewicht
     service.addNewProduct(hersteller=product['manufacturer'], produktname=product['name'], gewicht_volumen=gewicht, ean=product['ean'], preis=product['price'], bild=product['img'], kategorie=product['category_id'])
-    return render_template('sm_admin_summeryProduct.html', product = product)
+    return render_template('sm_admin_summeryProduct.html', product = product,logStatus=session.get('type', None))
