@@ -48,6 +48,7 @@ def login():
                 return redirect(url_for('adminMain'))
             else:
                 session['type'] = "customer"
+                session['shoppingID'] = None
                 return redirect(url_for('productcatalog'))
         else:
              flash('Invalid username or password')
@@ -63,7 +64,13 @@ def scannerP():
  
 @cust.route('/shoppinglist')
 def prodBasketP():
-    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
+    session['shoppingID'] = None        # temporär
+    if session['shoppingID'] == None:
+        # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
+        session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
+        print(session.get(['shoppingID'], None))
+    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get(['shoppingID'], None)))
+    # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
  
 @cust.route('/productcatalog')
 def productcatalog():
