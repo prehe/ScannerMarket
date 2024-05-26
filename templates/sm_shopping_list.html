@@ -4,11 +4,9 @@
     <title>Einkauf - ScannerMarket</title>
 {% endblock %}
 
-
 {% block content %}
-<script src="../static/warenkorb.js"></script>
-<script src="/static/scanner.js"></script>
 <!-- Main Content -->
+<script src="https://unpkg.com/html5-qrcode"></script>
 <div class="main-container">
     <div class="row">
         <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
@@ -28,13 +26,13 @@
                 {% for product in product_list %}
                 <div class="item row">
                     <div class="col-1">
-                        <button class="mx-1" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }},{{ product.product_id }})" >X</button>
+                        <button class="mx-1" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }},{{ product.product_id }})">X</button>
                     </div>
                     <div class="col-8">
                         <p>{{ product.name }}</p>
                     </div>
                     <div class="col-3 text-right">
-                        <button class="mx-1 btn btn-outline-warning decrease-btn" id="decrease_{{ product.product_id }}" aria-label="Decrease quantity" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})" >-</button>
+                        <button class="mx-1 btn btn-outline-warning decrease-btn" id="decrease_{{ product.product_id }}" aria-label="Decrease quantity" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})">-</button>
                         <span id="quantity_{{ product.product_id }}">{{ product.amount }}</span>
                         <button class="mx-1 btn btn-outline-success increase-btn" id="increase_{{ product.product_id }}" aria-label="Increase quantity" onclick="increaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})">+</button>
                     </div>
@@ -51,7 +49,7 @@
         <!-- Button "Produkt scannen" -->
         <div class="row">
             <div class="col-6 text-center">
-                <button class="btn btn-primary" id="scan-product-btn" onclick="scanProduct()">Produkt scannen</button>
+                <button class="btn btn-primary" id="scan-product-btn" onclick="window.location.href='../scanner'">Produkt scannen</button>
             </div>
             <!-- Button zum Beenden des Einkaufs -->
             <div class="col-6 text-center">
@@ -60,5 +58,6 @@
         </div>
     </div>
 </div>
+<script src="../static/warenkorb.js"></script>
 {% endblock %}
 <!-- END Main Content -->

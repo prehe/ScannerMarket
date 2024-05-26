@@ -37,29 +37,30 @@ def login():
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
-        ##hier checken, ob login Daten aus Formular in Datenbank und valide sind:    
+        # Check if login data from the form is valid in the database
         user = db.session.query(Nutzer).filter_by(Email=email, Passwort=password).first()
-        if user: 
-            ##wenn valide:
-            session['logged_in'] = db.session.query(Nutzer).filter(Nutzer.Email == form.email) ## form.email ggfs anpassen
-            customer =  session.get('logged_in', None)
-            if customer.admin:
+        if user:
+            # If valid:
+            session['logged_in'] = user.ID  # Store user ID in session
+            customer = db.session.query(Nutzer).get(session['logged_in'])  # Fetch user instance
+            if customer.Admin:
                 session['type'] = "admin"
-                return redirect(url_for('adminMain'))
+                return redirect(url_for('app_admin.adminMain'))
             else:
                 session['type'] = "customer"
                 session['shoppingID'] = None
-                return redirect(url_for('productcatalog'))
+                return redirect(url_for('app_customer.productcatalog'))
         else:
-             flash('Invalid username or password')
+            flash('Invalid username or password')
     else:
         for field, errors in form.errors.items():
             for error in errors:
                 print(f"Fehler im Feld '{getattr(form, field).label.text}': {error}")
-    return render_template('sm_login.html', form = form)
+    return render_template('sm_login.html', form=form)
+
  
 @cust.route('/scanner')
-def scannerP():
+def scanner():
     return render_template('sm_scanner.html')
  
 @cust.route('/shoppinglist')
@@ -68,7 +69,7 @@ def prodBasketP():
     if session['shoppingID'] == None:
         # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
         session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
-        print(session.get('shoppingID', None))
+        # print(session.get('shoppingID', None))
     # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get('shoppingID', None)))
     return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
  

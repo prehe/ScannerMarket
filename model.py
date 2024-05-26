@@ -67,6 +67,18 @@ class Produkte(db.Model):
 
     produktkategorien = relationship("Produktkategorien")
 
+    def to_dict(self):
+        return {
+            'ID': self.ID,
+            'Hersteller': self.Hersteller,
+            'Name': self.Name,
+            'Gewicht_Volumen': self.Gewicht_Volumen,
+            'EAN': self.EAN,
+            'Preis': self.Preis,
+            'Bild': self.Bild,
+            'Kategorie_ID': self.Kategorie_ID,
+        }
+
 class Einkauf(db.Model):
     __tablename__ = 'einkauf'
 
@@ -108,7 +120,7 @@ class Warenkorb(db.Model):
     __tablename__ = 'warenkorb'
 
     Einkauf_ID = db.Column(db.Integer, db.ForeignKey('einkauf.ID'), primary_key=True)
-    Produkt_ID = db.Column(db.Integer, db.ForeignKey('produkte.ID'), primary_key=True)
+    Produkt_ID = db.Column(db.Integer, db.ForeignKey('produkte.ID'), primary_key=True, autoincrement=False, nullable=False)
     Anzahl = db.Column(db.Integer)
 
     einkauf = relationship("Einkauf")
@@ -120,6 +132,7 @@ class Warenkorb(db.Model):
         warenkorb = cls(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id, Anzahl=anzahl)
         db.session.add(warenkorb)
         db.session.commit()
+        return warenkorb
 
     @classmethod
     def update_quantity(cls, einkauf_id, produkt_id, neue_anzahl):

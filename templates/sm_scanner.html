@@ -7,7 +7,6 @@
 {% block content %}
 <!-- Barcode Scanner script -->
 <script src="https://unpkg.com/html5-qrcode"></script>
-
 <script src="/static/scanner.js"></script>
 
 <div class="main-container">
@@ -17,7 +16,7 @@
             <div id="reader"></div>
             <div id="result" class="mx-auto" style="display: none;">
                 <div class="col product-element d-flex align-items-center"> 
-                    <img src="../static/icons/user-solid.svg">
+                    <img src="" id="productimage">
                     <div class="product-info"> 
                         <h5 id="manufacturer">Hersteller</h5>
                         <h3 id="product">Produktname</h3>
@@ -31,8 +30,8 @@
                     <p id="quantity">1</p>
                     <button class="btn btn-secondary" onclick="increaseQuantity()">+</button>
                 </div>
-                <button class="btn btn-secondary" onclick="rescan()">Produkt erneut scannen</button>
-                <button class="btn btn-secondary" onclick="addProdToBasket()">Produkt zum Warenkorb hinzufügen</button>
+                <button class="btn btn-secondary" onclick="rescan()">erneut scannen</button>
+                <button class="btn btn-secondary" onclick="addProdToBasket()">zum Warenkorb hinzufügen</button>
             </div>
         </div>
     </div>

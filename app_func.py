@@ -7,7 +7,6 @@ import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
 
-
 func = Blueprint(__name__, import_name="app_func")
 
 
@@ -90,28 +89,21 @@ def insertDB():
  
  
  
-@func.route('/getProductFromEan', methods=["POST"])
+@func.route('/getProductFromEan', methods=["GET"])
 def getProductFromEan():
-    search_ean = request.args.get('ean')  # Use request.args for query parameters
-    print(search_ean)
-    produkte_entries = db.session.query(Produkte).filter_by(ean=search_ean).all()
-    print(produkte_entries)
-    return produkte_entries
+    search_ean = request.args.get('ean')
+    try:
+        produkt = db.session.query(Produkte).filter_by(EAN=search_ean).first()
+        if produkt:
+            return jsonify(produkt.to_dict())
+        else:
+            return jsonify({'error': 'Produkt nicht gefunden'}), 404
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': str(e)}), 500
+        
  
  
-# @func.route('/startOrEndShopping', methods=["GET", "POST"])
-# def startShopping():
-#     # peudo code:
-#     # if last tmst_end = none & nutzer_id = nutzer_id:
-#         # add tmst_end
-#     # else:
-#         # set new shopping(nutzer_id, tmst_start)
-#         # return shopping_id
-#         return None
-
-
-#############################################################################################################################################
-# funktions-URLs:
 @func.route("/increase_cart_amount", methods=["POST"])
 def increase_cart_amount():
     einkauf_id = request.form["einkauf_id"]
@@ -130,5 +122,36 @@ def decrease_cart_amount():
 
 @func.route("/purchase", methods=["POST"])
 def purchase():
-    response = Einkauf.add_endTimestamp()
+    response = Einkauf.add_endTimestamp(session.get('shoppingID', None))
     return jsonify({"success": response})
+
+
+@func.route("/addProdToBasket", methods=["POST"])
+def addProdToBasket():
+    einkauf_id = session.get('shoppingID', None)
+    product_id = request.form.get("productId")
+    quantity = request.form.get("quantity")
+
+    # print(einkauf_id, product_id, quantity)
+
+    if not einkauf_id or not product_id or not quantity:
+        flash("Fehlende Daten für den Warenkorb", "error")
+        return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.prodBasketP'))
+
+    try:
+        quantity = int(quantity)
+    except ValueError:
+        flash("Ungültige Mengenangabe", "error")
+        return jsonify(success=False, message="Ungültige Mengenangabe", redirect_url=url_for('app_customer.prodBasketP'))
+
+    basket_item = Warenkorb.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=product_id).first()
+    if basket_item:
+        basket_item.Anzahl += quantity
+    else:
+        basket_item = Warenkorb(Einkauf_ID=einkauf_id, Produkt_ID=product_id, Anzahl=quantity)
+        db.session.add(basket_item)
+    
+    db.session.commit()
+
+    flash("Produkt erfolgreich zum Warenkorb hinzugefügt", "success")
+    return jsonify(success=True, message="Produkt erfolgreich zum Warenkorb hinzugefügt", redirect_url=url_for('app_customer.prodBasketP'))
