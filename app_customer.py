@@ -73,11 +73,11 @@ def prodBasketP():
         # print(session.get('shoppingID', None))
     data = getProdsFromShoppingList(1)
     # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get('shoppingID', None)))
-    return render_template('sm_shopping_list.html', product_list = data[0], total_price=data[1])
+    return render_template('sm_shopping_list.html', product_list = data[0], total_price=data[1], logStatus =session.get('type', None))
  
 @cust.route('/productcatalog')
 def productcatalog():
-    return render_template('sm_cust_main.html')
+    return render_template('sm_cust_main.html',logStatus =session.get('type', None))
 
 #globale Variable
 categoryNames={
@@ -115,7 +115,7 @@ def categoryPage(category):
     bannerImg = bannerImages[category]
     categoryName = categoryNames[category]
     products = getProdsFromCategory(categoryName)
-    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg)
+    return render_template('sm_category_page.html', category= categoryName, products=products, banner= bannerImg,logStatus =session.get('type', None))
  
  
 def getProdsFromCategory(category):
@@ -128,7 +128,7 @@ def getProdsFromCategory(category):
  
 @cust.route("/impressum")
 def impressum ():
-    return render_template('sm_impressum.html')
+    return render_template('sm_impressum.html',logStatus =session.get('type', None))
  
 def getProdsFromShoppingList(shopping_id):
     items = db.session.query(Warenkorb).\
@@ -149,3 +149,8 @@ def getProdsFromShoppingList(shopping_id):
         })
     total_price = getTotalBasketPrice(shopping_id)
     return products, total_price
+
+@cust.route('/logout')
+def logOut():
+    session['type'] = "default"
+    return redirect(url_for('app_customer.productcatalog'))
