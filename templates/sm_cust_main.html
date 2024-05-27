@@ -105,6 +105,13 @@
             </a>
         </div>
     </div>
+    {% if logStatus =='admin'%}
+    <div class="buttons-inline">
+        <a href="{{url_for('app_admin.adminMain')}}">
+            <button class="btn btn-secondary" type="button" >Zurück</button> 
+        </a>
+    </div>
+    {% endif %}
 </div>
 <!-- END Main Content -->
 {% endblock %}
