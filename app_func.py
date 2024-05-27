@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, render_template, request, session, redirect, url_for, session, flash
+from flask import Blueprint, Flask, jsonify, render_template, request, session, redirect, url_for, session, flash
 import formulare as formulare
 import pandas as pd
 import requests
@@ -7,124 +7,173 @@ import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
 
-
 func = Blueprint(__name__, import_name="app_func")
 
 
+categoryNames={
+    'category-bread' : "Backwaren",
+    'category-can': "Konserven & Konfitüren",
+    'category-coffee' : "Sonstiges",
+    'category-drinks' : "Getränke",
+    'category-fish' : "Fisch & Meeresfrüchte",
+    'category-frozen' : "Tiefkühlwaren",
+    'category-fruit' : "Obst & Gemüse",
+    'category-herbs' : "Gewürze & Saucen",
+    'category-meat' : "Fleischprodukte",
+    'category-milk' : "Milchprodukte",
+    'category-pasta' : "Pasta, Reis & Nüsse",
+    'category-sweets' : "Süßwaren"
+}
+
 @func.route('/insertDB')
 def insertDB():
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
-    #service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
-    # paymethod = Bezahlmöglichkeiten(methode="Paypal")
-    # db.session.add(paymethod)
-    # db.session.commit()
-    # paymethod = Bezahlmöglichkeiten(methode="Kreditkarte")
-    # db.session.add(paymethod)
-    # db.session.commit()
 
-    # something = Einkauf(Nutzer_ID = 2)
-    # db.session.add(something)
-    # db.session.commit()
+    #########################
+    # Basis-Insert DB:
+    ########################
+        
+    ################    Produktkategorien
+    service.addProductCategories(categoryNames)
 
-    # something = Warenkorb(Einkauf_ID=1, Produkt_ID = 3, Anzahl = 5)
-    # db.session.add(something)
-    # something2 = Warenkorb(Einkauf_ID=1, Produkt_ID = 2, Anzahl = 2)
-    # db.session.add(something2)
+
+    ################ Produkte aus xlsx
+    df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
+    # print(df)
+    for index, row in df.iterrows():
+        produkt = Produkte(
+            Hersteller=row['Hersteller'],
+            Name=row['Name'],
+            Gewicht_Volumen=row['Gewicht_Volumen'],
+            EAN=row['EAN'],
+            Preis=row['Preis'],
+            Bild=row['Bild'],
+            Kategorie_ID=row['Kategorie_ID']
+        )
+        db.session.add(produkt)
+    db.session.commit()
+
+
+    ###########     Bezahlmethoden
+    paymentmethod=['Paypal','Kreditkarte']
+    for name in paymentmethod:
+        Bezahlmöglichkeiten.add_paymentmethod(method=name)
+
+
+    service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
+    service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
     
+    #################  Einkauf
+    something = Einkauf(Nutzer_ID = 2)
+    db.session.add(something)
+    db.session.commit()
 
-    # products_to_add = [
-    # (7, 1),  # Tuple of (produkte_ID, quantity)
-    # (8, 2),
-    # (9, 1),
-    # (10, 3),
-    # (11, 1),
-    # (12, 2),
-    # (13, 1),
-    # (14, 1),
-    # (15, 2),
-    # (16, 1)]
+    products_to_add = [
+    (7, 1),  # Tuple of (produkte_ID, quantity)
+    (8, 2),
+    (9, 1),
+    (10, 3),
+    (11, 1),
+    (12, 2),
+    (13, 1),
+    (14, 1),
+    (15, 2),
+    (16, 1)]
 
-    # # Loop through the list of products and add them to the shopping cart
-    # for produkte_ID, quantity in products_to_add:
-    #     new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
-    #     db.session.add(new_item)
-    # db.session.commit()
+    # Loop through the list of products and add them to the shopping cart
+    for produkte_ID, quantity in products_to_add:
+        new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
+        db.session.add(new_item)
+    db.session.commit()
 
-    # service.addProductCategories(categoryNames)
-    # service.addAllProductsFromExcel(categoryNames)
-    # prod = Produkte(hersteller = 'ABC GmbH', produkt_name = "dummy3", produktkategorien_ID = 2)
-    # db.session.add(prod)
-    # db.session.commit()
- 
-    # something = Einkauf(nutzer_ID = 2)
-    # db.session.add(something)
-    # db.session.commit()
- 
-    # something = Warenkorb(einkauf_ID=1, produkte_ID = 3, anzahl = 5)
-    # db.session.add(something)
-    # # something2 = Warenkorb(einkauf_ID=1, produkte_ID = 2, anzahl = 2)
-    # # db.session.add(something2)
-    # db.session.commit()
- 
-    # service.addProductCategories(categoryNames)
-    # service.addAllProductsFromExcel(categoryNames)
-
-    # df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
-    # # print(df)
-    # for index, row in df.iterrows():
-    #     produkt = Produkte(
-    #         Hersteller=row['Hersteller'],
-    #         Name=row['Name'],
-    #         Gewicht_Volumen=row['Gewicht_Volumen'],
-    #         EAN=row['EAN'],
-    #         Preis=row['Preis'],
-    #         Bild=row['Bild'],
-    #         Kategorie_ID=row['Kategorie_ID']
-    #     )
-    #     db.session.add(produkt)
-    # db.session.commit()
- 
-    #produkte_entries = db.session.query(Produkte).all()
-    #return render_template('produkte.html', produkte_entries=produkte_entries)
-    #produkte_entries = db.session.query(Produkte).all()
     return redirect(url_for('app_customer.productcatalog'))
  
  
  
-@func.route('/getProductFromEan', methods=["POST"])
+@func.route('/getProductFromEan', methods=["GET"])
 def getProductFromEan():
-    search_ean = request.args.get('ean')  # Use request.args for query parameters
-    print(search_ean)
-    produkte_entries = db.session.query(Produkte).filter_by(ean=search_ean).all()
-    print(produkte_entries)
-    return produkte_entries
+    search_ean = request.args.get('ean')
+    try:
+        produkt = db.session.query(Produkte).filter_by(EAN=search_ean).first()
+        if produkt:
+            return jsonify(produkt.to_dict())
+        else:
+            return jsonify({'error': 'Produkt nicht gefunden'}), 404
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': str(e)}), 500
+        
  
  
-# @func.route('/startOrEndShopping', methods=["GET", "POST"])
-# def startShopping():
-#     # peudo code:
-#     # if last tmst_end = none & nutzer_id = nutzer_id:
-#         # add tmst_end
-#     # else:
-#         # set new shopping(nutzer_id, tmst_start)
-#         # return shopping_id
-#         return None
-
-
-#############################################################################################################################################
-# funktions-URLs:
 @func.route("/increase_cart_amount", methods=["POST"])
 def increase_cart_amount():
     einkauf_id = request.form["einkauf_id"]
     produkt_id = request.form["produkt_id"]
-    print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
+    # print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
     response = Warenkorb.increase_cart_amount(einkauf_id, produkt_id)
-    return response
+    price = Produkte.get_product(produkt_id).Preis
+    return jsonify({"success": response, 'price': price})
 
 @func.route("/decrease_cart_amount", methods=["POST"])
 def decrease_cart_amount():
     einkauf_id = request.form["einkauf_id"]
     produkt_id = request.form["produkt_id"]
-    print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
+    # print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
     response = Warenkorb.decrease_cart_amount(einkauf_id, produkt_id)
-    return response
+    price = Produkte.get_product(produkt_id).Preis
+    return jsonify({"success": response, 'price': price})
+
+@func.route("/purchase", methods=["POST"])
+def purchase():
+    response = Einkauf.add_endTimestamp(session.get('shoppingID', None))
+    return jsonify({"success": response})
+
+
+@func.route("/addProdToBasket", methods=["POST"])
+def addProdToBasket():
+    einkauf_id = session.get('shoppingID', None)
+    product_id = request.form.get("productId")
+    quantity = request.form.get("quantity")
+
+    # print(einkauf_id, product_id, quantity)
+
+    if not einkauf_id or not product_id or not quantity:
+        flash("Fehlende Daten für den Warenkorb", "error")
+        return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.prodBasketP'))
+
+    try:
+        quantity = int(quantity)
+    except ValueError:
+        flash("Ungültige Mengenangabe", "error")
+        return jsonify(success=False, message="Ungültige Mengenangabe", redirect_url=url_for('app_customer.prodBasketP'))
+
+    basket_item = Warenkorb.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=product_id).first()
+    if basket_item:
+        basket_item.Anzahl += quantity
+    else:
+        basket_item = Warenkorb(Einkauf_ID=einkauf_id, Produkt_ID=product_id, Anzahl=quantity)
+        db.session.add(basket_item)
+    
+    db.session.commit()
+
+    # flash("Produkt erfolgreich zum Warenkorb hinzugefügt", "success")
+    return jsonify(success=True, message="Produkt erfolgreich zum Warenkorb hinzugefügt", redirect_url=url_for('app_customer.prodBasketP'))
+
+
+@func.route("/deleteItemFromList", methods=["POST"])
+def deleteItemFromList():
+    einkauf_id = request.form["einkauf_id"]
+    produkt_id = request.form["produkt_id"]
+    response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
+    return jsonify(value=response, price = getTotalBasketPrice(einkauf_id))
+
+
+
+def getTotalBasketPrice(einkauf_id):
+    items = db.session.query(Warenkorb).\
+    outerjoin(Warenkorb.einkauf).\
+    join(Warenkorb.produkt).\
+    filter(Warenkorb.Einkauf_ID == einkauf_id).\
+    options(joinedload(Warenkorb.produkt)).all()
+
+    total_price = round(sum(item.Anzahl * item.produkt.Preis for item in items), 2)
+    return total_price

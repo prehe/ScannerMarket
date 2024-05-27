@@ -503,12 +503,11 @@ td, th{
 
 .product-buttons {
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
-.product-buttons .btn{
-    margin-right: 10px;
-    margin-left: 10px;
+.product-buttons p {
+    margin: 0 10px;
 }
 
 

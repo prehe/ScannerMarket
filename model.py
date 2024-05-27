@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
@@ -25,6 +26,13 @@ class Bezahlmöglichkeiten(db.Model):
 
     ID = db.Column(db.Integer, primary_key=True)
     Methode = db.Column(db.String(45))
+
+    @classmethod
+    def add_paymentmethod(cls, method):
+        """Fügt ein Produkt zum Warenkorb hinzu."""
+        paymentmethod = cls(Methode=method)
+        db.session.add(paymentmethod)
+        db.session.commit()
 
 class Bezahlung(db.Model):
     __tablename__ = 'bezahlung'
@@ -59,6 +67,23 @@ class Produkte(db.Model):
 
     produktkategorien = relationship("Produktkategorien")
 
+    def to_dict(self):
+        return {
+            'ID': self.ID,
+            'Hersteller': self.Hersteller,
+            'Name': self.Name,
+            'Gewicht_Volumen': self.Gewicht_Volumen,
+            'EAN': self.EAN,
+            'Preis': self.Preis,
+            'Bild': self.Bild,
+            'Kategorie_ID': self.Kategorie_ID,
+        }
+    
+    @classmethod
+    def get_product(cls, product_id):
+        product = Produkte.query.filter_by(ID=product_id).first()
+        return product
+
 class Einkauf(db.Model):
     __tablename__ = 'einkauf'
 
@@ -69,13 +94,38 @@ class Einkauf(db.Model):
 
     nutzer = relationship("Nutzer")
 
+    @classmethod
+    def add_einkauf(cls, nutzer_id, zeitstempel_start=None, zeitstempel_ende=None):
+        if zeitstempel_start is None:
+            zeitstempel_start = datetime.now()
+
+        neuer_einkauf = cls(
+            Nutzer_ID=nutzer_id,
+            Zeitstempel_start=zeitstempel_start,
+            Zeitstempel_ende=zeitstempel_ende
+        )
+
+        db.session.add(neuer_einkauf)
+        db.session.commit()
+        return neuer_einkauf.ID
+    
+    @classmethod
+    def add_endTimestamp(cls, einkauf_id):
+        einkauf = cls.query.filter_by(ID=einkauf_id).first()
+        if einkauf:
+            einkauf.Zeitstempel_ende = datetime.now()
+            db.session.commit()
+            return True
+        else:
+            return False
+
 
 
 class Warenkorb(db.Model):
     __tablename__ = 'warenkorb'
 
     Einkauf_ID = db.Column(db.Integer, db.ForeignKey('einkauf.ID'), primary_key=True)
-    Produkt_ID = db.Column(db.Integer, db.ForeignKey('produkte.ID'), primary_key=True)
+    Produkt_ID = db.Column(db.Integer, db.ForeignKey('produkte.ID'), primary_key=True, autoincrement=False, nullable=False)
     Anzahl = db.Column(db.Integer)
 
     einkauf = relationship("Einkauf")
@@ -87,6 +137,7 @@ class Warenkorb(db.Model):
         warenkorb = cls(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id, Anzahl=anzahl)
         db.session.add(warenkorb)
         db.session.commit()
+        return warenkorb
 
     @classmethod
     def update_quantity(cls, einkauf_id, produkt_id, neue_anzahl):
@@ -103,6 +154,9 @@ class Warenkorb(db.Model):
         if ware:
             db.session.delete(ware)
             db.session.commit()
+            return "removed"
+        else: 
+            return "item not found"
 
     @classmethod
     def increase_cart_amount(cls, einkauf_id, produkt_id):
@@ -112,20 +166,21 @@ class Warenkorb(db.Model):
             ware.Anzahl = ware.Anzahl + 1
             db.session.commit()
             return "increased"
+        else:
+            return "no change"
     
     @classmethod
     def decrease_cart_amount(cls, einkauf_id, produkt_id):
         """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
-        if ware > 1:
+        if ware is None:
+            return "error"  # handle case where the item is not found
+        if ware.Anzahl > 1:
             ware.Anzahl -= 1
             db.session.commit()
             return "decreased"
-        elif ware == 1:
-            cls.remove_from_cart(einkauf_id, produkt_id)
-            return "removed"
         else:
-            return "error"
+            return "no change"  # indicate that no change was made because the amount is already 1
 
     @classmethod
     def get_cart_contents(cls, einkauf_id):
