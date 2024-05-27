@@ -78,6 +78,11 @@ class Produkte(db.Model):
             'Bild': self.Bild,
             'Kategorie_ID': self.Kategorie_ID,
         }
+    
+    @classmethod
+    def get_product(cls, product_id):
+        product = Produkte.query.filter_by(ID=product_id).first()
+        return product
 
 class Einkauf(db.Model):
     __tablename__ = 'einkauf'
@@ -149,6 +154,9 @@ class Warenkorb(db.Model):
         if ware:
             db.session.delete(ware)
             db.session.commit()
+            return "removed"
+        else: 
+            return "item not found"
 
     @classmethod
     def increase_cart_amount(cls, einkauf_id, produkt_id):
@@ -158,6 +166,8 @@ class Warenkorb(db.Model):
             ware.Anzahl = ware.Anzahl + 1
             db.session.commit()
             return "increased"
+        else:
+            return "no change"
     
     @classmethod
     def decrease_cart_amount(cls, einkauf_id, produkt_id):

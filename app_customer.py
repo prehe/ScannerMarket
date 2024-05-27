@@ -1,4 +1,5 @@
 from flask import Blueprint, Flask, render_template, request, session, redirect, url_for, session, flash
+from app_func import getTotalBasketPrice
 import formulare as formulare
 import pandas as pd
 import requests
@@ -70,8 +71,9 @@ def prodBasketP():
         # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
         session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
         # print(session.get('shoppingID', None))
+    data = getProdsFromShoppingList(1)
     # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get('shoppingID', None)))
-    return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(1))
+    return render_template('sm_shopping_list.html', product_list = data[0], total_price=data[1])
  
 @cust.route('/productcatalog')
 def productcatalog():
@@ -129,14 +131,21 @@ def impressum ():
     return render_template('sm_impressum.html')
  
 def getProdsFromShoppingList(shopping_id):
+    items = db.session.query(Warenkorb).\
+    outerjoin(Warenkorb.einkauf).\
+    join(Warenkorb.produkt).\
+    filter(Warenkorb.Einkauf_ID == shopping_id).\
+    options(joinedload(Warenkorb.produkt)).all()
+
     products = []
-    prodsOfCategory = db.session.query(Warenkorb).\
-        outerjoin(Warenkorb.einkauf).\
-        join(Warenkorb.produkt).\
-        filter(Warenkorb.Einkauf_ID == shopping_id).\
-        options(joinedload(Warenkorb.produkt)).all()  # Lädt die Produktdaten vor, um N+1 Abfragen zu vermeiden
-    
-    for prod in prodsOfCategory:
-        newProd = {'shoppingCard_id': prod.Einkauf_ID, 'product_id': prod.Produkt_ID,'name': prod.produkt.Name, 'amount': prod.Anzahl}
-        products.append(newProd)
-    return products
+    for item in items:
+        products.append({
+            'shoppingCard_id': item.Einkauf_ID,
+            'product_id': item.Produkt_ID,
+            'hersteller': item.produkt.Hersteller,
+            'name': item.produkt.Name,
+            'amount': item.Anzahl,
+            'price': item.produkt.Preis
+        })
+    total_price = getTotalBasketPrice(shopping_id)
+    return products, total_price

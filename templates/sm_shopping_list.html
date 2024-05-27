@@ -6,7 +6,6 @@
 
 {% block content %}
 <!-- Main Content -->
-<script src="https://unpkg.com/html5-qrcode"></script>
 <div class="main-container">
     <div class="row">
         <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
@@ -24,12 +23,12 @@
             </div>
             <div class="item-list-content">
                 {% for product in product_list %}
-                <div class="item row">
+                <div class="item row" id="product_row_{{ product.product_id }}">
                     <div class="col-1">
-                        <button class="mx-1" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }},{{ product.product_id }})">X</button>
+                        <button class="mx-1 btn btn-secondary" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }},{{ product.product_id }})">X</button>
                     </div>
                     <div class="col-8">
-                        <p>{{ product.name }}</p>
+                        <p data-toggle="tooltip" data-placement="top" title="{{ product.hersteller }} {{ product.name }}">{{ product.name }} - {{ "%.2f"|format(product.price) }}€</p>
                     </div>
                     <div class="col-3 text-right">
                         <button class="mx-1 btn btn-outline-warning decrease-btn" id="decrease_{{ product.product_id }}" aria-label="Decrease quantity" onclick="decreaseAmount({{ product.shoppingCard_id }},{{ product.product_id }})">-</button>
@@ -43,7 +42,7 @@
         <!-- Gesamtpreis -->
         <div class="row total-price">
             <div class="col-12">
-                <p>Gesamtpreis: <span id="total-price">0.00</span> €</p>
+                <p>Gesamtpreis: <span id="total-price">{{ total_price }}</span> €</p>
             </div>
         </div>
         <!-- Button "Produkt scannen" -->

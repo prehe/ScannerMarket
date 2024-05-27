@@ -110,7 +110,8 @@ def increase_cart_amount():
     produkt_id = request.form["produkt_id"]
     # print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
     response = Warenkorb.increase_cart_amount(einkauf_id, produkt_id)
-    return response
+    price = Produkte.get_product(produkt_id).Preis
+    return jsonify({"success": response, 'price': price})
 
 @func.route("/decrease_cart_amount", methods=["POST"])
 def decrease_cart_amount():
@@ -118,7 +119,8 @@ def decrease_cart_amount():
     produkt_id = request.form["produkt_id"]
     # print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
     response = Warenkorb.decrease_cart_amount(einkauf_id, produkt_id)
-    return response
+    price = Produkte.get_product(produkt_id).Preis
+    return jsonify({"success": response, 'price': price})
 
 @func.route("/purchase", methods=["POST"])
 def purchase():
@@ -153,5 +155,25 @@ def addProdToBasket():
     
     db.session.commit()
 
-    flash("Produkt erfolgreich zum Warenkorb hinzugefügt", "success")
+    # flash("Produkt erfolgreich zum Warenkorb hinzugefügt", "success")
     return jsonify(success=True, message="Produkt erfolgreich zum Warenkorb hinzugefügt", redirect_url=url_for('app_customer.prodBasketP'))
+
+
+@func.route("/deleteItemFromList", methods=["POST"])
+def deleteItemFromList():
+    einkauf_id = request.form["einkauf_id"]
+    produkt_id = request.form["produkt_id"]
+    response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
+    return jsonify(value=response, price = getTotalBasketPrice(einkauf_id))
+
+
+
+def getTotalBasketPrice(einkauf_id):
+    items = db.session.query(Warenkorb).\
+    outerjoin(Warenkorb.einkauf).\
+    join(Warenkorb.produkt).\
+    filter(Warenkorb.Einkauf_ID == einkauf_id).\
+    options(joinedload(Warenkorb.produkt)).all()
+
+    total_price = round(sum(item.Anzahl * item.produkt.Preis for item in items), 2)
+    return total_price
