@@ -12,6 +12,13 @@ function increaseAmount(einkaufId, productId) {
             var spanElement = document.getElementById("quantity_" + productId);
             var currentAmount = parseInt(spanElement.innerText);
             spanElement.innerText = currentAmount + 1;
+
+            var priceElement = document.getElementById("total-price");
+            var currentPrice = parseFloat(priceElement.innerText);
+            currentPrice += response['price'];
+            currentPrice = currentPrice.toFixed(2);
+
+            priceElement.innerText = currentPrice;
         },
         error: function(xhr, status, error) {
             // Handle error
@@ -35,6 +42,12 @@ function decreaseAmount(einkaufId, productId) {
             var currentAmount = parseInt(spanElement.innerText);
             if (currentAmount >  1){
                 spanElement.innerText = currentAmount - 1;
+                var priceElement = document.getElementById("total-price");
+                var currentPrice = parseFloat(priceElement.innerText);
+                currentPrice -= response['price'];
+                currentPrice = currentPrice.toFixed(2);
+                
+                priceElement.innerText = currentPrice;
             }
         },
         error: function(xhr, status, error) {
@@ -44,3 +57,49 @@ function decreaseAmount(einkaufId, productId) {
     });
 }
 
+function purchase() {
+    $.ajax({
+        url: "/purchase",
+        method: "POST",
+        success: function(response) {
+            if (response.success) {
+                console.log("Operation successful");
+            } else {
+                console.log("Operation failed");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+}
+
+function deleteItemFromList(shoppingcard_ID, product_ID){
+    $.ajax({
+        url: "/deleteItemFromList",
+        method: "POST",
+        data: {
+            einkauf_id: shoppingcard_ID,
+            produkt_id: product_ID
+        },
+        success: function(response) {   
+            if (response.value == "removed") {
+                var productRow = document.getElementById("product_row_" + product_ID);
+                if (productRow) {
+                    productRow.remove();
+
+                    // Gesamtpreis anpassen nach Produktentfernung
+                    var priceElement = document.getElementById("total-price");
+                    var currentPrice = response.price;
+                    currentPrice = currentPrice.toFixed(2);
+                    
+                    priceElement.innerText = currentPrice;
+                }
+            }
+            
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+}

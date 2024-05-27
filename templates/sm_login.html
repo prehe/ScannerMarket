@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row login-container">
         <div class="col-sm-6 offset-sm-3">
-            <div class="logo_big" onclick="window.location.href='/productcatalog'">
+            <div class="logo_big" onclick="window.location.href='{{ url_for('app_customer.productcatalog') }}'">
                 <img class="logo_big" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner">
             </div>
             <form method="POST" action="{{ url_for('app_customer.login') }}">
