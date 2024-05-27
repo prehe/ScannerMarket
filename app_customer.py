@@ -64,16 +64,10 @@ def scannerP():
 @cust.route('/shoppinglist')
 def prodBasketP():
     session['shoppingID'] = None            # temporär ##########################################################################
-    session['userID'] = 1
     print(session.get('userID', None))
     if session['shoppingID'] == None:
         session['shoppingID'] = Einkauf.add_einkauf(session.get('userID', None))
     return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get('shoppingID', None)), logStatus=session.get('type', None))
- 
-@cust.route('/productcatalog')
-def productcatalog():
-    return render_template('sm_cust_main.html',logStatus=session.get('type', None))
-
 #globale Variable
 categoryNames={
     'category-bread' : "Backwaren",
