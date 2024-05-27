@@ -16,12 +16,12 @@ admin = Blueprint(__name__, import_name="app_admin")
  
 @admin.route('/admin')
 def adminMain():
-    return render_template('sm_admin_main.html')
+    return render_template('sm_admin_main.html',logStatus =session.get('type', None))
  
  
 @admin.route('/admin/analysis')
 def analysis():
-    return render_template('sm_admin_analysis.html', analyse_page= "/Produktkategorien")
+    return render_template('sm_admin_analysis.html', analyse_page= "/Produktkategorien",logStatus =session.get('type', None))
 
 
 @admin.route('/Kunden')
