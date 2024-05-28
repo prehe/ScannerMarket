@@ -14,6 +14,9 @@
         <div class="col-sm-6 offset-sm-3 mx-auto">
             <h4 class="title-scanner">Produkt scannen:</h4>
             <div id="reader"></div>
+            <div>
+                <button class="btn btn-secondary btn-scannerBack" onclick="location.href='{{ url_for('app_customer.shoppinglist') }}'">zurück zum Warenkorb</button>
+            </div>
             <div id="result" class="mx-auto" style="display: none;">
                 <div class="col product-element d-flex align-items-center"> 
                     <img src="" id="productimage">

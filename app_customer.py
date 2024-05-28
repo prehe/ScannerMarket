@@ -8,32 +8,42 @@ import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func
+from flask import session
 
 cust = Blueprint(__name__, import_name="app_cust")
 
 
+def clear_flash_messages():
+    session.pop('_flashes', None)
+
 @cust.route('/registration', methods=['GET', 'POST'])
 def registration():
+    clear_flash_messages()
     form = formulare.RegistrationForm()
     if form.validate_on_submit():
-        # Hier Logik für die Registrierung hinzufügen
-        flash('Registrierung erfolgreich!', 'success')
-        session['type'] = 'customer'
-        service.addNewCustomer(vorname=form.vorname.data, nachname=form.nachname.data, geb_datum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
-        customer = db.session.query('Nutzer').filter(Email=form.email.data)
-        paying = db.session.query('Bezahlmöglichkeiten').filter(Methode=form.bezahlmethode.data)
-        if form.bezahlmethode == 'paypal':
-           payment= Bezahlung(customer.ID, paying.ID, PP_Email=form.paypal_email.data )
-        else:
-           payment= Bezahlung(customer.ID, paying.ID, Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültigkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer= form.kreditkarte_cvv.data )
-        db.session.add(payment)
-        db.session.commit()
-        return redirect(url_for('productcatalog')) 
+        try:
+            customer = Nutzer.add_nutzer(vorname=form.vorname.data, nachname=form.nachname.data, geburtsdatum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
+            if form.bezahlmethode.data == 'paypal':
+                payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Paypal"), PP_Email=form.paypal_email.data)
+            else:
+                payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Kreditkarte"), Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültingkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer=form.kreditkarte_cvv.data)
+            db.session.add(payment)
+            db.session.commit()
+
+            flash('Registrierung erfolgreich!', 'success')
+            session['type'] = 'customer'
+            return redirect(url_for('app_customer.productcatalog'))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred: {str(e)}', 'danger')
+
     return render_template('sm_registration.html', form=form)
  
 
-@cust.route('/login', methods=['GET', 'POST'])      
+@cust.route('/login', methods=['GET', 'POST'])
 def login():
+    clear_flash_messages()
     form = formulare.LoginForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -51,12 +61,9 @@ def login():
                 session['type'] = "customer"
                 return redirect(url_for('app_customer.productcatalog'))
         else:
-            flash('Invalid username or password')
-    else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                print(f"Fehler im Feld '{getattr(form, field).label.text}': {error}")
+            flash('Email oder Passwort falsch', 'warning')
     return render_template('sm_login.html', form=form)
+
 
  
 @cust.route('/scanner')
@@ -64,7 +71,7 @@ def scanner():
     return render_template('sm_scanner.html')
  
 @cust.route('/shoppinglist')
-def prodBasketP():
+def shoppinglist():
     session['shoppingID'] = None            # temporär ##########################################################################
     print(session.get('userID', None))
     if session['shoppingID'] == None:
@@ -77,7 +84,7 @@ def prodBasketP():
  
 @cust.route('/productcatalog')
 def productcatalog():
-    return render_template('sm_cust_main.html',logStatus =session.get('type', None))
+    return render_template('sm_cust_main.html', logStatus = session.get('type', None))
 
 #globale Variable
 categoryNames={

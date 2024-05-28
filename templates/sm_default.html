@@ -52,39 +52,42 @@
                 <ul class="navbar-nav">
                     <div class="row align-items-center">
                         {% if logStatus == 'customer' %}
-                            <li class="nav-item col-4">
-                                <a class="nav-link active" aria-current="page" href="../scanner">
-                                    <img src="../static/icons_weiß/user-solid.svg" alt="User Icon" class="center">
-                                    <span>Profil</span>
-                                </a>
-                            </li>
-                            <li class="nav-item col-4">
+                            <li class="nav-item col d-flex align-items-center justify-content-center custom-li">
                                 <a class="nav-link active" aria-current="page" href="../shoppinglist">
-                                    <img src="../static/icons_weiß/basket-shopping-solid.svg" alt="Basket Icon" class="center">
-                                    <span>Einkauf</span>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <img src="../static/icons_weiß/basket-shopping-solid.svg" alt="Basket Icon" class="center">
+                                        <span class="d-inline-block">Einkauf</span>
+                                    </div>
                                 </a>
-                            </li>
-                            <li class="nav-item col-4">
+                            </li>    
+                            <li class="nav-item col d-flex align-items-center justify-content-center custom-li">
                                 <a class="nav-link active" aria-current="page" href="../logout">
-                                    <img src="../static/icons_weiß/right-from-bracket-solid.svg" alt="Logout Icon">
-                                    <span class="d-inline-block">Log-Out</span>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <img src="../static/icons_weiß/right-from-bracket-solid.svg" alt="Logout Icon">
+                                        <span class="d-inline-block">Ausloggen</span>
+                                    </div>
                                 </a>
-                            </li>
+                            </li>                                                    
                         {% elif logStatus == 'default' %}
-                            <li class="nav-item col-4">
-                                <a class="nav-link active" aria-current="page" href="../login">
-                                    <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="Login Icon">
-                                    <span class="d-inline-block">Log-In</span>
+                            <li class="nav-item col d-flex align-items-center justify-content-center custom-li">
+                                <a class="nav-link active align-items-center" aria-current="page" href="../login">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <img src="../static/icons_weiß/right-to-bracket-solid.svg" alt="Login Icon">
+                                        <span class="d-inline-block">Einloggen</span>
+                                    </div>
                                 </a>
                             </li>
-                        {% elif logStatus =='admin'%}
-                            <li class="nav-item col-4">
-                                <a class="nav-link active" aria-current="page" href="../logout">
-                                    <img src="../static/icons_weiß/right-from-bracket-solid.svg" alt="Logout Icon">
-                                    <span class="d-inline-block">Log-Out</span>
+                        {% elif logStatus =='admin' %}
+                            <li class="nav-item col d-flex align-items-center justify-content-center custom-li">
+                                <a class="nav-link active align-items-center" aria-current="page" href="../logout">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <img src="../static/icons_weiß/right-from-bracket-solid.svg" alt="Logout Icon">
+                                        <span class="d-inline-block">Ausloggen</span>
+                                    </div>
                                 </a>
                             </li>
                         {% endif %}
+               
                     </div>
                 </ul>
             </nav>

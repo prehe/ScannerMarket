@@ -12,7 +12,7 @@
             <div class="col-md-5 offset-md-3">
                 <div class="row justify-content-xl-between align-items-center">
                     <div class="col">
-                        <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner" onclick="window.location.href='{{ url_for('app_cust.productcatalog') }}'">
+                        <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner" onclick="window.location.href='{{ url_for('app_customer.productcatalog') }}'">
                     </div>
                     <div class="col-md text-center">
                         <h1>Registrierung:</h1>
@@ -20,7 +20,20 @@
                 </div>
             </div>
             
-            <form method="POST" action="{{ url_for('app_cust.registration') }}">
+            <form method="POST" action="{{ url_for('app_customer.registration') }}">
+                <!-- Flash Message Block -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <!-- END Flash Message Block -->
                 {{form.csrf_token}}
                 <div class="form-group">
                     {{ form.vorname.label(class="form-label") }}
@@ -71,12 +84,16 @@
                     {{ form.newsletter.label(class="form-check-label") }}
                 </div>
                 <div class="form-check">
+                    {{ form.kundenkarte() }}
+                    {{ form.kundenkarte.label(class="form-check-label") }}
+                </div>
+                <div class="form-check">
                     {{ form.agb() }}
                     {{ form.agb.label(class="form-check-label") }}
                 </div>
                 <div class="row">
                     <div class="col btn-left">
-                        <a href="{{ url_for('app_cust.login') }}">
+                        <a href="{{ url_for('app_customer.login') }}">
                             <button type="button" class="btn btn-secondary">zurück</button>
                         </a>
                     </div>
