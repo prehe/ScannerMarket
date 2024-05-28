@@ -9,16 +9,19 @@ function increaseAmount(einkaufId, productId) {
             produkt_id: productId
         },
         success: function(response) {
-            var spanElement = document.getElementById("quantity_" + productId);
-            var currentAmount = parseInt(spanElement.innerText);
-            spanElement.innerText = currentAmount + 1;
+            if (response.success == "increased"){
+                var spanElement = document.getElementById("quantity_" + productId);
+                var currentAmount = parseInt(spanElement.innerText);
+                spanElement.innerText = currentAmount + 1;
 
-            var priceElement = document.getElementById("total-price");
-            var currentPrice = parseFloat(priceElement.innerText);
-            currentPrice += response['price'];
-            currentPrice = currentPrice.toFixed(2);
+                var priceElement = document.getElementById("total-price");
+                var currentPrice = parseFloat(priceElement.innerText);
+                currentPrice += response['price'];
+                currentPrice = currentPrice.toFixed(2);
 
-            priceElement.innerText = currentPrice;
+                priceElement.innerText = currentPrice;
+            }
+            window.location.href = response.redirect_url;
         },
         error: function(xhr, status, error) {
             // Handle error
@@ -49,6 +52,7 @@ function decreaseAmount(einkaufId, productId) {
                 
                 priceElement.innerText = currentPrice;
             }
+            window.location.href = response.redirect_url;
         },
         error: function(xhr, status, error) {
             // Handle error

@@ -532,25 +532,30 @@ td, th{
 .btn-custom-height {
     padding: 0.25rem 0.5rem; /* Adjust these values as needed */
     font-size: 0.875rem;     /* Ensure the font size is appropriate */
+    color: white;
 }
 
-.item-list-content {
-    max-height: 400px; 
+.item-shopping-list-content{
+    color: white;
+    align-items: center;
+    max-height: 530px; 
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 10px; 
+    border: 5px solid white;
 }
 
-
-.item-shopping-list-content{
-    color: black;
-    align-items: center;
+.item-shopping-list-content .item {
+    padding: 5px;
 }
 
 .total-price{
     padding: 10px;
 }
 
+.quantity-title{
+    padding-right: 35px;
+}
 
 
 

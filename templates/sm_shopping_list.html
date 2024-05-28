@@ -8,9 +8,9 @@
 <!-- Main Content -->
 <div class="main-container">
     <div class="row">
-        <h4 class="col-sm-6 offset-sm-3 text-center title-basket-list">Mein Einkauf:</h4>
+        <h4 class="col-md-6 offset-md-3 text-center title-basket-list">Mein Einkauf:</h4>
     </div>
-    <div class="col-sm-6 offset-sm-3">
+    <div class="col-md-6 offset-md-3">
         <!-- Flash Message Block -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -28,45 +28,46 @@
         <!-- Warenkorbliste -->
         <div class="item-list">
             <div class="item-header row">
-                <div class="col-md-9 offset-md-1">
+                <div class="col offset-md-1">
                     <h5>Produktname</h5>
                 </div>
-                <div class="col-md-2 text-end">
-                    <h5>Anzahl</h5>
+                <div class="col d-flex justify-content-end">
+                    <h5 class="quantity-title">Anzahl</h5>
                 </div>
-            </div>            
+            </div>                        
             <div class="item-shopping-list-content">
                 {% for product in product_list %}
-                <div class="item row align-items-center" id="product_row_{{ product.product_id }}" style="background-color: {{ 'lightgray' if loop.index is divisibleby(2) else 'white' }};">
-                    <div class="col-md-1">
+                <div class="item row align-items-center" id="product_row_{{ product.product_id }}" style="background-color: {{ 'rgb(24, 115, 180)' if loop.index is divisibleby(2) else 'rgb(20, 95, 148)' }};">
+                    <div class="col-9 d-flex align-items-center">
                         <button class="mx-1 btn btn-secondary btn-sm btn-custom-height" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }}, {{ product.product_id }})">X</button>
+                        <p data-toggle="tooltip" class="mb-0" data-placement="top" title="{{ product.hersteller }} {{ product.name }}">{{ product.name }} - {{ "%.2f"|format(product.price) }}€</p>
                     </div>
-                    <div class="col-md-7">
-                        <p data-toggle="tooltip" data-placement="top" title="{{ product.hersteller }} {{ product.name }}">{{ product.name }} - {{ "%.2f"|format(product.price) }}€</p>
-                    </div>
-                    <div class="col-md-4 d-flex justify-content-end align-items-center">
+                    <div class="col-3 d-flex justify-content-end align-items-center">
                         <button class="mx-1 btn btn-warning decrease-btn btn-sm btn-custom-height" id="decrease_{{ product.product_id }}" aria-label="Decrease quantity" onclick="decreaseAmount({{ product.shoppingCard_id }}, {{ product.product_id }})">-</button>
                         <span id="quantity_{{ product.product_id }}" class="mx-1 align-items-center">{{ product.amount }}</span>
                         <button class="mx-1 btn btn-success increase-btn btn-sm btn-custom-height" id="increase_{{ product.product_id }}" aria-label="Increase quantity" onclick="increaseAmount({{ product.shoppingCard_id }}, {{ product.product_id }})">+</button>
                     </div>
                 </div>
                 {% endfor %}
-            </div>            
-        </div>        
+            </div>          
+        </div> 
+
+
+
+
         <!-- Gesamtpreis -->
         <div class="row total-price">
-            <div class="col-12">
+            <div class="col text-end">
                 <h5>Gesamtpreis: <span id="total-price">{{ total_price }}</span> €</h5>
             </div>
         </div>
-        
         <div class="row">
             <!-- Button zum Beenden des Einkaufs -->
-            <div class="col-6 text-center">
+            <div class="col text-center">
                 <button class="btn btn-secondary" id="finish-shopping-btn" onclick="purchase()">Einkauf beenden</button>
             </div>
             <!-- Button "Produkt scannen" -->
-            <div class="col-6 text-center">
+            <div class="col text-center">
                 <button class="btn btn-success" id="scan-product-btn" onclick="window.location.href='../scanner'">Produkt scannen</button>
             </div>
         </div>

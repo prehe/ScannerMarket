@@ -175,11 +175,12 @@ class Warenkorb(db.Model):
         """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
         if ware:
-            ware.Anzahl = ware.Anzahl + 1
-            db.session.commit()
-            return "increased"
-        else:
-            return "no change"
+            if ware.Anzahl < 10:
+                ware.Anzahl = ware.Anzahl + 1
+                db.session.commit()
+                return "increased"
+            else:
+                return "limit reached"
     
     @classmethod
     def decrease_cart_amount(cls, einkauf_id, produkt_id):

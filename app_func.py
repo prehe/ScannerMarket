@@ -33,55 +33,56 @@ def insertDB():
     ########################
         
     ################    Produktkategorien
-    service.addProductCategories(categoryNames)
+    # service.addProductCategories(categoryNames)
 
 
-    ################ Produkte aus xlsx
-    df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
-    # print(df)
-    for index, row in df.iterrows():
-        produkt = Produkte(
-            Hersteller=row['Hersteller'],
-            Name=row['Name'],
-            Gewicht_Volumen=row['Gewicht_Volumen'],
-            EAN=row['EAN'],
-            Preis=row['Preis'],
-            Bild=row['Bild'],
-            Kategorie_ID=row['Kategorie_ID']
-        )
-        db.session.add(produkt)
-    db.session.commit()
+    # ################ Produkte aus xlsx
+    # df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
+    # # print(df)
+    # for index, row in df.iterrows():
+    #     produkt = Produkte(
+    #         Hersteller=row['Hersteller'],
+    #         Name=row['Name'],
+    #         Gewicht_Volumen=row['Gewicht_Volumen'],
+    #         EAN=row['EAN'],
+    #         Preis=row['Preis'],
+    #         Bild=row['Bild'],
+    #         Kategorie_ID=row['Kategorie_ID']
+    #     )
+    #     db.session.add(produkt)
+    # db.session.commit()
 
 
-    ###########     Bezahlmethoden
-    paymentmethod=['Paypal','Kreditkarte']
-    for name in paymentmethod:
-        Bezahlmöglichkeiten.add_paymentmethod(method=name)
+    # ###########     Bezahlmethoden
+    # paymentmethod=['Paypal','Kreditkarte']
+    # for name in paymentmethod:
+    #     Bezahlmöglichkeiten.add_paymentmethod(method=name)
 
 
-    service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
-    service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
+    # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
+    # service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
     
-    #################  Einkauf
+    # #################  Einkauf
     something = Einkauf(Nutzer_ID = 2)
     db.session.add(something)
     db.session.commit()
 
-    products_to_add = [
-    (7, 1),  # Tuple of (produkte_ID, quantity)
-    (8, 2),
-    (9, 1),
-    (10, 3),
-    (11, 1),
-    (12, 2),
-    (13, 1),
-    (14, 1),
-    (15, 2),
-    (16, 1)]
+    # products_to_add = [
+    # (7, 1),  # Tuple of (produkte_ID, quantity)
+    # (8, 2),
+    # (9, 1),
+    # (10, 3),
+    # (11, 1),
+    # (12, 2),
+    # (13, 1),
+    # (14, 1),
+    # (15, 2),
+    # (16, 1)]
+    products_to_add = [(44,3), (46,3), (100,3),(33,3),(150,3),(200,3), (250,3), (300,3),(290,3),(400,3), (234,3), (287,3), (76,3)]
 
     # Loop through the list of products and add them to the shopping cart
     for produkte_ID, quantity in products_to_add:
-        new_item = Warenkorb(Einkauf_ID=1, Produkt_ID=produkte_ID, Anzahl=quantity)
+        new_item = Warenkorb(Einkauf_ID=2, Produkt_ID=produkte_ID, Anzahl=quantity)
         db.session.add(new_item)
     db.session.commit()
 
@@ -111,7 +112,9 @@ def increase_cart_amount():
     # print(einkauf_id, produkt_id, " aus der empfangenen URL: /increase_cart_amount")
     response = Warenkorb.increase_cart_amount(einkauf_id, produkt_id)
     price = Produkte.get_product(produkt_id).Preis
-    return jsonify({"success": response, 'price': price})
+    if response == "limit reached":
+        flash('maximale Anzahl pro Produkt erreicht (10)', 'warning')
+    return jsonify({"success": response, 'price': price, 'redirect_url':url_for('app_customer.shoppinglist')})
 
 @func.route("/decrease_cart_amount", methods=["POST"])
 def decrease_cart_amount():
@@ -120,12 +123,12 @@ def decrease_cart_amount():
     # print(einkauf_id, produkt_id, " aus der empfangenen URL: /decrease_cart_amount")
     response = Warenkorb.decrease_cart_amount(einkauf_id, produkt_id)
     price = Produkte.get_product(produkt_id).Preis
-    return jsonify({"success": response, 'price': price})
+    return jsonify({"success": response, 'price': price, 'redirect_url':url_for('app_customer.shoppinglist')})
 
 @func.route("/purchase", methods=["POST"])
 def purchase():
-    response = Einkauf.add_endTimestamp(session.get('shoppingID', None))
-    return jsonify({"success": response})
+    Einkauf.add_endTimestamp(session.get('shoppingID', None))
+    return redirect(url_for('app_customer.productcatalog'))
 
 
 @func.route("/addProdToBasket", methods=["POST"])
@@ -138,13 +141,13 @@ def addProdToBasket():
 
     if not einkauf_id or not product_id or not quantity:
         flash("Fehlende Daten für den Warenkorb", "error")
-        return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.prodBasketP'))
+        return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.shoppinglist'))
 
     try:
         quantity = int(quantity)
     except ValueError:
         flash("Ungültige Mengenangabe", "error")
-        return jsonify(success=False, message="Ungültige Mengenangabe", redirect_url=url_for('app_customer.prodBasketP'))
+        return jsonify(success=False, message="Ungültige Mengenangabe", redirect_url=url_for('app_customer.shoppinglist'))
 
     basket_item = Warenkorb.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=product_id).first()
     if basket_item:
@@ -154,9 +157,7 @@ def addProdToBasket():
         db.session.add(basket_item)
     
     db.session.commit()
-
-    # flash("Produkt erfolgreich zum Warenkorb hinzugefügt", "success")
-    return jsonify(success=True, message="Produkt erfolgreich zum Warenkorb hinzugefügt", redirect_url=url_for('app_customer.prodBasketP'))
+    return jsonify(success=True, message="Produkt erfolgreich zum Warenkorb hinzugefügt", redirect_url=url_for('app_customer.shoppinglist'))
 
 
 @func.route("/deleteItemFromList", methods=["POST"])

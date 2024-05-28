@@ -52,8 +52,9 @@ def login():
         user = db.session.query(Nutzer).filter_by(Email=email, Passwort=password).first()
         if user:
             # If valid:
-            session['logged_in'] = user.ID  # Store user ID in session
-            customer = db.session.query(Nutzer).get(session['logged_in'])  # Fetch user instance
+            session['shoppingID'] = None
+            session['userID'] = user.ID  # Store user ID in session
+            customer = db.session.query(Nutzer).get(session['userID'])  # Fetch user instance
             if customer.Admin:
                 session['type'] = "admin"
                 return redirect(url_for('app_admin.adminMain'))
@@ -72,15 +73,14 @@ def scanner():
  
 @cust.route('/shoppinglist')
 def shoppinglist():
-    session['shoppingID'] = None            # temporär ##########################################################################
-    print(session.get('userID', None))
     if session['shoppingID'] == None:
-        # session['shoppingID'] = Einkauf.add_einkauf(session.get(['logged_in'], None).ID)
-        session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
+        session['shoppingID'] = Einkauf.add_einkauf(session.get('userID', None))
+        # session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
         # print(session.get('shoppingID', None))
-    data = getProdsFromShoppingList(1)
-    # return render_template('sm_shopping_list.html', product_list = getProdsFromShoppingList(session.get('shoppingID', None)))
-    return render_template('sm_shopping_list.html', product_list = data[0], total_price=data[1], logStatus =session.get('type', None))
+
+    data = getProdsFromShoppingList(session.get('shoppingID', None))
+    return render_template('sm_shopping_list.html',  product_list = data[0], total_price=f"{data[1]:.2f}", logStatus = session.get('type', None))
+    # return render_template('sm_shopping_list.html', product_list = data[0], total_price=data[1], logStatus = session.get('type', None))
  
 @cust.route('/productcatalog')
 def productcatalog():
