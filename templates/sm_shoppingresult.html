@@ -1,0 +1,22 @@
+{% extends "sm_default.html" %}
+
+{% block header %}
+    <title>Einkauf - ScannerMarket</title>
+{% endblock %}
+
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="/static/qrcodeGenerator.min.js"></script>
+<script src="/static/generator.js"></script>
+
+<div class="main-container">
+    <label>QR-Code:</label>
+    <!-- <div id="qrcodeoutput"></div> -->
+
+    <input type="text" id="textinput">
+    <button type="submit" onclick="generator()">Generieren</button>
+    <div id="output"></div>
+
+</div>
+{% endblock %}

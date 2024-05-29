@@ -67,16 +67,20 @@ def login():
 
 
  
-@cust.route('/scanner')
-def scanner():
-    return render_template('sm_scanner.html')
- 
 @cust.route('/shoppinglist')
 def shoppinglist():
     if session['shoppingID'] == None:
         session['shoppingID'] = Einkauf.add_einkauf(session.get('userID', None))
     data = getProdsFromShoppingList(session.get('shoppingID', None))
     return render_template('sm_shopping_list.html',  product_list = data[0], total_price=f"{data[1]:.2f}", logStatus = session.get('type', None))
+
+@cust.route('/scanner')
+def scanner():
+    return render_template('sm_scanner.html')
+
+@cust.route('/shoppingresult')
+def shoppingresult():
+    return render_template('sm_shoppingresult.html')
  
 @cust.route('/productcatalog')
 def productcatalog():
