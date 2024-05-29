@@ -94,19 +94,26 @@ def show_umsatz():
     
     #am meisten gekaufte Produkte
     bestSellers = get_best_seller(curr_year, curr_month)
-    bestSellers = [
-        ("Apfel", "../static/images/category-frozen.jpg", 100),
-        ("Birnen", "../static/images/category-meat.jpg", 10),
-        ("Birnen", "../static/images/category-meat.jpg", 10)
-    ]
+    
+    if bestSellers == []:
+        bestSellers = [
+            ("Apfel", "../static/images/category-frozen.jpg", 100),
+            ("Birnen", "../static/images/category-meat.jpg", 10),
+            ("Birnen", "../static/images/category-meat.jpg", 10)
+        ]
 
     # monatsaktuelle Einkaufszahlen und wieviele Produkte verkauft wurden
     selledProds = numberOfSelledProducts(curr_year, curr_month)
     sells = numberOfSells(curr_year, curr_month)
 
-    return render_template('umsatz.html', title="Umsatz", salesOfYear=salesOfCurrYear, 
+    # Kundendaten abfragen
+    start, end = getStartEndDates(curr_year, curr_month)
+    newCust=db.session.query(func.count(Nutzer.ID)).filter(Nutzer.Registriert_am>= start, Nutzer.Registriert_am<= end).scalar() or 0
+    allCust=db.session.query(func.count(Nutzer.ID)).scalar() or 0
+   
+    return render_template('umsatz.html', salesOfYear=salesOfCurrYear, 
                            salesOfMonth=salesOfCurrMonth, year=curr_year, month=dates["Monatsname"],
-                           bestSellers=bestSellers, selledProds=selledProds, sells=sells)
+                           bestSellers=bestSellers, selledProds=selledProds, sells=sells,newCust=newCust, allCust=allCust)
 
 #ChatGPT
 def getStartEndDates(year, month):
@@ -128,7 +135,7 @@ def get_best_seller(year,month):
     start, end = getStartEndDates(year, month)
     bestSeller = db.session.query(Produkte.Name, Produkte.Bild, func.sum(Warenkorb.Anzahl)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).group_by(Produkte.Name).order_by(func.sum(Warenkorb.Anzahl).desc()).limit(5).all() 
     if bestSeller is None:
-        return (0,0,0)
+        return []
     return bestSeller
 #ChatGPT
 def numberOfSelledProducts(year, month):
@@ -153,16 +160,7 @@ def curr_Date():
    
     return {"Date":curr_date, "Monatsname":months[month_name], "Monat":curr_month, "Jahr":curr_year, "Tag":curr_day}
 
-@admin.route('/Neukunden')
-def show_neukunden():
-    dates = curr_Date()
-    curr_month = dates["Monat"]
-    curr_year = dates["Jahr"]
-    month_name = dates["Monatsname"]
-    start, end = getStartEndDates(curr_year, curr_month)
-    newCust=db.session.query(func.count(Nutzer.ID)).filter(Nutzer.Registriert_am>= start, Nutzer.Registriert_am<= end).scalar() or 0
-    allCust=db.session.query(func.count(Nutzer.ID)).scalar() or 0
-    return render_template('neukunden.html',title = "Neukunden", month= month_name, newCust=newCust, allCust=allCust)
+
 ###########################################################################################################################################
 #Formulare:
 @admin.route('/admin/newProduct', methods=['GET', 'POST'])
