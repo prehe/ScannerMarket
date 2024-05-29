@@ -127,8 +127,9 @@ def decrease_cart_amount():
 
 @func.route("/purchase", methods=["POST"])
 def purchase():
-    Einkauf.add_endTimestamp(session.get('shoppingID', None))
-    return redirect(url_for('app_customer.productcatalog'))
+    response = Einkauf.add_endTimestamp(session.get('shoppingID', None))
+    session['shoppingID'] = None
+    return jsonify({"success": response, 'redirect_url': url_for('app_customer.productcatalog')})
 
 
 @func.route("/addProdToBasket", methods=["POST"])
@@ -152,12 +153,16 @@ def addProdToBasket():
     basket_item = Warenkorb.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=product_id).first()
     if basket_item:
         basket_item.Anzahl += quantity
+        if basket_item.Anzahl > 10:
+            basket_item.Anzahl = 10
+            flash('maximale Anzahl pro Produkt erreicht (10)', 'warning')
     else:
         basket_item = Warenkorb(Einkauf_ID=einkauf_id, Produkt_ID=product_id, Anzahl=quantity)
         db.session.add(basket_item)
     
     db.session.commit()
-    return jsonify(success=True, message="Produkt erfolgreich zum Warenkorb hinzugefügt", redirect_url=url_for('app_customer.shoppinglist'))
+    flash('Produkt erfolgreich zum Warenkorb hinzugefügt', 'success')
+    return jsonify(success=True, redirect_url=url_for('app_customer.shoppinglist'))
 
 
 @func.route("/deleteItemFromList", methods=["POST"])
@@ -165,7 +170,7 @@ def deleteItemFromList():
     einkauf_id = request.form["einkauf_id"]
     produkt_id = request.form["produkt_id"]
     response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
-    return jsonify(value=response, price = getTotalBasketPrice(einkauf_id))
+    return jsonify(value=response, redirect_url=url_for('app_customer.shoppinglist'))
 
 
 

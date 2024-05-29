@@ -525,6 +525,10 @@ td, th{
     margin: 0 10px;
 }
 
+.btn-scanner-footer{
+    margin: 10px;
+}
+
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -538,7 +542,8 @@ td, th{
 .item-shopping-list-content{
     color: white;
     align-items: center;
-    max-height: 530px; 
+    max-height: 530px;
+    /* height of navbar + height of footer */
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 10px; 
@@ -557,6 +562,9 @@ td, th{
     padding-right: 35px;
 }
 
+.modal-dialog{
+    color: black;
+}
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -564,7 +572,6 @@ td, th{
 /* FOOTER: */
 .linkings {
     flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
-
 }
 
 /* Anpassung Link */

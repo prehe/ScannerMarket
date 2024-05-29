@@ -61,15 +61,56 @@ function decreaseAmount(einkaufId, productId) {
     });
 }
 
+let currentDeleteProductId = null;
+let currentShoppingCardId = null;
+let currentProdName = null;
+
+function confirmDelete(shoppingCardId, productId, hersteller, productName) {
+    currentDeleteProductId = productId;
+    currentShoppingCardId = shoppingCardId;
+    // Get product name from the hidden input field
+    var productNameInput = document.getElementById("productName_" + productId);
+    if (productNameInput) {
+        var currentProdName = hersteller + " " + productName;
+        productNameInput.value = currentProdName;
+        // Optionally, display the product name in the modal
+        document.getElementById("productNameDisplay").innerText = currentProdName;
+    }
+}
+
+
+function deleteItemFromList() {
+    $.ajax({
+        url: "/deleteItemFromList",
+        method: "POST",
+        data: {
+            einkauf_id: currentShoppingCardId,
+            produkt_id: currentDeleteProductId
+        },
+        success: function(response) {
+            if (response.value == "removed") {
+                var deleteModal = document.getElementById('deleteConfirmationModal');
+                deleteModal.setAttribute('aria-hidden', 'true');
+                console.log(response.redirect_url);
+                window.location.href = response.redirect_url;
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+}
+
 function purchase() {
     $.ajax({
         url: "/purchase",
         method: "POST",
         success: function(response) {
             if (response.success) {
-                console.log("Operation successful");
-            } else {
-                console.log("Operation failed");
+                var purchaseModal = document.getElementById('purchaseConfirmationModal');
+                purchaseModal.setAttribute('aria-hidden', 'true');
+                console.log(response.redirect_url);
+                window.location.href = response.redirect_url;
             }
         },
         error: function(xhr, status, error) {
@@ -78,32 +119,45 @@ function purchase() {
     });
 }
 
-function deleteItemFromList(shoppingcard_ID, product_ID){
+
+// Funktion zum Ausblenden der Flash-Nachricht nach einer Verzögerung
+function hideFlashMessage() {
+    var alertContainer = document.querySelector('.alert-container');
+    if (alertContainer) {
+        setTimeout(function() {
+            alertContainer.style.display = 'none';
+        }, 3000); // Verzögerung von 5000 Millisekunden (5 Sekunden)
+    }
+}
+
+// Rufen Sie die Funktion zum Ausblenden der Flash-Nachricht auf, wenn die Seite geladen ist
+document.addEventListener("DOMContentLoaded", function() {
+    hideFlashMessage();
+});
+
+
+// temporäre Funktion   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function addProductInstant(){
     $.ajax({
-        url: "/deleteItemFromList",
-        method: "POST",
+        url: "/addProdToBasket",
+        type: "POST",
         data: {
-            einkauf_id: shoppingcard_ID,
-            produkt_id: product_ID
+            productId: 5,
+            quantity: 3
         },
-        success: function(response) {   
-            if (response.value == "removed") {
-                var productRow = document.getElementById("product_row_" + product_ID);
-                if (productRow) {
-                    productRow.remove();
-
-                    // Gesamtpreis anpassen nach Produktentfernung
-                    var priceElement = document.getElementById("total-price");
-                    var currentPrice = response.price;
-                    currentPrice = currentPrice.toFixed(2);
-                    
-                    priceElement.innerText = currentPrice;
-                }
+        success: function(response) {
+            if (response.success) {
+                // Redirect to the URL provided in the response
+                window.location.href = response.redirect_url;
+            } else {
+                // Handle the error case, if needed
+                console.error(response.message);
+                alert(response.message);
             }
-            
         },
         error: function(xhr, status, error) {
-            console.error("Error:", error);
+            console.error(error);
         }
     });
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

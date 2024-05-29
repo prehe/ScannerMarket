@@ -15,7 +15,7 @@
             <h4 class="title-scanner">Produkt scannen:</h4>
             <div id="reader"></div>
             <div>
-                <button class="btn btn-secondary btn-scannerBack" onclick="location.href='{{ url_for('app_customer.shoppinglist') }}'">zurück zum Warenkorb</button>
+                <button id="scannerBack" class="btn btn-secondary btn-scannerBack" onclick="location.href='{{ url_for('app_customer.shoppinglist') }}'">zurück zum Warenkorb</button>
             </div>
             <div id="result" class="mx-auto" style="display: none;">
                 <div class="col product-element d-flex align-items-center"> 
@@ -27,14 +27,16 @@
                         <p id="weight">Menge/Volumen: 500g</p>
                     </div>
                 </div>
-                <div class="col product-buttons mx-left my-auto">
+                <div class="col product-buttons mx-right my-auto">
                     <p>Anzahl:</p>
                     <button class="btn btn-secondary" onclick="decreaseQuantity()">-</button>
                     <p id="quantity">1</p>
                     <button class="btn btn-secondary" onclick="increaseQuantity()">+</button>
                 </div>
-                <button class="btn btn-secondary" onclick="rescan()">erneut scannen</button>
-                <button class="btn btn-secondary" onclick="addProdToBasket()">zum Warenkorb hinzufügen</button>
+                <div class="btn-scanner-footer">
+                    <button class="btn btn-secondary" onclick="rescan()">erneut scannen</button>
+                    <button class="btn btn-secondary" onclick="addProdToBasket()">zum Warenkorb hinzufügen</button>
+                </div>
             </div>
         </div>
     </div>

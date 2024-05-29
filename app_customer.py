@@ -75,9 +75,6 @@ def scanner():
 def shoppinglist():
     if session['shoppingID'] == None:
         session['shoppingID'] = Einkauf.add_einkauf(session.get('userID', None))
-        # session['shoppingID'] = Einkauf.add_einkauf(nutzer_id=1)
-        # print(session.get('shoppingID', None))
-
     data = getProdsFromShoppingList(session.get('shoppingID', None))
     return render_template('sm_shopping_list.html',  product_list = data[0], total_price=f"{data[1]:.2f}", logStatus = session.get('type', None))
  

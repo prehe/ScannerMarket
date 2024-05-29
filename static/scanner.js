@@ -14,10 +14,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function success(result) {
-        console.log(result);
+        // console.log(result);
         scanner.clear();
         document.getElementById('result').style.display = "block";
         document.getElementById('reader').style.display = 'none';
+        document.getElementById('scannerBack').style.display = 'none';
 
         // Mock result for testing purposes
         result = "4061458042918"; // This line should be removed in production
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
             type: "GET",
             data: { ean: result },
             success: function(response) {
-                console.log(response);
+                // console.log(response);
                 window.productId = response.ID;  // Corrected line
                 document.getElementById("manufacturer").innerText = response.Hersteller;
                 document.getElementById("product").innerText = response.Name;
@@ -42,12 +43,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function error(err) {
-        console.error(err);
+        // console.error(err);
     }
 
     function rescan() {
         document.getElementById('result').style.display = "none";
         document.getElementById('reader').style.display = 'block';
+        document.getElementById('scannerBack').style.display = 'block';
         initializeScanner();
     }
 
@@ -79,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (response.success) {
                     // Redirect to the URL provided in the response
                     window.location.href = response.redirect_url;
+                    flash("Produkt erfolgreich zum Einkauf hinzugefügt", "success");
                 } else {
                     // Handle the error case, if needed
                     console.error(response.message);

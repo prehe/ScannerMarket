@@ -39,7 +39,9 @@
                 {% for product in product_list %}
                 <div class="item row align-items-center" id="product_row_{{ product.product_id }}" style="background-color: {{ 'rgb(24, 115, 180)' if loop.index is divisibleby(2) else 'rgb(20, 95, 148)' }};">
                     <div class="col-9 d-flex align-items-center">
-                        <button class="mx-1 btn btn-secondary btn-sm btn-custom-height" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" onclick="deleteItemFromList({{ product.shoppingCard_id }}, {{ product.product_id }})">X</button>
+                        <!-- Add a hidden input field to store product name -->
+                        <input type="hidden" id="productName_{{ product.product_id }}">
+                        <button class="mx-1 btn btn-secondary btn-sm btn-custom-height" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" onclick="confirmDelete({{ product.shoppingCard_id }}, {{ product.product_id }}, '{{ product.hersteller }}', '{{ product.name}}' )">X</button>
                         <p data-toggle="tooltip" class="mb-0" data-placement="top" title="{{ product.hersteller }} {{ product.name }}">{{ product.name }} - {{ "%.2f"|format(product.price) }}€</p>
                     </div>
                     <div class="col-3 d-flex justify-content-end align-items-center">
@@ -52,9 +54,6 @@
             </div>          
         </div> 
 
-
-
-
         <!-- Gesamtpreis -->
         <div class="row total-price">
             <div class="col text-end">
@@ -64,15 +63,60 @@
         <div class="row">
             <!-- Button zum Beenden des Einkaufs -->
             <div class="col text-center">
-                <button class="btn btn-secondary" id="finish-shopping-btn" onclick="purchase()">Einkauf beenden</button>
+                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#purchaseConfirmationModal">Einkauf beenden</button>
             </div>
             <!-- Button "Produkt scannen" -->
             <div class="col text-center">
                 <button class="btn btn-success" id="scan-product-btn" onclick="window.location.href='../scanner'">Produkt scannen</button>
+                <!-- <button class="btn btn-success" id="scan-product-btn" onclick="addProductInstant()">Produkt scannen</button> -->
             </div>
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationLabel">Produkt entfernen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Möchten Sie das Produkt "<span id="productNameDisplay"></span>" wirklich entfernen?
+            </div>            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton" onclick="deleteItemFromList()">Entfernen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Purchase Confirmation Modal -->
+<div class="modal fade" id="purchaseConfirmationModal" tabindex="-1" aria-labelledby="purchaseConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="purchaseConfirmationLabel">Einkauf beenden</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Möchten Sie Ihren Einkauf wirklich beenden und bezahlen?
+                Die Rechnung wird über die angegebene Bezahlmethode abgerechent. 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                <button type="button" class="btn btn-success" onclick="purchase()">Bezahlen & Einkauf beenden</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script> -->
 <script src="../static/warenkorb.js"></script>
 {% endblock %}
 <!-- END Main Content -->
