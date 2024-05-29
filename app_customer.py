@@ -80,7 +80,6 @@ def shoppinglist():
 
     data = getProdsFromShoppingList(session.get('shoppingID', None))
     return render_template('sm_shopping_list.html',  product_list = data[0], total_price=f"{data[1]:.2f}", logStatus = session.get('type', None))
-    # return render_template('sm_shopping_list.html', product_list = data[0], total_price=data[1], logStatus = session.get('type', None))
  
 @cust.route('/productcatalog')
 def productcatalog():
