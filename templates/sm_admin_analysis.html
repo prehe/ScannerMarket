@@ -14,15 +14,12 @@
                 <label for="dropdownMenuButton">Analyse:</label>
                 <select id="dropdownMenuButton" class="form-control" required>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <option value="Umsatz">Umsatz</option>
-                        <option value="Neukunden">Neukunden</option>
+                        <option value="Analysen">Analysen</option>
                         <option value="Produkte">Produktdatenbank</option>
                         <option value="Produktkategorien">Produktkategorien</option>
                         <option value="Kunden">Kundendatenbank</option>
                         <option value="Einkäufe">Einkäufe</option>
                         <option value="Warenkorb">Warenkorb</option>
-                        <option value="Bezahlung">Bezahlung</option>
-                        <option value="Bezahlmöglichkeiten">Bezahlmöglichkeiten</option>
                     </div>
                 </select>
             </div>
@@ -30,9 +27,9 @@
         
         
          <!-- Analysen Content -->
-         <div class="analysis-container">
-            <iframe id = "Analysen-Feld" src="{{url_for('app_admin.show_umsatz')}}"></iframe>
-         </div>
+         <div class="analysis-container"> 
+            <iframe id = "Analysen-Feld" src="{{url_for('app_admin.show_umsatz')}}" ></iframe>
+         </div> 
          <!-- END Analysen Content -->
          <div class="buttons-inline">
             <a href="{{url_for('app_admin.adminMain')}}">
@@ -43,4 +40,5 @@
 
 <!-- Flask -->
 <script src="{{ url_for('static', filename='analysen.js') }}"></script>
+ 
 {% endblock %}

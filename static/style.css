@@ -374,14 +374,15 @@ header, body, footer{
     align-items: center;
 }
 
-.analysis-container{
+.analysis-container {
     width: 100%;
-    height: 75vh;
+    height: 70vh;
     background-color: rgb(20, 95, 148);
 }
-.analysis-container iframe{
+.analysis-container iframe {
     width: 100%;
     height: 100%;
+    background-color: transparent;
 }
 
 
@@ -392,14 +393,13 @@ header, body, footer{
     flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
     overflow: hidden;
     padding: 5px;
-    height: auto;
+    height: 75vh;
 }
 
 .table-container{
     overflow-y: auto;
     overflow-x: auto;
     max-width: 100%;
-    max-height: 75vh;
     margin: 5px;
 
 }
@@ -421,6 +421,17 @@ td, th{
     height: 40vh;
     object-fit: cover;
 }
+
+#carouselProds .carousel-control-prev {
+    left: 20%;
+}
+#carouselProds .carousel-control-next {
+    right: 20%;
+}
+#carouselProds .carousel-control-prev-icon, .carousel-control-next-icon {
+    background-size: 100%,100%;
+}
+
 
 .analysen-element {
     text-align: center;
