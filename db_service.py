@@ -1,12 +1,13 @@
+from datetime import date
 from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
 import pandas as pd
 import requests
 import time
 import math
 
-def addNewCustomer (vorname, nachname, geb_datum, email, passwort, kundenkarte, admin, newsletter, reg_am):
+def addNewCustomer (vorname, nachname, geb_datum, email, passwort, kundenkarte, admin, newsletter):
     #einen neuen Kunden in die Datenbank einfügen
-    customer = Nutzer(Vorname=vorname, Nachname=nachname, Geburtsdatum=geb_datum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am = reg_am)
+    customer = Nutzer(Vorname=vorname, Nachname=nachname, Geburtsdatum=geb_datum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am = date.today())
     db.session.add(customer)
     db.session.commit()
 

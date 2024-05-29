@@ -17,7 +17,7 @@ header, body, footer{
 .container-fluid {
     background-color: rgb(24, 115, 180);
     color: white;
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     min-height: 90vh;
@@ -59,6 +59,17 @@ header, body, footer{
 /*unterstreichen des Schriftzugs, wenn die Maus darüber hovert*/
 .nav-link.active span:hover{
     text-decoration: underline;
+}
+
+.custom-li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-li .nav-link {
+    display: flex;
+    align-items: center;
 }
 
 
@@ -189,13 +200,13 @@ header, body, footer{
 /* main Inhalt - Produktübersicht - Kundensicht*/
 
 /* Basiscontainer für Inhalt unter der NAVBAR: */
-.main-container{
+.main-container {
     background-color: rgb(20, 95, 148);
     color: white;
     border-radius: 5px;
-    flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
-    overflow-y: auto; /* Fügt bei Bedarf einen Scrollbalken hinzu */
-    overflow: hidden;
+    flex: 1; /* Fills the available space */
+    overflow-y: auto; 
+    overflow-x: hidden;
     padding: 5px;
 }
 
@@ -464,6 +475,10 @@ td, th{
     font-size: 1.3rem; 
 }
 
+.btn-scannerBack{
+    margin-top: 10px;
+}
+
 #result button{
     font-size: 1rem;
 }
@@ -514,7 +529,33 @@ td, th{
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /* WARENKORB-Seite */
+.btn-custom-height {
+    padding: 0.25rem 0.5rem; /* Adjust these values as needed */
+    font-size: 0.875rem;     /* Ensure the font size is appropriate */
+    color: white;
+}
 
+.item-shopping-list-content{
+    color: white;
+    align-items: center;
+    max-height: 530px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 10px; 
+    border: 5px solid white;
+}
+
+.item-shopping-list-content .item {
+    padding: 5px;
+}
+
+.total-price{
+    padding: 10px;
+}
+
+.quantity-title{
+    padding-right: 35px;
+}
 
 
 

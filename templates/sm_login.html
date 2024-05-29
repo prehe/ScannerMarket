@@ -15,8 +15,21 @@
             <form method="POST" action="{{ url_for('app_customer.login') }}">
                 {{ form.csrf_token }}
                 <div class="title">
-                    <h1>ScannerMarket - Login:</h1>
+                    <h1>ScannerMarket - Anmeldung:</h1>
                 </div>
+                <!-- Flash Message Block -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <!-- END Flash Message Block -->
                 <div class="form-group-login">
                     {{ form.email.label(class="form-label") }}
                     {{ form.email(class="form-control", placeholder="Enter email") }}

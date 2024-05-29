@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
@@ -21,11 +21,23 @@ class Nutzer(db.Model):
     Newsletter = db.Column(db.Boolean)
     Registriert_am = db.Column(db.Date)
 
+    @classmethod
+    def add_nutzer(cls, vorname, nachname, geburtsdatum, email, passwort, kundenkarte=False, admin=False, newsletter=False):
+        new_nutzer = cls(Vorname=vorname, Nachname=nachname, Geburtsdatum=geburtsdatum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am=date.today())
+        db.session.add(new_nutzer)
+        db.session.commit()
+        return new_nutzer
+
 class Bezahlmöglichkeiten(db.Model):
     __tablename__ = 'bezahlmöglichkeiten'
 
     ID = db.Column(db.Integer, primary_key=True)
     Methode = db.Column(db.String(45))
+
+    @classmethod
+    def getBezahlmöglichkeitenID(cls, methode):
+        paymentID = Bezahlmöglichkeiten.query.filter_by(Methode=methode).first()
+        return paymentID.ID
 
     @classmethod
     def add_paymentmethod(cls, method):
@@ -163,11 +175,12 @@ class Warenkorb(db.Model):
         """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
         if ware:
-            ware.Anzahl = ware.Anzahl + 1
-            db.session.commit()
-            return "increased"
-        else:
-            return "no change"
+            if ware.Anzahl < 10:
+                ware.Anzahl = ware.Anzahl + 1
+                db.session.commit()
+                return "increased"
+            else:
+                return "limit reached"
     
     @classmethod
     def decrease_cart_amount(cls, einkauf_id, produkt_id):
