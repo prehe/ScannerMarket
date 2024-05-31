@@ -1,0 +1,91 @@
+{% extends "sm_default.html" %}
+
+{% block header %}
+<title>Profilbearbeitung - ScannerMarket</title>
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="main-container">
+   
+        <div class=" row">
+            <div class="col-sm-6 offset-sm-3">   
+                <div class="col-md-5 offset-md-3">
+                    <div class="row justify-content-xl-between align-items-center">
+                        <div class="col">
+                            <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner" onclick="window.location.href='{{ url_for('app_customer.productcatalog') }}'">
+                        </div>
+                        <div class="col-md text-center">
+                            <h1>Profil bearbeiten:</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="POST" action=""{{ url_for('app_customer.profile') }}"">
+                    <!-- Flash Message Block -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="alert-container">
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <!-- END Flash Message Block -->
+                    {{form.csrf_token}}
+                    <div class="form-group">
+                        {{ form.Vorname.label(class="form-label") }}
+                        {{ form.Vorname(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Nachname.label(class="form-label") }}
+                        {{ form.Nachname(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Geburtsdatum.label(class="form-label") }}
+                        {{ form.Geburtsdatum(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Email.label(class="form-label") }}
+                        {{ form.Email(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Passwort.label(class="form-label") }}
+                        {{ form.Passwort(class="form-control", placeholder="altes Passwort im Fall von Passwort-Änderungen angeben") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Passwort_new.label(class="form-label") }}
+                        {{ form.Passwort_new(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.Passwort_conf.label(class="form-label") }}
+                        {{ form.Passwort_conf(class="form-control") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.Newsletter() }}
+                        {{ form.Newsletter.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.Kundenkarte() }}
+                        {{ form.Kundenkarte.label(class="form-check-label") }}
+                    </div>
+                  
+                    <div class="row">
+                        <div class="col btn-left">
+                            <a href="{{ url_for('app_customer.productcatalog') }}">
+                                <button type="button" class="btn btn-secondary">zurück</button>
+                            </a>
+                        </div>
+                        <div class="col btn-right">
+                            {{form.submit(class = "btn btn-secondary")}}
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </div>
+</div>
+<!-- END Main Content -->
+{% endblock %}
