@@ -103,6 +103,8 @@ class Einkauf(db.Model):
     Nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'))
     Zeitstempel_start = db.Column(db.DateTime)
     Zeitstempel_ende = db.Column(db.DateTime)
+    Preis = db.Column(db.Float)
+    Bezahlt = db.Column(db.Boolean)
 
     nutzer = relationship("Nutzer")
 
@@ -122,10 +124,21 @@ class Einkauf(db.Model):
         return neuer_einkauf.ID
     
     @classmethod
-    def add_endTimestamp(cls, einkauf_id):
+    def add_endTimestamp(cls, einkauf_id, preis):
         einkauf = cls.query.filter_by(ID=einkauf_id).first()
         if einkauf:
             einkauf.Zeitstempel_ende = datetime.now()
+            einkauf.Preis = preis
+            db.session.commit()
+            return True
+        else:
+            return False
+        
+    @classmethod
+    def payment_done(cls, einkauf_id):
+        einkauf = cls.query.filter_by(ID=einkauf_id).first()
+        if einkauf:
+            einkauf.Bezahlt = True
             db.session.commit()
             return True
         else:

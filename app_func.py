@@ -137,9 +137,6 @@ def addProdToBasket():
     einkauf_id = session.get('shoppingID', None)
     product_id = request.form.get("productId")
     quantity = request.form.get("quantity")
-
-    # print(einkauf_id, product_id, quantity)
-
     if not einkauf_id or not product_id or not quantity:
         flash("Fehlende Daten für den Warenkorb", "error")
         return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.shoppinglist'))
@@ -172,7 +169,12 @@ def deleteItemFromList():
     response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
     return jsonify(value=response, redirect_url=url_for('app_customer.shoppinglist'))
 
-
+@func.route("/generateQR", methods=["GET"])
+def generateQR():
+    einkauf_id = session.get('shoppingID', None)
+    preis = getTotalBasketPrice(einkauf_id)
+    payment_URL = f"Einkauf_ID={einkauf_id}&Preis={preis}"
+    return payment_URL
 
 def getTotalBasketPrice(einkauf_id):
     items = db.session.query(Warenkorb).\

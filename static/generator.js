@@ -19,28 +19,31 @@
 
 
 
-function generator(value) {
-    const qrcodeoutput = document.getElementById('qrcodeoutput');
-    const mainContainer = document.getElementById("main-container");
+function generateQR() {
+    $.ajax({
+        url: "/generateQR",
+        type: "GET",
+        success: function(response) {
+            const qrcodeoutput = document.getElementById('qrcodeoutput');
+            const outputElementWidth = qrcodeoutput.offsetWidth;
+            console.log("outputElementWidth:", outputElementWidth);  // Debugging line
 
-    console.log(mainContainer);  // Debugging line
-    if (!mainContainer) {
-        console.error("Element with ID 'main-container' not found.");
-        return;
-    }
-
-    const mainContainerWidth = mainContainer.offsetWidth;
-    console.log("Main container width:", mainContainerWidth);  // Debugging line
-
-    qrcodeoutput.innerHTML = "";  // Clear the previous QR code
-
-    value="Einkauf_ID=123";
-    
-    new QRCode(qrcodeoutput, {
-        text: value,
-        width: mainContainerWidth,
-        height: mainContainerWidth,
-        colorDark: '#000',
-        colorLight: '#fff'
+            qrcodeoutput.innerHTML = "";  // Clear the previous QR code
+            
+            new QRCode(qrcodeoutput, {
+                text: response,
+                width: outputElementWidth,
+                height: outputElementWidth,
+                colorDark: '#000',
+                colorLight: '#fff'
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
     });
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    generateQR();
+});
