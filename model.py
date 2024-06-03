@@ -112,6 +112,12 @@ class Einkauf(db.Model):
             return True
         else:
             return False
+    
+    @classmethod
+    def resetTable(cls):
+        """Löscht alle Einträge in der Tabelle."""
+        cls.query.delete()
+        db.session.commit()
 
 
 
@@ -181,4 +187,10 @@ class Warenkorb(db.Model):
     def get_cart_contents(cls, einkauf_id):
         """Gibt den Inhalt des Warenkorbs für einen bestimmten Einkauf zurück."""
         return cls.query.filter_by(Einkauf_ID=einkauf_id).all()
+    
+    @classmethod
+    def resetTable(cls):
+        """Löscht alle Einträge in der Tabelle."""
+        cls.query.delete()
+        db.session.commit()
 

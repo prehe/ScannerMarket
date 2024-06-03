@@ -35,6 +35,10 @@ def registration():
         except Exception as e:
             db.session.rollback()
             flash(f'An error occurred: {str(e)}', 'danger')
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                print(f"Fehler im Feld '{getattr(form, field).label.text}': {error}")
 
     return render_template('sm_registration.html', form=form)
  
@@ -162,7 +166,7 @@ def logOut():
 
 @cust.route('/profile', methods=['GET', 'POST'])
 def profile():
-    #clear_flash_messages()
+    clear_flash_messages()
     user = db.session.query(Nutzer).get(session['userID'])
     form = formulare.EditProfile(obj=user)
     print(user.Vorname, user.Nachname, user.Email)
