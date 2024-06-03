@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm, form
-from wtforms.fields import BooleanField, RadioField, SelectField, StringField, DecimalField,PasswordField, EmailField, DateField
+from wtforms.fields import BooleanField, RadioField, SelectField, StringField, DecimalField,PasswordField, EmailField, DateField 
 from wtforms.fields.simple import SubmitField
 from flask_wtf.file import FileField, FileAllowed
-from wtforms.validators import DataRequired, Length, NumberRange, URL,Email
+from wtforms.validators import DataRequired, Length, NumberRange, URL,Email, EqualTo, Optional
 
 
 
@@ -37,3 +37,16 @@ class RegistrationForm(FlaskForm):
     kundenkarte = BooleanField('Kundenkarte beantragen')
     newsletter = BooleanField('Newsletter aktivieren')
     agb = BooleanField('Zustimmung der ScannerMarket AGBs', validators=[DataRequired()])
+
+class EditProfile(FlaskForm):
+    Vorname = StringField('Vorname', validators=[DataRequired()])
+    Nachname = StringField('Nachname', validators=[DataRequired()])
+    Geburtsdatum = DateField('Geburtsdatum', validators=[DataRequired()], format='%Y-%m-%d')
+    Email = EmailField('Email', validators=[DataRequired(), Email()])
+    Passwort = PasswordField('Passwort')
+    Passwort_new = PasswordField('neues Passwort', validators=[Optional(),Length(min=4),EqualTo('Passwort_conf', message='Passwörter müssen übereinstimmen')])
+    Passwort_conf = PasswordField('neues Passwort bestätigen', validators=[Optional(),Length(min=4)])
+    Kundenkarte = BooleanField('Kundenkarte beantragen')
+    Newsletter = BooleanField('Newsletter aktivieren')
+    submit = SubmitField('Änderungen übernehmen')
+
