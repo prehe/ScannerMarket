@@ -1,43 +1,42 @@
 function adjustHeight() {
-    // Get the height of the viewport
+    // Get the height and width of the viewport
     const displayHeight = window.innerHeight;
+    const displayWidth = window.innerWidth;
 
     // Get the main container element and its height navbar
     const mainContainer = document.getElementById("main-container");
-    const mainContainerHeight = mainContainer ? mainContainer.offsetHeight : 0;
-
     const navbar = document.getElementById("navbar");
-    const navbarHeight = mainContainer ? navbar.offsetHeight : 0;
-
+    const navbarHeight = navbar ? navbar.offsetHeight : 0;
     const basicContainer = document.getElementById("container-fluid");
-
-    // Get the footer element and its height
     const footer = document.getElementById("footer");
     const footerHeight = footer ? footer.offsetHeight : 0;
 
-    // Print the heights to the console for debugging
-    console.log('Display Height:', displayHeight);
-    if (mainContainer) {
-        console.log('Main Container Height:', mainContainerHeight);
-    } else {
-        console.log('Main container element not found.');
-    }
-    if (footer) {
-        console.log('Footer Height:', footerHeight);
-    } else {
-        console.log('Footer element not found.');
+    // Calculate the available height for the main container
+    const availableHeight = displayHeight - footerHeight - navbarHeight;
+
+    // Set the height and width of the main container
+    mainContainer.style.height = `${availableHeight}px`;
+    mainContainer.style.maxHeight = `${availableHeight}px`;
+    mainContainer.style.width = `${displayWidth}px`;
+    mainContainer.style.maxWidth = `${displayWidth}px`;
+    basicContainer.style.width = `${displayWidth}px`;
+
+    // Ensure footer and basicContainer have the correct width
+    try {
+        footer.style.width = `${displayWidth}px`;
+    } catch (e) {
+        console.log(e);
     }
 
-    // Example: Adjust the height of the main container     container-fluid
-    mainContainer.style.height = `${displayHeight - footerHeight - navbarHeight}px`;
-    footer.style.width = `${window.innerWidth}px`;
-    basicContainer.style.width = `${window.innerWidth}px`;
+    // // Ensure no element exceeds the intended width
+    const elements = [mainContainer, footer, basicContainer];
+    elements.forEach(element => {
+        if (element.offsetWidth > displayWidth) {
+            element.style.width = `${displayWidth}px`;
+        }
+    });
 }
 
-// Call the function to adjust the height when the page is loaded
-document.addEventListener("DOMContentLoaded", function() {
-    adjustHeight();
-});
-
-// Optionally, adjust the height again if the window is resized
-window.addEventListener("resize", adjustHeight);
+// Call the function on window resize and load
+window.addEventListener('resize', adjustHeight);
+window.addEventListener('load', adjustHeight);

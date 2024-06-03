@@ -207,6 +207,7 @@ header, body, footer{
     border-radius: 5px;
     flex: 1; /* Fills the available space */
     overflow-y: auto; 
+    overflow-x: hidden;
     padding: 5px;
 }
 
@@ -234,11 +235,13 @@ header, body, footer{
     /* margin: 10px; */
     padding-left: 10px;
     padding-right: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 /*Rahmen und Inhalt der Kategorien definieren*/
 .category-item {
     padding: 5px;
-    /* overflow: hidden; */
+    overflow: hidden;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -246,6 +249,8 @@ header, body, footer{
     text-align: center;
     height: 100%;
     width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .category-item img{
@@ -277,12 +282,16 @@ header, body, footer{
     justify-content: center;
     display: flex;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*übergeordneter Container für alle Produkte*/
 .product-container{
     margin-top: 10px;
     padding: 2px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*Container für ein Produkt - enthält Produktinfos und Bild*/
@@ -291,6 +300,8 @@ header, body, footer{
     background-color: white;
     border-radius: 5px;
     height: 400px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 /*enhält das Produktbild*/
 .product-img{
@@ -299,7 +310,7 @@ header, body, footer{
     height: 65%;
     padding-top : 2.5%;
     padding-bottom : 2.5%;
-    /* overflow: hidden; */
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -391,14 +402,14 @@ header, body, footer{
     background-color: rgb(20, 95, 148);
     color: white;
     flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
-    /* overflow: hidden; */
+    overflow: hidden;
     padding: 5px;
     height: 75vh;
 }
 
 .table-container{
-    /* overflow-y: auto;
-    overflow-x: hidden; */
+    overflow-y: auto;
+    overflow-x: hidden;
     max-width: 100%;
     margin: 5px;
 }
@@ -411,8 +422,8 @@ header, body, footer{
 
 td, th{
     padding : 5px;
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 
 .carousel-item img{
@@ -553,8 +564,8 @@ td, th{
     color: white;
     align-items: center;
     max-height: 530px;
-    /* overflow-y: auto; */
-    /* overflow-x: hidden; */
+    overflow-y: auto;
+    overflow-x: hidden;
     border-radius: 10px; 
     border: 5px solid white;
 }
@@ -590,6 +601,7 @@ td, th{
 footer{
     position: sticky;
     flex-shrink: 0;
+    overflow-x: hidden;
 }
 
 /* Anpassung Link */
@@ -606,6 +618,7 @@ footer{
 }
 
 
-/* .main-grid{
-    overflow-y: scroll;
-} */
+.main-grid{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
