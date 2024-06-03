@@ -9,18 +9,14 @@
 <div class="container-fluid">
     <div class="registration-container row">
         <div class="col-sm-6 offset-sm-3">   
-            <div class="col-md-5 offset-md-3">
-                <div class="row justify-content-xl-between align-items-center">
-                    <div class="col">
-                        <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner" onclick="window.location.href='{{ url_for('app_customer.productcatalog') }}'">
-                    </div>
-                    <div class="col-md text-center">
-                        <h1>Registrierung:</h1>
-                    </div>
-                </div>
+            <div class="logo_big" onclick="window.location.href='{{ url_for('app_customer.login') }}'">
+                <img class="logo_big" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner">
             </div>
             
             <form method="POST" action="{{ url_for('app_customer.registration') }}">
+                <div class="title">
+                    <h1>ScannerMarket - Registrierung:</h1>
+                </div>
                 <!-- Flash Message Block -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
@@ -55,30 +51,7 @@
                     {{ form.passwort.label(class="form-label") }}
                     {{ form.passwort(class="form-control", placeholder="Passwort") }}
                 </div>
-                <div class="form-group">
-                    {{ form.bezahlmethode.label(class="form-label") }}
-                    {{ form.bezahlmethode(class="form-control") }}
-                </div>
-                <div id="paypal-details" style="display: none;" class="bezahldaten">
-                    <div class="form-group">
-                        {{ form.paypal_email.label(class="form-label") }}
-                        {{ form.paypal_email(class="form-control", placeholder="PayPal-E-Mail") }}
-                    </div>
-                </div>
-                <div id="kreditkarte-details" style="display: none;" class="bezahldaten">
-                    <div class="form-group">
-                        {{ form.kreditkarte_nummer.label(class="form-label") }}
-                        {{ form.kreditkarte_nummer(class="form-control", placeholder="Kreditkartennummer") }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.kreditkarte_gueltig_bis.label(class="form-label") }}
-                        {{ form.kreditkarte_gueltig_bis(class="form-control", placeholder="Gültig bis") }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.kreditkarte_cvv.label(class="form-label") }}
-                        {{ form.kreditkarte_cvv(class="form-control", placeholder="CVC") }}
-                    </div>
-                </div>
+                
                 <div class="form-check">
                     {{ form.newsletter() }}
                     {{ form.newsletter.label(class="form-check-label") }}
@@ -105,23 +78,6 @@
         </div>
     </div>
 </div>
-<script>
-const zahlungsartDropdown = document.getElementById('bezahlmethode');
-const paypalDetails = document.getElementById('paypal-details');
-const kreditkarteDetails = document.getElementById('kreditkarte-details');
 
-zahlungsartDropdown.addEventListener('change', () => {
-    if (zahlungsartDropdown.value === 'paypal') {
-        paypalDetails.style.display = 'block';
-        kreditkarteDetails.style.display = 'none';
-    } else if (zahlungsartDropdown.value === 'kreditkarte') {
-        paypalDetails.style.display = 'none';
-        kreditkarteDetails.style.display = 'block';
-    } else {
-        paypalDetails.style.display = 'none';
-        kreditkarteDetails.style.display = 'none';
-    }
-});
-</script>
 <!-- END Main Content -->
 {% endblock %}

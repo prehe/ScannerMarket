@@ -401,7 +401,6 @@ header, body, footer{
     overflow-x: auto;
     max-width: 100%;
     margin: 5px;
-
 }
 
 .table {
@@ -588,6 +587,10 @@ td, th{
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
+footer{
+    position: sticky;
+    top: 100%;
+}
 
 /* FOOTER: */
 .linkings {
@@ -605,4 +608,9 @@ td, th{
 .linkings a:hover {
     color: rgb(200, 200, 200);
     text-decoration: underline;
+}
+
+
+.main-grid{
+    overflow-y: scroll;
 }

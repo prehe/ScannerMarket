@@ -10,7 +10,7 @@ analysenDropdown.addEventListener('change', () => {
     else if (analysenDropdown.value === 'Produkte'){
         document.getElementById("Analysen-Feld").src = "/Produkte";
     }
-    else if (analysenDropdown.value === 'Einkauf'){
+    else if (analysenDropdown.value === 'Einkaufe'){
         document.getElementById("Analysen-Feld").src = "/Einkauf";
     }
     else if (analysenDropdown.value === 'Warenkorb'){

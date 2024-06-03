@@ -22,11 +22,16 @@ def registration():
     form = formulare.RegistrationForm()
     if form.validate_on_submit():
         try:
-            customer = Nutzer.add_nutzer(vorname=form.vorname.data, nachname=form.nachname.data, geburtsdatum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
-            flash('Registrierung erfolgreich!', 'success')
-            session['type'] = 'customer'
-            return redirect(url_for('app_customer.productcatalog'))
-
+            if (db.session.query(Nutzer).filter(Nutzer.Email==form.email.data).first()):
+                flash('die Email ist bereits vergeben', 'danger')
+            else:
+                customer = Nutzer.add_nutzer(vorname=form.vorname.data, nachname=form.nachname.data, geburtsdatum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
+                session['shoppingID'] = None
+                session['userID'] = customer.ID  # Store user ID in session
+                flash('Registrierung erfolgreich!', 'success')
+                session['type'] = 'customer'
+                return redirect(url_for('app_customer.productcatalog'))
+            
         except Exception as e:
             db.session.rollback()
             flash(f'An error occurred: {str(e)}', 'danger')
@@ -154,3 +159,37 @@ def getProdsFromShoppingList(shopping_id):
 def logOut():
     session['type'] = "default"
     return redirect(url_for('app_customer.productcatalog'))
+
+@cust.route('/profile', methods=['GET', 'POST'])
+def profile():
+    #clear_flash_messages()
+    user = db.session.query(Nutzer).get(session['userID'])
+    form = formulare.EditProfile(obj=user)
+    print(user.Vorname, user.Nachname, user.Email)
+    if form.validate_on_submit():
+        
+        if (db.session.query(Nutzer).filter(Nutzer.ID != user.ID, Nutzer.Email==form.Email.data).first()):
+            flash('die Email ist bereits vergeben', 'danger')
+        else:
+            user.Email = form.Email.data
+        user.Vorname = form.Vorname.data
+        print(form.Vorname.data)
+        user.Nachname = form.Nachname.data
+        user.Geburtsdatum = form.Geburtsdatum.data
+        if form.Passwort.data:
+            if form.Passwort.data == user.Passwort:
+                if form.Passwort_new.data:
+                    user.Passwort = form.Passwort_new.data
+                else:
+                    flash('kein neues Passwort angegeben', 'danger')
+            else:
+                flash('falsches Passwort', 'danger')   
+        user.Kundenkarte = form.Kundenkarte.data
+        user.Newsletter = form.Newsletter.data
+        db.session.commit()
+        flash('Änderung erfolgreich!', 'success')
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                print(f"Fehler im Feld '{getattr(form, field).label.text}': {error}")
+    return render_template('sm_profile.html',logStatus = session.get('type', None), form=form)
