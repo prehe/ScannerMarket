@@ -25,6 +25,7 @@ def registration():
             if (db.session.query(Nutzer).filter(Nutzer.Email==form.email.data).first()):
                 flash('die Email ist bereits vergeben', 'danger')
             else:
+                print('testestset')
                 customer = Nutzer.add_nutzer(vorname=form.vorname.data, nachname=form.nachname.data, geburtsdatum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
                 if form.bezahlmethode.data == 'paypal':
                     payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Paypal"), PP_Email=form.paypal_email.data)
