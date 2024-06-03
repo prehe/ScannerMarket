@@ -4,6 +4,7 @@ header, body, footer{
     height: auto;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 /* center object perfect*/
@@ -17,7 +18,7 @@ header, body, footer{
 .container-fluid {
     background-color: rgb(24, 115, 180);
     color: white;
-    height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     min-height: 90vh;
@@ -206,7 +207,6 @@ header, body, footer{
     border-radius: 5px;
     flex: 1; /* Fills the available space */
     overflow-y: auto; 
-    overflow-x: hidden;
     padding: 5px;
 }
 
@@ -238,7 +238,7 @@ header, body, footer{
 /*Rahmen und Inhalt der Kategorien definieren*/
 .category-item {
     padding: 5px;
-    overflow: hidden;
+    /* overflow: hidden; */
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -299,7 +299,7 @@ header, body, footer{
     height: 65%;
     padding-top : 2.5%;
     padding-bottom : 2.5%;
-    overflow: hidden;
+    /* overflow: hidden; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -391,14 +391,14 @@ header, body, footer{
     background-color: rgb(20, 95, 148);
     color: white;
     flex: 1;    /* Füllt den verbleibenden verfügbaren Platz */
-    overflow: hidden;
+    /* overflow: hidden; */
     padding: 5px;
     height: 75vh;
 }
 
 .table-container{
-    overflow-y: auto;
-    overflow-x: auto;
+    /* overflow-y: auto;
+    overflow-x: hidden; */
     max-width: 100%;
     margin: 5px;
 }
@@ -411,8 +411,8 @@ header, body, footer{
 
 td, th{
     padding : 5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
 }
 
 .carousel-item img{
@@ -553,9 +553,8 @@ td, th{
     color: white;
     align-items: center;
     max-height: 530px;
-    /* height of navbar + height of footer */
-    overflow-y: auto;
-    overflow-x: hidden;
+    /* overflow-y: auto; */
+    /* overflow-x: hidden; */
     border-radius: 10px; 
     border: 5px solid white;
 }
@@ -587,14 +586,10 @@ td, th{
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
+/* FOOTER: */
 footer{
     position: sticky;
-    top: 100%;
-}
-
-/* FOOTER: */
-.linkings {
-    flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
+    flex-shrink: 0;
 }
 
 /* Anpassung Link */
@@ -611,6 +606,6 @@ footer{
 }
 
 
-.main-grid{
+/* .main-grid{
     overflow-y: scroll;
-}
+} */

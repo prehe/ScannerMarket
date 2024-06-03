@@ -30,9 +30,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
             crossorigin="anonymous"></script> 
     
-        <div class="container-fluid">
+        <div class="container-fluid" id="container-fluid">
             <div class="outer-container">
-                <nav class="navbar">
+                <nav class="navbar" id="navbar">
                     <div class="navbar-brand">
                         <div class="col-md">
                             {% if logStatus == 'admin' %}
@@ -111,7 +111,7 @@
 
 
     <footer>
-        <div class="linkings row">
+        <div class="linkings row" id="footer">
             <a href="/impressum" class="col">Impressum</a>
             <a href="#" class="col">Terms & Conditions</a>
             <a href="#" class="col">Privacy Policy</a>

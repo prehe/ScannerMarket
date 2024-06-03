@@ -112,8 +112,9 @@ def decrease_cart_amount():
 
 @func.route("/purchase", methods=["POST"])
 def purchase():
-    response = Einkauf.add_endTimestamp(session.get('shoppingID', None))
+    response = Einkauf.add_endTimestamp(session.get('shoppingID', None), getTotalBasketPrice(session.get('shoppingID', None)))
     session['shoppingID'] = None
+    print('purchase_send')
     return jsonify({"success": response, 'redirect_url': url_for('app_customer.productcatalog')})
 
 
