@@ -1,5 +1,5 @@
 from datetime import date
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte
 import pandas as pd
 import requests
 import time

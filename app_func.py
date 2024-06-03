@@ -2,7 +2,7 @@ from flask import Blueprint, Flask, jsonify, render_template, request, session, 
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -53,12 +53,7 @@ def insertDB():
     # db.session.commit()
 
 
-    # ###########     Bezahlmethoden
-    # paymentmethod=['Paypal','Kreditkarte']
-    # for name in paymentmethod:
-    #     Bezahlmöglichkeiten.add_paymentmethod(method=name)
-
-
+    ################    Nutzer
     # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
     # service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
     
@@ -137,9 +132,6 @@ def addProdToBasket():
     einkauf_id = session.get('shoppingID', None)
     product_id = request.form.get("productId")
     quantity = request.form.get("quantity")
-
-    # print(einkauf_id, product_id, quantity)
-
     if not einkauf_id or not product_id or not quantity:
         flash("Fehlende Daten für den Warenkorb", "error")
         return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.shoppinglist'))
@@ -172,7 +164,12 @@ def deleteItemFromList():
     response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
     return jsonify(value=response, redirect_url=url_for('app_customer.shoppinglist'))
 
-
+@func.route("/generateQR", methods=["GET"])
+def generateQR():
+    einkauf_id = session.get('shoppingID', None)
+    preis = getTotalBasketPrice(einkauf_id)
+    payment_URL = f"Einkauf_ID={einkauf_id}&Preis={preis}"
+    return payment_URL
 
 def getTotalBasketPrice(einkauf_id):
     items = db.session.query(Warenkorb).\

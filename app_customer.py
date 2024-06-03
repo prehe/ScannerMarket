@@ -3,7 +3,7 @@ from app_func import getTotalBasketPrice
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -26,19 +26,12 @@ def registration():
                 flash('die Email ist bereits vergeben', 'danger')
             else:
                 customer = Nutzer.add_nutzer(vorname=form.vorname.data, nachname=form.nachname.data, geburtsdatum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
-                if form.bezahlmethode.data == 'paypal':
-                    payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Paypal"), PP_Email=form.paypal_email.data)
-                else:
-                    payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Kreditkarte"), Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültingkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer=form.kreditkarte_cvv.data)
-                db.session.add(payment)
-                db.session.commit()
-                user = db.session.query(Nutzer).filter_by(Email=form.email.data, Passwort=form.passwort.data).first()
                 session['shoppingID'] = None
-                session['userID'] = user.ID  # Store user ID in session
+                session['userID'] = customer.ID  # Store user ID in session
                 flash('Registrierung erfolgreich!', 'success')
                 session['type'] = 'customer'
                 return redirect(url_for('app_customer.productcatalog'))
-
+            
         except Exception as e:
             db.session.rollback()
             flash(f'An error occurred: {str(e)}', 'danger')
@@ -72,16 +65,20 @@ def login():
 
 
  
-@cust.route('/scanner')
-def scanner():
-    return render_template('sm_scanner.html')
- 
 @cust.route('/shoppinglist')
 def shoppinglist():
     if session['shoppingID'] == None:
         session['shoppingID'] = Einkauf.add_einkauf(session.get('userID', None))
     data = getProdsFromShoppingList(session.get('shoppingID', None))
     return render_template('sm_shopping_list.html',  product_list = data[0], total_price=f"{data[1]:.2f}", logStatus = session.get('type', None))
+
+@cust.route('/scanner')
+def scanner():
+    return render_template('sm_scanner.html')
+
+@cust.route('/shoppingresult')
+def shoppingresult():
+    return render_template('sm_shoppingresult.html')
  
 @cust.route('/productcatalog')
 def productcatalog():

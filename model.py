@@ -28,37 +28,6 @@ class Nutzer(db.Model):
         db.session.commit()
         return new_nutzer
 
-class Bezahlmöglichkeiten(db.Model):
-    __tablename__ = 'bezahlmöglichkeiten'
-
-    ID = db.Column(db.Integer, primary_key=True)
-    Methode = db.Column(db.String(45))
-
-    @classmethod
-    def getBezahlmöglichkeitenID(cls, methode):
-        paymentID = Bezahlmöglichkeiten.query.filter_by(Methode=methode).first()
-        return paymentID.ID
-
-    @classmethod
-    def add_paymentmethod(cls, method):
-        """Fügt ein Produkt zum Warenkorb hinzu."""
-        paymentmethod = cls(Methode=method)
-        db.session.add(paymentmethod)
-        db.session.commit()
-
-class Bezahlung(db.Model):
-    __tablename__ = 'bezahlung'
-
-    Nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'), primary_key=True)
-    Bezahlmöglichkeiten_ID = db.Column(db.Integer, db.ForeignKey('bezahlmöglichkeiten.ID'), primary_key=True)
-    PP_Email = db.Column(db.String(45))
-    Karten_Nr = db.Column(db.String(45))
-    Karte_Gültingkeitsdatum = db.Column(db.Date)
-    Karte_Prüfnummer = db.Column(db.Integer)
-
-    nutzer = relationship("Nutzer")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
-    bezahlmöglichkeiten = relationship("Bezahlmöglichkeiten")
-
 class Produktkategorien(db.Model):
     __tablename__ = 'produktkategorien'
 
@@ -103,6 +72,8 @@ class Einkauf(db.Model):
     Nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'))
     Zeitstempel_start = db.Column(db.DateTime)
     Zeitstempel_ende = db.Column(db.DateTime)
+    Preis = db.Column(db.Float)
+    Bezahlt = db.Column(db.Boolean)
 
     nutzer = relationship("Nutzer")
 
@@ -122,10 +93,21 @@ class Einkauf(db.Model):
         return neuer_einkauf.ID
     
     @classmethod
-    def add_endTimestamp(cls, einkauf_id):
+    def add_endTimestamp(cls, einkauf_id, preis):
         einkauf = cls.query.filter_by(ID=einkauf_id).first()
         if einkauf:
             einkauf.Zeitstempel_ende = datetime.now()
+            einkauf.Preis = preis
+            db.session.commit()
+            return True
+        else:
+            return False
+        
+    @classmethod
+    def payment_done(cls, einkauf_id):
+        einkauf = cls.query.filter_by(ID=einkauf_id).first()
+        if einkauf:
+            einkauf.Bezahlt = True
             db.session.commit()
             return True
         else:
