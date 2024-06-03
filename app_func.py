@@ -2,7 +2,7 @@ from flask import Blueprint, Flask, jsonify, render_template, request, session, 
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -33,51 +33,35 @@ def insertDB():
     ########################
         
     ################    Produktkategorien
-    # service.addProductCategories(categoryNames)
+    service.addProductCategories(categoryNames)
 
 
-    # ################ Produkte aus xlsx
-    # df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
-    # # print(df)
-    # for index, row in df.iterrows():
-    #     produkt = Produkte(
-    #         Hersteller=row['Hersteller'],
-    #         Name=row['Name'],
-    #         Gewicht_Volumen=row['Gewicht_Volumen'],
-    #         EAN=row['EAN'],
-    #         Preis=row['Preis'],
-    #         Bild=row['Bild'],
-    #         Kategorie_ID=row['Kategorie_ID']
-    #     )
-    #     db.session.add(produkt)
-    # db.session.commit()
+    ################ Produkte aus xlsx
+    df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
+    # print(df)
+    for index, row in df.iterrows():
+        produkt = Produkte(
+            Hersteller=row['Hersteller'],
+            Name=row['Name'],
+            Gewicht_Volumen=row['Gewicht_Volumen'],
+            EAN=row['EAN'],
+            Preis=row['Preis'],
+            Bild=row['Bild'],
+            Kategorie_ID=row['Kategorie_ID']
+        )
+        db.session.add(produkt)
+    db.session.commit()
 
 
-    # ###########     Bezahlmethoden
-    # paymentmethod=['Paypal','Kreditkarte']
-    # for name in paymentmethod:
-    #     Bezahlmöglichkeiten.add_paymentmethod(method=name)
-
-
-    # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
-    # service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
+    ###############    Nutzer
+    service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
+    service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
     
     # #################  Einkauf
     something = Einkauf(Nutzer_ID = 2)
     db.session.add(something)
     db.session.commit()
 
-    # products_to_add = [
-    # (7, 1),  # Tuple of (produkte_ID, quantity)
-    # (8, 2),
-    # (9, 1),
-    # (10, 3),
-    # (11, 1),
-    # (12, 2),
-    # (13, 1),
-    # (14, 1),
-    # (15, 2),
-    # (16, 1)]
     products_to_add = [(44,3), (46,3), (100,3),(33,3),(150,3),(200,3), (250,3), (300,3),(290,3),(400,3), (234,3), (287,3), (76,3)]
 
     # Loop through the list of products and add them to the shopping cart
@@ -137,9 +121,6 @@ def addProdToBasket():
     einkauf_id = session.get('shoppingID', None)
     product_id = request.form.get("productId")
     quantity = request.form.get("quantity")
-
-    # print(einkauf_id, product_id, quantity)
-
     if not einkauf_id or not product_id or not quantity:
         flash("Fehlende Daten für den Warenkorb", "error")
         return jsonify(success=False, message="Fehlende Daten für den Warenkorb", redirect_url=url_for('app_customer.shoppinglist'))
@@ -172,7 +153,12 @@ def deleteItemFromList():
     response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
     return jsonify(value=response, redirect_url=url_for('app_customer.shoppinglist'))
 
-
+@func.route("/generateQR", methods=["GET"])
+def generateQR():
+    einkauf_id = session.get('shoppingID', None)
+    preis = getTotalBasketPrice(einkauf_id)
+    payment_URL = f"Einkauf_ID={einkauf_id}&Preis={preis}"
+    return payment_URL
 
 def getTotalBasketPrice(einkauf_id):
     items = db.session.query(Warenkorb).\

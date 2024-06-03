@@ -2,7 +2,7 @@ from flask import Blueprint, Flask, render_template, request, session, redirect,
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -66,18 +66,6 @@ def show_warenkorb():
     column_names = ["Einkauf_ID", "Produkt_ID", "Anzahl"]
     return render_template('db_table_view.html', entries=warenkorb_entries, column_names=column_names, title = "Warenkorb")
  
-@admin.route('/Bezahlmöglichkeiten')
-def show_bezahlmöglichkeiten():
-    bezahlmoeglichkeiten_entries = db.session.query(Bezahlmöglichkeiten).all()
-    column_names = ["ID", "Methode"]
-    return render_template('db_table_view.html', entries=bezahlmoeglichkeiten_entries, column_names=column_names, title="Bezahlmöglichkeiten")
- 
-@admin.route('/Bezahlung')
-def show_bezahlung():
-    bezahlung_entries = db.session.query(Bezahlung).all()
-    column_names = ["Nutzer_ID", "Bezahlmöglichkeiten_ID", "PP_Email", "Karten_Nr", "Karte_Gültingkeitsdatum", "Karte_Prüfnummer" ]
-    return render_template('db_table_view.html', entries =bezahlung_entries, column_names=column_names, title = "Bezahlung")
-
 @admin.route('/Umsatz')
 def show_umsatz():
     dates = curr_Date()

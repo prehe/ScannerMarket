@@ -1,0 +1,26 @@
+{% extends "sm_default.html" %}
+
+{% block header %}
+    <title>Einkauf - ScannerMarket</title>
+{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="/static/qrcodeGenerator.min.js"></script>
+<script src="/static/generator.js"></script>
+
+<div class="main-container">
+    <div class="row">
+        <h4 class="col-md-6 offset-md-3 text-center title-basket-list">Mein Einkauf:</h4>
+        <div class="col-md-6 offset-md-3 text-center">
+            <button type="submit" onclick="generateQR()" class="btn btn-secondary">QR-Code für Selbstbezahlkasse erstellen</button>
+        </div>
+        <div class="col-md-6 offset-md-3 text-center">
+            <div id="qrcodeoutput" class="mt-3"></div>
+        </div>
+        <div class="col-md-6 offset-md-3 text-center">
+            <button id="backToMenuBtn" onclick="window.location.href='productcatalog'" class="btn btn-secondary">zurück zum Produktkatalog</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
