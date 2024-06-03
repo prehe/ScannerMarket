@@ -3,7 +3,7 @@ from app_func import getTotalBasketPrice
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -23,13 +23,6 @@ def registration():
     if form.validate_on_submit():
         try:
             customer = Nutzer.add_nutzer(vorname=form.vorname.data, nachname=form.nachname.data, geburtsdatum=form.geburtsdatum.data, email=form.email.data, passwort=form.passwort.data, kundenkarte=form.kundenkarte.data, admin=False, newsletter=form.newsletter.data)
-            if form.bezahlmethode.data == 'paypal':
-                payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Paypal"), PP_Email=form.paypal_email.data)
-            else:
-                payment = Bezahlung(Nutzer_ID=customer.ID, Bezahlmöglichkeiten_ID=Bezahlmöglichkeiten.getBezahlmöglichkeitenID("Kreditkarte"), Karten_Nr=form.kreditkarte_nummer.data, Karte_Gültingkeitsdatum=form.kreditkarte_gueltig_bis.data, Karte_Prüfnummer=form.kreditkarte_cvv.data)
-            db.session.add(payment)
-            db.session.commit()
-
             flash('Registrierung erfolgreich!', 'success')
             session['type'] = 'customer'
             return redirect(url_for('app_customer.productcatalog'))

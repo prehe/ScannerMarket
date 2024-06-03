@@ -28,37 +28,6 @@ class Nutzer(db.Model):
         db.session.commit()
         return new_nutzer
 
-class Bezahlmöglichkeiten(db.Model):
-    __tablename__ = 'bezahlmöglichkeiten'
-
-    ID = db.Column(db.Integer, primary_key=True)
-    Methode = db.Column(db.String(45))
-
-    @classmethod
-    def getBezahlmöglichkeitenID(cls, methode):
-        paymentID = Bezahlmöglichkeiten.query.filter_by(Methode=methode).first()
-        return paymentID.ID
-
-    @classmethod
-    def add_paymentmethod(cls, method):
-        """Fügt ein Produkt zum Warenkorb hinzu."""
-        paymentmethod = cls(Methode=method)
-        db.session.add(paymentmethod)
-        db.session.commit()
-
-class Bezahlung(db.Model):
-    __tablename__ = 'bezahlung'
-
-    Nutzer_ID = db.Column(db.Integer, db.ForeignKey('nutzer.ID'), primary_key=True)
-    Bezahlmöglichkeiten_ID = db.Column(db.Integer, db.ForeignKey('bezahlmöglichkeiten.ID'), primary_key=True)
-    PP_Email = db.Column(db.String(45))
-    Karten_Nr = db.Column(db.String(45))
-    Karte_Gültingkeitsdatum = db.Column(db.Date)
-    Karte_Prüfnummer = db.Column(db.Integer)
-
-    nutzer = relationship("Nutzer")  # backref wird verwendet, um eine bidirektionale Beziehung zu ermöglichen
-    bezahlmöglichkeiten = relationship("Bezahlmöglichkeiten")
-
 class Produktkategorien(db.Model):
     __tablename__ = 'produktkategorien'
 

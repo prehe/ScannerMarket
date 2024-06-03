@@ -2,7 +2,7 @@ from flask import Blueprint, Flask, jsonify, render_template, request, session, 
 import formulare as formulare
 import pandas as pd
 import requests
-from model import db, Nutzer, Bezahlmöglichkeiten, Bezahlung, Produktkategorien, Produkte, Einkauf, Warenkorb
+from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
 from sqlalchemy.orm import joinedload
@@ -53,12 +53,7 @@ def insertDB():
     # db.session.commit()
 
 
-    # ###########     Bezahlmethoden
-    # paymentmethod=['Paypal','Kreditkarte']
-    # for name in paymentmethod:
-    #     Bezahlmöglichkeiten.add_paymentmethod(method=name)
-
-
+    ################    Nutzer
     # service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
     # service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
     
