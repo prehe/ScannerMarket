@@ -32,43 +32,44 @@ def insertDB():
     # Basis-Insert DB:
     ########################
         
-    ################    Produktkategorien
-    service.addProductCategories(categoryNames)
+    # # ################    Produktkategorien
+    # service.addProductCategories(categoryNames)
 
 
-    ################ Produkte aus xlsx
-    df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
-    # print(df)
-    for index, row in df.iterrows():
-        produkt = Produkte(
-            Hersteller=row['Hersteller'],
-            Name=row['Name'],
-            Gewicht_Volumen=row['Gewicht_Volumen'],
-            EAN=row['EAN'],
-            Preis=row['Preis'],
-            Bild=row['Bild'],
-            Kategorie_ID=row['Kategorie_ID']
-        )
-        db.session.add(produkt)
-    db.session.commit()
+    # ################ Produkte aus xlsx
+    # df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
+    # # print(df)
+    # for index, row in df.iterrows():
+    #     produkt = Produkte(
+    #         Hersteller=row['Hersteller'],
+    #         Name=row['Name'],
+    #         Gewicht_Volumen=row['Gewicht_Volumen'],
+    #         EAN=row['EAN'],
+    #         Preis=row['Preis'],
+    #         Bild=row['Bild'],
+    #         Kategorie_ID=row['Kategorie_ID']
+    #     )
+    #     db.session.add(produkt)
+    # db.session.commit()
 
 
-    ###############    Nutzer
-    service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15)) 
-    service.addNewCustomer(vorname="Celli", nachname="Stern", geb_datum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True, reg_am =date(2024,5,15))
+    # ###############    Nutzer
+    # Nutzer.add_nutzer(vorname="Peter", nachname="Muster", geburtsdatum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    # Nutzer.add_nutzer(vorname="Celli", nachname="Stern", geburtsdatum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True)
     
-    # #################  Einkauf
-    something = Einkauf(Nutzer_ID = 2)
-    db.session.add(something)
-    db.session.commit()
+    # # #################  Einkauf
+    # something = Einkauf(Nutzer_ID = 2)
+    # db.session.add(something)
+    # db.session.commit()
 
-    products_to_add = [(44,3), (46,3), (100,3),(33,3),(150,3),(200,3), (250,3), (300,3),(290,3),(400,3), (234,3), (287,3), (76,3)]
+    # products_to_add = [(44,3), (46,3), (100,3),(33,3),(150,3),(200,3), (250,3), (300,3),(290,3),(400,3), (234,3), (287,3), (76,3)]
 
-    # Loop through the list of products and add them to the shopping cart
-    for produkte_ID, quantity in products_to_add:
-        new_item = Warenkorb(Einkauf_ID=2, Produkt_ID=produkte_ID, Anzahl=quantity)
-        db.session.add(new_item)
-    db.session.commit()
+    # # Loop through the list of products and add them to the shopping cart
+    # for produkte_ID, quantity in products_to_add:
+    #     new_item = Warenkorb(Einkauf_ID=2, Produkt_ID=produkte_ID, Anzahl=quantity)
+    #     db.session.add(new_item)
+    # db.session.commit()
+    # Einkauf.resetTable()
 
     return redirect(url_for('app_customer.productcatalog'))
  
