@@ -1,7 +1,5 @@
-from flask import Blueprint, Flask, render_template, request, session, redirect, url_for, session, flash
+from flask import Blueprint, Flask, render_template, session, redirect, url_for
 import formulare as formulare
-import pandas as pd
-import requests
 from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
@@ -10,40 +8,33 @@ from sqlalchemy import func
 
 
 admin = Blueprint(__name__, import_name="app_admin")
-
-
-#dürfen nur einsehbar sein, wenn eingelogter Nutzer ein Administrator ist
  
+ # Route zur Übersichtsseite des Administrators
 @admin.route('/admin')
 def adminMain():
     return render_template('sm_admin_main.html',logStatus =session.get('type', None))
  
- 
+ # Route zur Übersichtsseite der Analysen des Administrators
 @admin.route('/admin/analysis')
 def analysis():
     return render_template('sm_admin_analysis.html', analyse_page= "/Produktkategorien",logStatus =session.get('type', None))
 
-
+###########################################################################################################################################
+# Route zur Kundendatenbankseite
 @admin.route('/Kunden')
 def show_nutzer():
-    #Kunden hinzufügen
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='ma.musn@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am= date(2024, 5, 14))
-    #service.addNewCustomer(vorname="Peter", nachname="Muster", geb_datum=date(1990, 1, 1), email='peter.muster@example.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True, reg_am =date(2024,5,15))
-   
     nutzer_entries = db.session.query(Nutzer).all()
-    # print(nutzer_entries[0].ID)
-    column_names = ["ID", "Vorname", "Nachname", "Geburtsdatum", "Email", "Passwort", "Kundenkarte", "Admin", "Newsletter", " Registriert_am"]
+    column_names = ["ID", "Vorname", "Nachname", "Geburtsdatum", "Email", "Passwort", "Kundenkarte", "Admin", "Newsletter", "Registriert_am"]
     return render_template('db_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
  
+ # Route zur Produktkategoriendatenbankseite
 @admin.route('/Produktkategorien')
 def show_produktkategorie():
-    #Produktkategorien zur Datenbank einmalig hinzufügen
-    #service.addProductCategories(categoryNames)
- 
     produktkategorien_entries = db.session.query(Produktkategorien).all()
     column_names = ["ID", "Kategorie"]
     return render_template('db_table_view.html',entries=produktkategorien_entries, column_names= column_names, title = "Produktkategorien")
  
+ # Route zur Produktdatenbank
 @admin.route('/Produkte')
 def show_produkte():
     #Alle Produkte aus der Excel-Tabelle in die Datenbank einfügen
@@ -52,20 +43,21 @@ def show_produkte():
     column_names = ["ID", "Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis","Bild", "Kategorie_ID"]
     return render_template('db_table_view.html', entries=produkte_entries, column_names= column_names, title = "Produkte")
  
- 
-####ToDo: auf Tabellenanzeige Template anpassen
+ # Route zur Einkaufsdatenbank
 @admin.route('/Einkauf')
 def show_einkauf():
     einkauf_entries = db.session.query(Einkauf).all()
     column_names =["ID", "Nutzer_ID",  "Zeitstempel_start","Zeitstempel_ende" ]
     return render_template('db_table_view.html', entries=einkauf_entries, column_names=column_names, title = "Einkauf")
  
+ # Route zur Warenkorbdatenbank
 @admin.route('/Warenkorb')
 def show_warenkorb():
     warenkorb_entries = db.session.query(Warenkorb).all()
     column_names = ["Einkauf_ID", "Produkt_ID", "Anzahl"]
     return render_template('db_table_view.html', entries=warenkorb_entries, column_names=column_names, title = "Warenkorb")
  
+ # Route zur Analysenseite
 @admin.route('/Umsatz')
 def show_umsatz():
     dates = curr_Date()
@@ -104,6 +96,7 @@ def show_umsatz():
                            bestSellers=bestSellers, selledProds=selledProds, sells=sells,newCust=newCust, allCust=allCust)
 
 #ChatGPT
+# liefert die Start- und End-Daten des angegebenen Monats
 def getStartEndDates(year, month):
     start= datetime.strptime(f'{year}-{month}-01', '%Y-%m-%d')
     if int(month) == 12:
@@ -113,24 +106,30 @@ def getStartEndDates(year, month):
     return start, end
 
 #ChatGPT
+# liefert den monatlichen Umsatz
 def salesVolume_per_month(year, month):
     start, end = getStartEndDates(year, month)
     salesVolume = db.session.query(func.sum(Produkte.Preis*Warenkorb.Anzahl)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).scalar() or 0
     return salesVolume
 
 #ChatGPT
+# liefert die 5 bestverkauftetsten Produkte
 def get_best_seller(year,month):
     start, end = getStartEndDates(year, month)
     bestSeller = db.session.query(Produkte.Name, Produkte.Bild, func.sum(Warenkorb.Anzahl)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).group_by(Produkte.Name).order_by(func.sum(Warenkorb.Anzahl).desc()).limit(5).all() 
     if bestSeller is None:
         return []
     return bestSeller
+
 #ChatGPT
+# liefert die Anzahl der insgesamt verkauften Produkte des Monats
 def numberOfSelledProducts(year, month):
     start, end = getStartEndDates(year, month)
     number = db.session.query(func.sum(Warenkorb.Anzahl)).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).scalar() or 0  # or 0 sorgt dafür, dass falls die query keine Ergebnisse findet (None) ein Integer zurückgegeben wird
     return number
+
 #ChatGPT
+# liefert die Anzahl der Einkäufe des Monats
 def numberOfSells(year, month):
     start, end = getStartEndDates(year, month)
     number = db.session.query(func.count(Einkauf.ID)).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).scalar() or 0 
@@ -150,11 +149,12 @@ def curr_Date():
 
 
 ###########################################################################################################################################
-#Formulare:
+# Formular zum hinzufügen eines Produktes - Verwaltung, Datenbankänderung + Weiterleitung
 @admin.route('/admin/newProduct', methods=['GET', 'POST'])
 def newProduct():
     form = formulare.addProductForm()
    
+    # Eingaben validieren und in Session speichern --> Weiterleitung an Zusammenfassungsseite
     if form.validate_on_submit():
         session['newProduct'] = {
             'name' : form.name.data,
@@ -168,11 +168,13 @@ def newProduct():
         }
         return redirect(url_for('summeryNewProduct'))
     else:
-        for field, errors in form.errors.items():
+        for field, errors in form.errors.items(): # falls es Fehler bei validate_on_submit gibt, wird dieser auf der Console ausgegeben
             for error in errors:
                 print(f"Fehler im Feld '{getattr(form, field).label.text}': {error}")
+
     return render_template('sm_admin_newProduct.html', form = form)
 
+# Zusammenfassungsseite des neuhinzugefügten Produktes
 @admin.route('/admin/summeryNewProduct')
 def summeryNewProduct():
     product = session.get('newProduct', None)
