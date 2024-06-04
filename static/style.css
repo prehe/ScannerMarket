@@ -83,7 +83,7 @@ header, body, footer{
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 /* Container für Email, Passwort, AGB, ... */
@@ -96,9 +96,9 @@ header, body, footer{
 
 /* Logo auf der LOGIN-Seite */
 .logo_big {
-    height: 10rem;
+    height: 8rem;
     display: block;
-    margin: 55px auto 40px;
+    margin: 25px auto 25px;
 }
 
 /* Layoutanpassung für LOGIN */
@@ -131,14 +131,14 @@ header, body, footer{
 
 /* Logo auf der Registierungsseite */
 .logo_small {
-    height: 4rem;
+    height: 6rem;
     display: block;
     margin: 0 auto 0;
 }
 
 /* Layoutanpassung für REGISTIERUNG */
 .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 /* Layoutanpassung für REGISTIERUNG */
@@ -232,16 +232,15 @@ header, body, footer{
 /* Kategory Übersicht */
 /* Rahmen für Kategorien außen */
 .category-overview{
-    /* margin: 10px; */
     padding-left: 10px;
     padding-right: 10px;
     overflow-x: hidden;
     overflow-y: hidden;
 }
-/*Rahmen und Inhalt der Kategorien definieren*/
+
+/* Rahmen und Inhalt der Kategorien definieren */
 .category-item {
     padding: 5px;
-    overflow: hidden;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -249,23 +248,29 @@ header, body, footer{
     text-align: center;
     height: 100%;
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
-.category-item img{
+.category-item img {
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 250px;
     object-fit: cover;
 } 
 
-/*Schriftzug der Kategorien zentral auf die Bilder hinzufügen*/
+/* Schriftzug der Kategorien zentral auf die Bilder hinzufügen */
 .caption {
     padding: 3px; 
     position: absolute;
     background-color: rgb(20, 95, 148);
     color: white;
     border-radius: 5px;
+}
+
+.main-grid{
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -494,61 +499,68 @@ td, th{
 
 #result {
     font-size: 1.3rem; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.btn-scannerBack{
+.btn-scannerBack {
     margin-top: 10px;
 }
 
-#result button{
+#result button {
     font-size: 1rem;
 }
 
-.title-scanner{
+.title-scanner {
     display: block;
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
 }
 
-.product-element img{
-    height: 9rem;
+.product-element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+.product-element img {
+    height: 12rem;
     border: 3px solid white;
-    vertical-align: middle;
+    margin-bottom: 20px;
 }
 
-.product-info{
-    vertical-align: top; 
-    padding-left: 20px;
+.product-info {
+    padding-left: 0;
     text-align: left;
-}
-
-.product-info h5{
-    padding-top: 15px;
-    font-size: 1.4rem;
-}
-
-.product-info h3{
-    font-size: 1.5rem;
-    padding-bottom: 10px;
-}
-
-.product-info p{
-    font-size: 1rem;
 }
 
 .product-buttons {
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .product-buttons p {
     margin: 0 10px;
 }
 
-.btn-scanner-footer{
+.btn-scanner-footer {
+    display: flex;
+    justify-content: center;
     margin: 10px;
 }
+
+.btn-scanner-footer .col {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -615,10 +627,4 @@ footer{
 .linkings a:hover {
     color: rgb(200, 200, 200);
     text-decoration: underline;
-}
-
-
-.main-grid{
-    overflow-x: hidden;
-    overflow-y: hidden;
 }

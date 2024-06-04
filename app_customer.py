@@ -65,6 +65,9 @@ def login():
                 return redirect(url_for('app_customer.productcatalog'))
         else:
             flash('Email oder Passwort falsch', 'warning')
+    else:
+        if request.method == 'POST':
+            flash('Email oder Passwort falsch', 'warning')
     return render_template('sm_login.html', form=form)
 
 

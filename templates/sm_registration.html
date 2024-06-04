@@ -9,8 +9,8 @@
 <div class="container-fluid" id="main-container">
     <div class="registration-container row">
         <div class="col-sm-6 offset-sm-3">   
-            <div class="logo_big" onclick="window.location.href='{{ url_for('app_customer.login') }}'">
-                <img class="logo_big" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner">
+            <div class="logo_small" onclick="window.location.href='{{ url_for('app_customer.login') }}'">
+                <img class="logo_small" src="{{ url_for('static', filename='images/logo1.svg') }}" alt="Scanner">
             </div>
             
             <form method="POST" action="{{ url_for('app_customer.registration') }}">
@@ -64,7 +64,7 @@
                     {{ form.agb() }}
                     {{ form.agb.label(class="form-check-label") }}
                 </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col btn-left">
                         <a href="{{ url_for('app_customer.login') }}">
                             <button type="button" class="btn btn-secondary">zurück</button>

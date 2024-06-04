@@ -113,9 +113,7 @@ def decrease_cart_amount():
 @func.route("/purchase", methods=["POST"])
 def purchase():
     response = Einkauf.add_endTimestamp(session.get('shoppingID', None), getTotalBasketPrice(session.get('shoppingID', None)))
-    session['shoppingID'] = None
-    print('purchase_send')
-    return jsonify({"success": response, 'redirect_url': url_for('app_customer.productcatalog')})
+    return jsonify({"success": response, 'redirect_url': url_for('app_customer.shoppingresult')})
 
 
 @func.route("/addProdToBasket", methods=["POST"])
@@ -160,6 +158,7 @@ def generateQR():
     einkauf_id = session.get('shoppingID', None)
     preis = getTotalBasketPrice(einkauf_id)
     payment_URL = f"Einkauf_ID={einkauf_id}&Preis={preis}"
+    session['shoppingID'] = None
     return payment_URL
 
 def getTotalBasketPrice(einkauf_id):
