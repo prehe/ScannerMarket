@@ -21,6 +21,10 @@ function adjustHeight() {
     mainContainer.style.maxWidth = `${displayWidth}px`;
     basicContainer.style.width = `${displayWidth}px`;
 
+    console.log("Display Height: ", displayHeight);
+    console.log("available Height: ", availableHeight);
+    console.log("main-container Height: ", mainContainer.offsetHeight);
+
     // Ensure footer and basicContainer have the correct width
     try {
         footer.style.width = `${displayWidth}px`;
