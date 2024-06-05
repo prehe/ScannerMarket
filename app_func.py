@@ -32,29 +32,29 @@ def insertDB():
     ########################
         
     # # ################    Produktkategorien
-    # service.addProductCategories(categoryNames)
+    service.addProductCategories(categoryNames)
 
 
-    # ################ Produkte aus xlsx
-    # df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
-    # # print(df)
-    # for index, row in df.iterrows():
-    #     produkt = Produkte(
-    #         Hersteller=row['Hersteller'],
-    #         Name=row['Name'],
-    #         Gewicht_Volumen=row['Gewicht_Volumen'],
-    #         EAN=row['EAN'],
-    #         Preis=row['Preis'],
-    #         Bild=row['Bild'],
-    #         Kategorie_ID=row['Kategorie_ID']
-    #     )
-    #     db.session.add(produkt)
-    # db.session.commit()
+    ################ Produkte aus xlsx
+    df = pd.read_excel("produkte.xlsx", usecols=["Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis", "Bild", "Kategorie_ID"])
+    # print(df)
+    for index, row in df.iterrows():
+        produkt = Produkte(
+            Hersteller=row['Hersteller'],
+            Name=row['Name'],
+            Gewicht_Volumen=row['Gewicht_Volumen'],
+            EAN=row['EAN'],
+            Preis=row['Preis'],
+            Bild=row['Bild'],
+            Kategorie_ID=row['Kategorie_ID']
+        )
+        db.session.add(produkt)
+    db.session.commit()
 
 
     # ###############    Nutzer
-    # Nutzer.add_nutzer(vorname="Peter", nachname="Muster", geburtsdatum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
-    # Nutzer.add_nutzer(vorname="Celli", nachname="Stern", geburtsdatum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True)
+    Nutzer.add_nutzer(vorname="Peter", nachname="Muster", geburtsdatum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
+    Nutzer.add_nutzer(vorname="Celli", nachname="Stern", geburtsdatum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True)
     
     # # #################  Einkauf
     # something = Einkauf(Nutzer_ID = 2)

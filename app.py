@@ -4,6 +4,12 @@ from model import db
 from app_customer import cust
 from app_admin import admin
 from app_func import func
+import os
+import certifi
+from flask import Flask, render_template, session
+from flask_sqlalchemy import SQLAlchemy
+from google.cloud.sql.connector import Connector
+import pymysql
 
  
 # Initialize the Flask application
@@ -13,14 +19,40 @@ app.register_blueprint(admin)
 app.register_blueprint(func)
 
 
-#session key 
-app.config['SECRET_KEY'] = 'mysecretkey' 
+# Initialize the Flask application
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'mysecretkey'
 
-# Verbindung zur Datenbank herstellen
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///scannerMarket.db"
+# Set up Cloud SQL Connector
+connector = Connector()
+os.environ['SSL_CERT_FILE'] = certifi.where()
+
+# Function to get Cloud SQL connection
+def getconn() -> pymysql.connections.Connection:
+    conn: pymysql.connections.Connection = connector.connect(
+        "test1-424109:europe-west3:scannermarket-db-1",
+        "pymysql",
+        user="scanner",
+        password="scanner",
+        database="scannermarket-db-1",
+    )
+    return conn
+
+# Configure Flask-SQLAlchemy to use Cloud SQL Connector
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "creator": getconn
+}
 
-db.init_app(app) 
+# Initialize SQLAlchemy with the Flask app
+db = SQLAlchemy(app)
+
+
+#############################################################################################
+
+
+
  
 # Define the root route
 @app.route('/')
