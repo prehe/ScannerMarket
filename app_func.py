@@ -1,7 +1,6 @@
 from flask import Blueprint, Flask, jsonify, render_template, request, session, redirect, url_for, session, flash
 import formulare as formulare
 import pandas as pd
-import requests
 from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
