@@ -35,6 +35,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("price").innerText = "Preis: " + response.Preis + "€";
                 document.getElementById("weight").innerText = "Menge/Volumen: " + response.Gewicht_Volumen;
                 document.getElementById("productimage").src = response.Bild;
+
+                try {
+                    //Scanner anpassen
+                    const mainContainer = document.getElementById("main-container");
+                    const availableHeight = mainContainer.offsetHeight;
+
+                    const topContent = document.getElementById("title-scanner");
+                    var topContentHeight = topContent.offsetHeight;   
+                         
+                    const btn_scanner_footer = document.getElementById("btn-scanner-footer");
+                    var btn_scanner_footertHeight = btn_scanner_footer.offsetHeight;
+            
+                    const product_element = document.getElementById("product_element");
+                    product_element.style.height = `${availableHeight - topContentHeight - btn_scanner_footertHeight-110}px`;
+                    console.log("product_element.style.height: ", product_element.style.height);
+                } catch (e) {
+                    console.error(error);
+                }
             },
             error: function(xhr, status, error) {
                 console.error(error);

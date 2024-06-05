@@ -13,7 +13,7 @@ app.register_blueprint(admin)
 app.register_blueprint(func)
 
 
-#session key --------------------------------------- auf jedenfall noch anpassen
+#session key 
 app.config['SECRET_KEY'] = 'mysecretkey' 
 
 # Verbindung zur Datenbank herstellen
@@ -25,18 +25,14 @@ db.init_app(app)
 # Define the root route
 @app.route('/')
 def index():
-    # Render the default template
     session['type'] = "default"
     return render_template('sm_cust_main.html', logStatus=session.get('type', None))
  
 
-# Run the Flask application
+# Flask starten
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
    
-# Liveserver nicht mehr möglich mit den child templates
 # app.py ausführen mit STRG+C stoppen und mit dem folgenden Befehl dauerhaft laufen lassen
-# python -m flask --app app.py run --debug
-# dann muss nur die Seite aktualiesiert werden und nicht immer app.py neu gestartet werden

@@ -4,6 +4,7 @@ header, body, footer{
     height: auto;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 /* center object perfect*/
@@ -17,7 +18,7 @@ header, body, footer{
 .container-fluid {
     background-color: rgb(24, 115, 180);
     color: white;
-    height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     min-height: 90vh;
@@ -82,7 +83,7 @@ header, body, footer{
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 /* Container für Email, Passwort, AGB, ... */
@@ -95,9 +96,9 @@ header, body, footer{
 
 /* Logo auf der LOGIN-Seite */
 .logo_big {
-    height: 10rem;
+    height: 8rem;
     display: block;
-    margin: 55px auto 40px;
+    margin: 25px auto 25px;
 }
 
 /* Layoutanpassung für LOGIN */
@@ -130,14 +131,14 @@ header, body, footer{
 
 /* Logo auf der Registierungsseite */
 .logo_small {
-    height: 4rem;
+    height: 6rem;
     display: block;
     margin: 0 auto 0;
 }
 
 /* Layoutanpassung für REGISTIERUNG */
 .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 /* Layoutanpassung für REGISTIERUNG */
@@ -231,14 +232,15 @@ header, body, footer{
 /* Kategory Übersicht */
 /* Rahmen für Kategorien außen */
 .category-overview{
-    /* margin: 10px; */
     padding-left: 10px;
     padding-right: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
-/*Rahmen und Inhalt der Kategorien definieren*/
+
+/* Rahmen und Inhalt der Kategorien definieren */
 .category-item {
     padding: 5px;
-    overflow: hidden;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -246,21 +248,29 @@ header, body, footer{
     text-align: center;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
-.category-item img{
+.category-item img {
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 250px;
     object-fit: cover;
 } 
 
-/*Schriftzug der Kategorien zentral auf die Bilder hinzufügen*/
+/* Schriftzug der Kategorien zentral auf die Bilder hinzufügen */
 .caption {
     padding: 3px; 
     position: absolute;
     background-color: rgb(20, 95, 148);
     color: white;
     border-radius: 5px;
+}
+
+.main-grid{
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -277,12 +287,16 @@ header, body, footer{
     justify-content: center;
     display: flex;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*übergeordneter Container für alle Produkte*/
 .product-container{
     margin-top: 10px;
     padding: 2px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /*Container für ein Produkt - enthält Produktinfos und Bild*/
@@ -291,6 +305,8 @@ header, body, footer{
     background-color: white;
     border-radius: 5px;
     height: 400px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 /*enhält das Produktbild*/
 .product-img{
@@ -398,7 +414,7 @@ header, body, footer{
 
 .table-container{
     overflow-y: auto;
-    overflow-x: auto;
+    overflow-x: hidden;
     max-width: 100%;
     margin: 5px;
 }
@@ -411,22 +427,65 @@ header, body, footer{
 
 td, th{
     padding : 5px;
-    overflow: hidden;
+    overflow: hidden; 
     text-overflow: ellipsis;
 }
 
-.carousel-item img{
-    width: 100%;
-    height: 40vh;
-    object-fit: cover;
+@media screen and (min-width: 576px) {
+    .carousel-inner{
+        display:flex;
+
+    }
+    
+}
+@media (min-width:992px){ /*entspricht Breakpoint large*/
+    #carouselProds .carousel-control-prev {
+        left: 2%;
+        top : 75%;
+    }
+    #carouselProds .carousel-control-next {
+        right: 2%;
+        top : 75%;
+    }
+    .card{
+        width: 100%;
+    }
+}
+@media (min-width:768px) and (max-width:991.98px){ /*entspricht Breakpoint medium*/
+    #carouselProds .carousel-control-prev {
+        left: 5%;
+        top : 75%;
+    }
+    #carouselProds .carousel-control-next {
+        right: 5%;
+        top : 75%;
+    }
+    .card{
+        width: 100%;
+    }
+}
+@media (max-width:767.98px){ /*entspricht Breakpoint small*/
+    #carouselProds .carousel-control-prev {
+        left: 7%;
+        top : 75%;
+    }
+    #carouselProds .carousel-control-next {
+        right: 7%;
+        top : 75%;
+    }
+    .card{
+        width: 100%;
+    }
 }
 
-#carouselProds .carousel-control-prev {
-    left: 20%;
+.carousel-element {
+    padding-left : 20%;
+    padding-right : 20%;
+    justify-content: center;
+    align-items: center;
 }
-#carouselProds .carousel-control-next {
-    right: 20%;
-}
+
+
 #carouselProds .carousel-control-prev-icon, .carousel-control-next-icon {
     background-size: 100%,100%;
 }
@@ -434,6 +493,7 @@ td, th{
 
 .analysen-element {
     text-align: center;
+   
 }
 .analysen-element img{
    width: 30vw;
@@ -483,61 +543,68 @@ td, th{
 
 #result {
     font-size: 1.3rem; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.btn-scannerBack{
+.btn-scannerBack {
     margin-top: 10px;
 }
 
-#result button{
+#result button {
     font-size: 1rem;
 }
 
-.title-scanner{
+.title-scanner {
     display: block;
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
 }
 
-.product-element img{
-    height: 9rem;
+.product-element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+.product-element img {
+    height: 12rem;
     border: 3px solid white;
-    vertical-align: middle;
+    margin-bottom: 20px;
 }
 
-.product-info{
-    vertical-align: top; 
-    padding-left: 20px;
+.product-info {
+    padding-left: 0;
     text-align: left;
-}
-
-.product-info h5{
-    padding-top: 15px;
-    font-size: 1.4rem;
-}
-
-.product-info h3{
-    font-size: 1.5rem;
-    padding-bottom: 10px;
-}
-
-.product-info p{
-    font-size: 1rem;
 }
 
 .product-buttons {
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .product-buttons p {
     margin: 0 10px;
 }
 
-.btn-scanner-footer{
+.btn-scanner-footer {
+    display: flex;
+    justify-content: center;
     margin: 10px;
 }
+
+.btn-scanner-footer .col {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -553,7 +620,6 @@ td, th{
     color: white;
     align-items: center;
     max-height: 530px;
-    /* height of navbar + height of footer */
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 10px; 
@@ -587,14 +653,11 @@ td, th{
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
+/* FOOTER: */
 footer{
     position: sticky;
-    top: 100%;
-}
-
-/* FOOTER: */
-.linkings {
-    flex-shrink: 0; /* Fixiert die Fußzeile am unteren Rand */
+    flex-shrink: 0;
+    overflow-x: hidden;
 }
 
 /* Anpassung Link */
@@ -608,9 +671,4 @@ footer{
 .linkings a:hover {
     color: rgb(200, 200, 200);
     text-decoration: underline;
-}
-
-
-.main-grid{
-    overflow-y: scroll;
 }

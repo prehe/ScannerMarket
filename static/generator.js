@@ -1,23 +1,3 @@
-// function generator(value) {
-//     const qrcodeoutput = document.getElementById('qrcodeoutput');
-//     const mainContainerWidth = document.getElementById("main-container").width;
-
-//     qrcodeoutput.innerHTML = "";
-
-//     new QRCode(qrcodeoutput, {
-//         text: value,
-//         width: 250,
-//         height: 250,
-//         colorDark: '#000',
-//         colorLight: '#fff'
-//     });
-// }
-
-// document.addEventListener("DOMContentLoaded", function() {
-//     generator("Einkauf_ID=123");
-// });
-
-
 
 function generateQR() {
     $.ajax({
@@ -26,14 +6,41 @@ function generateQR() {
         success: function(response) {
             const qrcodeoutput = document.getElementById('qrcodeoutput');
             const outputElementWidth = qrcodeoutput.offsetWidth;
-            console.log("outputElementWidth:", outputElementWidth);  // Debugging line
+
+            const displayHeight = window.innerHeight;
+            const navbar = document.getElementById("navbar").offsetHeight;
+            const footer = document.getElementById("footer").offsetHeight;
+
+            var height1 = displayHeight - navbar - footer - 120;
+            if (height1 < outputElementWidth) {
+                outputHeight = height1;
+                console.log("outputHeight height 1:", outputHeight);  // Debugging line
+            } else {
+                outputHeight = outputElementWidth;
+                console.log("outputHeight:", outputHeight);  // Debugging line
+            }
+
+            // const mainContainer = document.getElementById('main-container');
+            // const mainContainerHeight = mainContainer.offsetWidth;
+
+            // const top = document.getElementById('title-basket-list');
+            // const topHeight = top.offsetHeight;
+
+            // const bottom = document.getElementById('backToMenuBtn');
+            // const bottomHeight = bottom.offsetHeight;
+
+            // var outputSize = mainContainerHeight - topHeight - bottomHeight;
+
+            // console.log("mainContainerHeight:", mainContainerHeight);  // Debugging line
+            // console.log("topHeight:", topHeight);  // Debugging line
+            // console.log("bottomHeight:", bottomHeight);  // Debugging line
 
             qrcodeoutput.innerHTML = "";  // Clear the previous QR code
             
             new QRCode(qrcodeoutput, {
                 text: response,
-                width: outputElementWidth,
-                height: outputElementWidth,
+                width: outputHeight,
+                height: outputHeight,
                 colorDark: '#000',
                 colorLight: '#fff'
             });

@@ -1,8 +1,11 @@
 {% extends "sm_default.html" %}
 
-{% block content%}
+{% block header %}
+    <title>Administrator - ScannerMarket</title>
+{% endblock %}
 
-    <div class="main-container">
+{% block content%}
+    <div class="main-container" id="main-container">
         <a href="/admin/analysis">   
             <div class="admin-categories">
                 <img src="..\static\images\analysis.jpg" alt="">
@@ -24,4 +27,5 @@
             </div>
         </a>
     </div>
+    <script src="/static/adjustHeight.js"></script>
 {% endblock %}

@@ -4,11 +4,11 @@
 {% extends "sm_default.html" %}
 
 {% block header %}
-    <title>SM - Analysen</title>
+    <title>Analysen - ScannerMarket</title>
 {% endblock %}
 
 {% block content%}
-    <div class = "main-container">
+    <div class = "main-container" id="main-container">
         <div class = "analysis-navigation">
             <div class="form-group">
                 <label for="dropdownMenuButton">Analyse:</label>
@@ -40,5 +40,4 @@
 
 <!-- Flask -->
 <script src="{{ url_for('static', filename='analysen.js') }}"></script>
- 
 {% endblock %}

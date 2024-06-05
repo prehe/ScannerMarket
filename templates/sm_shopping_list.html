@@ -6,8 +6,8 @@
 
 {% block content %}
 <!-- Main Content -->
-<div class="main-container">
-    <div class="row">
+<div class="main-container" id="main-container">
+    <div class="row" id="shoppinglist_title">
         <h4 class="col-md-6 offset-md-3 text-center title-basket-list">Mein Einkauf:</h4>
     </div>
     <div class="col-md-6 offset-md-3">
@@ -35,7 +35,7 @@
                     <h5 class="quantity-title">Anzahl</h5>
                 </div>
             </div>                        
-            <div class="item-shopping-list-content">
+            <div class="item-shopping-list-content" id="item-shopping-list-content">
                 {% for product in product_list %}
                 <div class="item row align-items-center" id="product_row_{{ product.product_id }}" style="background-color: {{ 'rgb(24, 115, 180)' if loop.index is divisibleby(2) else 'rgb(20, 95, 148)' }};">
                     <div class="col-9 d-flex align-items-center">
@@ -55,20 +55,22 @@
         </div> 
 
         <!-- Gesamtpreis -->
-        <div class="row total-price">
-            <div class="col text-end">
-                <h5>Gesamtpreis: <span id="total-price">{{ total_price }}</span> €</h5>
+        <div id="bottom-content"> 
+            <div class="row total-price">
+                <div class="col text-end">
+                    <h5>Gesamtpreis: <span id="total-price">{{ total_price }}</span> €</h5>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <!-- Button zum Beenden des Einkaufs -->
-            <div class="col text-center">
-                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#purchaseConfirmationModal">Einkauf beenden</button>
-            </div>
-            <!-- Button "Produkt scannen" -->
-            <div class="col text-center">
-                <button class="btn btn-success" id="scan-product-btn" onclick="window.location.href='../scanner'">Produkt scannen</button>
-                <!-- <button class="btn btn-success" id="scan-product-btn" onclick="addProductInstant()">Produkt scannen</button> -->
+            <div class="row">
+                <!-- Button zum Beenden des Einkaufs -->
+                <div class="col text-center">
+                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#purchaseConfirmationModal">Einkauf beenden</button>
+                </div>
+                <!-- Button "Produkt scannen" -->
+                <div class="col text-center">
+                    <!-- <button class="btn btn-success" id="scan-product-btn" onclick="window.location.href='../scanner'">Produkt scannen</button> -->
+                    <button class="btn btn-success" id="scan-product-btn" onclick="addProductInstant()">Produkt scannen</button>
+                </div>
             </div>
         </div>
     </div>
@@ -102,17 +104,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Möchten Sie Ihren Einkauf wirklich beenden und bezahlen?
-                Die Rechnung wird über die angegebene Bezahlmethode abgerechent. 
+                Möchten Sie Ihren Einkauf wirklich beenden?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                <button type="button" class="btn btn-success" onclick="purchase()">Bezahlen & Einkauf beenden</button>
+                <button type="button" class="btn btn-success" onclick="purchase()">Einkauf beenden</button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="../static/warenkorb.js"></script>
+<script src="../static/adjustHeight.js"></script>
 {% endblock %}
 <!-- END Main Content -->

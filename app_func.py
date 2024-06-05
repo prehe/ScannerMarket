@@ -1,7 +1,6 @@
 from flask import Blueprint, Flask, jsonify, render_template, request, session, redirect, url_for, session, flash
 import formulare as formulare
 import pandas as pd
-import requests
 from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
 from datetime import date, datetime
@@ -112,9 +111,8 @@ def decrease_cart_amount():
 
 @func.route("/purchase", methods=["POST"])
 def purchase():
-    response = Einkauf.add_endTimestamp(session.get('shoppingID', None))
-    session['shoppingID'] = None
-    return jsonify({"success": response, 'redirect_url': url_for('app_customer.productcatalog')})
+    response = Einkauf.add_endTimestamp(session.get('shoppingID', None), getTotalBasketPrice(session.get('shoppingID', None)))
+    return jsonify({"success": response, 'redirect_url': url_for('app_customer.shoppingresult')})
 
 
 @func.route("/addProdToBasket", methods=["POST"])
@@ -159,6 +157,7 @@ def generateQR():
     einkauf_id = session.get('shoppingID', None)
     preis = getTotalBasketPrice(einkauf_id)
     payment_URL = f"Einkauf_ID={einkauf_id}&Preis={preis}"
+    session['shoppingID'] = None
     return payment_URL
 
 def getTotalBasketPrice(einkauf_id):
