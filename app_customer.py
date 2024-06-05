@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, render_template, redirect, url_for, session, flash
+from flask import Blueprint, Flask, render_template, redirect, request, url_for, session, flash
 from app_func import getTotalBasketPrice
 import formulare as formulare
 from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
@@ -65,7 +65,6 @@ def registration():
 def login():
     clear_flash_messages()
     form = formulare.LoginForm()
-
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
@@ -85,6 +84,10 @@ def login():
                 return redirect(url_for('app_customer.productcatalog'))
         else:
             flash('Email oder Passwort falsch', 'warning')
+    else:
+        if request.method == 'POST':
+            flash('Email oder Passwort falsch', 'warning')
+    return render_template('sm_login.html', form=form)
     # else:
     #     if request.method == 'POST':
     #         flash('Email oder Passwort falsch', 'warning')
