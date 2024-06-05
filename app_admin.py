@@ -25,14 +25,14 @@ def analysis():
 def show_nutzer():
     nutzer_entries = db.session.query(Nutzer).all()
     column_names = ["ID", "Vorname", "Nachname", "Geburtsdatum", "Email", "Passwort", "Kundenkarte", "Admin", "Newsletter", "Registriert_am"]
-    return render_template('db_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
+    return render_template('sm_admin_table_view.html', entries=nutzer_entries, column_names=column_names, title = "registrierte Kunden")
  
  # Route zur Produktkategoriendatenbankseite
 @admin.route('/Produktkategorien')
 def show_produktkategorie():
     produktkategorien_entries = db.session.query(Produktkategorien).all()
     column_names = ["ID", "Kategorie"]
-    return render_template('db_table_view.html',entries=produktkategorien_entries, column_names= column_names, title = "Produktkategorien")
+    return render_template('sm_admin_table_view.html',entries=produktkategorien_entries, column_names= column_names, title = "Produktkategorien")
  
  # Route zur Produktdatenbank
 @admin.route('/Produkte')
@@ -41,21 +41,21 @@ def show_produkte():
     # service.addAllProductsFromExcel(categoryNames)  
     produkte_entries = db.session.query(Produkte).all()
     column_names = ["ID", "Hersteller", "Name", "Gewicht_Volumen", "EAN", "Preis","Bild", "Kategorie_ID"]
-    return render_template('db_table_view.html', entries=produkte_entries, column_names= column_names, title = "Produkte")
+    return render_template('sm_admin_table_view.html', entries=produkte_entries, column_names= column_names, title = "Produkte")
  
  # Route zur Einkaufsdatenbank
 @admin.route('/Einkauf')
 def show_einkauf():
     einkauf_entries = db.session.query(Einkauf).all()
     column_names =["ID", "Nutzer_ID",  "Zeitstempel_start","Zeitstempel_ende" ]
-    return render_template('db_table_view.html', entries=einkauf_entries, column_names=column_names, title = "Einkauf")
+    return render_template('sm_admin_table_view.html', entries=einkauf_entries, column_names=column_names, title = "Einkauf")
  
  # Route zur Warenkorbdatenbank
 @admin.route('/Warenkorb')
 def show_warenkorb():
     warenkorb_entries = db.session.query(Warenkorb).all()
     column_names = ["Einkauf_ID", "Produkt_ID", "Anzahl"]
-    return render_template('db_table_view.html', entries=warenkorb_entries, column_names=column_names, title = "Warenkorb")
+    return render_template('sm_admin_table_view.html', entries=warenkorb_entries, column_names=column_names, title = "Warenkorb")
  
  # Route zur Analysenseite
 @admin.route('/Umsatz')
@@ -91,7 +91,7 @@ def show_umsatz():
     newCust=db.session.query(func.count(Nutzer.ID)).filter(Nutzer.Registriert_am>= start, Nutzer.Registriert_am<= end).scalar() or 0
     allCust=db.session.query(func.count(Nutzer.ID)).scalar() or 0
    
-    return render_template('umsatz.html', salesOfYear=salesOfCurrYear, 
+    return render_template('sm_admin_umsatz.html', salesOfYear=salesOfCurrYear, 
                            salesOfMonth=salesOfCurrMonth, year=curr_year, month=dates["Monatsname"],
                            bestSellers=bestSellers, selledProds=selledProds, sells=sells,newCust=newCust, allCust=allCust)
 
