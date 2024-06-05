@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-6 p-0">
-                <div class="analysen-element">
-                    <div id="carouselProds" class="carousel slide myCarousel" data-bs-ride="carousel">
+                <div class="analysen-element carousel-element">
+                    <div id="carouselProds" class="carousel carousel-dark slide myCarousel" data-bs-ride="carousel">
                         
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselProds" data-bs-slide-to="0" class="active"></button>
@@ -27,22 +27,24 @@
                                 <button type="button" data-bs-target="#carouselProds" data-bs-slide-to="{{ i }}"></button>
                             {% endfor %}
                         </div>
-
+                        
                         <div class="carousel-inner">
                             {%for  Prod in (bestSellers)%}
                                 <div class="carousel-item {%if loop.index0 == 0%} active {% endif %}">
-                                    <div class="">
-                                        <div class="product-img ">
-                                            <img src={{Prod[1]}}  alt="Slide {{loop.index}}">
+                                    <div class="card">
+                                        <div class="product-img">
+                                            <img src={{Prod[1]}}  alt="Slide {{loop.index}}" >
                                         </div>
-                                        <div class="carousel-caption ">
-                                            <h5>{{Prod[0]}}</h5>
-                                            <p>Anzahl: {{Prod[2]}}</p>
+                                        <div class="card-body">
+                                          <h5 class="card-title">{{Prod[0]}}</h5>
+                                          <p class="card-text">Anzahl: {{Prod[2]}}</p>
                                         </div>
-                                    </div>
+                                      </div>
                                 </div>
                             {% endfor %}
                         </div>
+
+
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselProds" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
@@ -58,6 +60,7 @@
             <div class="col-sm-12 col-md-6 p-0">
                 <div class="analysen-element">
                     <img src="..\static\images\euro.png" alt="">
+                    <p> </p>
                     <h5>Anzahl verkaufter Produkte</h5>
                     <p>{{month}}: {{selledProds}}</p>
                 </div>
@@ -66,6 +69,7 @@
             <div class="col-sm-12 col-md-6 p-0">
                 <div class="analysen-element">
                     <img src="..\static\images\products.png" alt="">
+                    <p> </p>
                     <h5>Anzahl Einkäufe</h5>
                     <p>{{month}}: {{sells}}</p>
                 </div>
@@ -79,6 +83,7 @@
             <div class="col-sm-12 col-md-6 p-0">
                 <div class="analysen-element">
                     <img src="..\static\images\newCust.png" alt="">
+                    <p> </p>
                     <p>Neukunden im Monat {{month}}: {{newCust}}</p>
                 </div>
                 
@@ -86,6 +91,7 @@
             <div class="col-sm-12 col-md-6 p-0">
                 <div class="analysen-element">
                     <img src="..\static\images\customer.png" alt="">
+                    <p> </p>
                     <p>Kunden insgesamt: {{allCust}}</p>
                 </div>
             </div>
