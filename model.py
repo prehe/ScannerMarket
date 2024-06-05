@@ -4,18 +4,18 @@ from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
-# Verbindung zur Datenbank herstellen
-engine = db.create_engine('sqlite:///scannerMarket.db', echo=True)  # Passen Sie die Verbindungsdaten an
+# # Verbindung zur Datenbank herstellen
+# engine = db.create_engine('sqlite:///scannerMarket.db', echo=True)  # Passen Sie die Verbindungsdaten an
 
 class Nutzer(db.Model):
     __tablename__ = 'nutzer'
 
     ID = db.Column(db.Integer, primary_key=True)
-    Vorname = db.Column(db.String(45))
-    Nachname = db.Column(db.String(45))
+    Vorname = db.Column(db.String(200))
+    Nachname = db.Column(db.String(200))
     Geburtsdatum = db.Column(db.Date)
-    Email = db.Column(db.String(45), nullable=False, unique=True)
-    Passwort = db.Column(db.String(45), nullable=False)
+    Email = db.Column(db.String(200), nullable=False, unique=True)
+    Passwort = db.Column(db.String(50), nullable=False)
     Kundenkarte = db.Column(db.Boolean)
     Admin = db.Column(db.Boolean)
     Newsletter = db.Column(db.Boolean)
@@ -38,12 +38,12 @@ class Produkte(db.Model):
     __tablename__ = 'produkte'
 
     ID = db.Column(db.Integer, primary_key=True)
-    Hersteller = db.Column(db.String(45))
-    Name = db.Column(db.String(45))
+    Hersteller = db.Column(db.String(200))
+    Name = db.Column(db.String(200))
     Gewicht_Volumen = db.Column(db.String(45))
-    EAN = db.Column(db.Integer)
+    EAN = db.Column(db.BigInteger)
     Preis = db.Column(db.Float)
-    Bild = db.Column(db.String)  
+    Bild = db.Column(db.String(1500))  
     Kategorie_ID = db.Column(db.Integer, db.ForeignKey('produktkategorien.ID'))
 
     produktkategorien = relationship("Produktkategorien")

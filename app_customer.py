@@ -88,9 +88,6 @@ def login():
         if request.method == 'POST':
             flash('Email oder Passwort falsch', 'warning')
     return render_template('sm_login.html', form=form)
-    # else:
-    #     if request.method == 'POST':
-    #         flash('Email oder Passwort falsch', 'warning')
         
             
 # PRODUKTKATALOG & PRODUKTSEITEN

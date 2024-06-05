@@ -1,25 +1,20 @@
-runtime: python
+runtime: python311
 service: default
-env: flex
 
 entrypoint: gunicorn -b :$PORT app:app
 
 runtime_config:
   operating_system: ubuntu22
 
-resources:
-  cpu: 1
-  memory_gb: 0.5
-  disk_size_gb: 10
 
 handlers:
-  - url: /static/icons_weiß
-    static_dir: static/icons_weiß
-  - url: /static/images
-    static_dir: static/images
-  - url: /static
-    static_dir: static
-  - url: /templates
-    static_dir: templates
+  # - url: /static/icons_weiß
+  #   static_dir: static/icons_weiß
+  # - url: /static/images
+  #   static_dir: static/images
+  # - url: /static
+  #   static_dir: static
+  # - url: /templates
+  #   static_dir: templates
   - url: /.*
-    script: auto
+    script: app.app

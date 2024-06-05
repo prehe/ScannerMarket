@@ -19,20 +19,28 @@ def addProductCategories (categoryNames):
     db.session.commit()
 
 def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie):
-     # Produkt in die Datenbank einfügen
+    # Check if bild is nan or None and skip the insertion if it is
+    bild = str(bild)
+    print(bild)
+    if pd.isna(bild) or bild is None or bild == 'nan' or bild == 'None' or bild == '':
+        print("Bild is nan or None, skipping insertion.")
+    else:
         new_product = Produkte(
-            Hersteller = hersteller,
-            Name = produktname,
-            Gewicht_Volumen = gewicht_volumen,
-            EAN = ean,
-            Preis = preis,
-            Bild = bild,
-            Kategorie_ID = kategorie
+            Hersteller=hersteller,
+            Name=produktname,
+            Gewicht_Volumen=gewicht_volumen,
+            EAN=ean,
+            Preis=preis,
+            Bild=bild,
+            Kategorie_ID=kategorie
         )
         db.session.add(new_product)
         db.session.commit()
         db.session.close()
         print("erfolgreich hinzugefügt")
+
+
+    
 
 #Daten eines Produktes über den barcode aus der Datenbank abfragen
 def get_and_save_product_data(barcode, price, categoryId):

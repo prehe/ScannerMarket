@@ -20,7 +20,6 @@ app.register_blueprint(func)
 
 
 # Initialize the Flask application
-app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'
 
 # Set up Cloud SQL Connector
@@ -46,8 +45,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 }
 
 # Initialize SQLAlchemy with the Flask app
-db = SQLAlchemy(app)
-
+db.init_app(app)
 
 #############################################################################################
 
@@ -66,5 +64,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-   
+
 # app.py ausführen mit STRG+C stoppen und mit dem folgenden Befehl dauerhaft laufen lassen
