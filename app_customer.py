@@ -95,6 +95,7 @@ def login():
 # Route zum Produktkatalog
 @cust.route('/productcatalog')
 def productcatalog():
+    clear_flash_messages()      # alte Flash-Nachrichten löschen
     return render_template('sm_cust_main.html', logStatus = session.get('type', None))
 
 # Route zur Kategorieseite

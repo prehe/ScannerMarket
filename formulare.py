@@ -29,7 +29,7 @@ class RegistrationForm(FlaskForm):
     geburtsdatum = DateField('Geburtsdatum', validators=[DataRequired()], format='%Y-%m-%d')  # Datums-Format muss eigenhalten werden
     email = EmailField('Email', validators=[DataRequired(), Email()])
     passwort = PasswordField('Passwort', validators=[DataRequired(),Length(min=4)]) # Passwort muss mindestens 4 Zeichen haben
-    passwort_new = PasswordField('Passwort bestätigen', validators=[Length(min=4)]) # Passwort muss mindestens 4 Zeichen haben
+    passwort_new = PasswordField('Passwort bestätigen', validators=[DataRequired(), Length(min=4)]) # Passwort muss mindestens 4 Zeichen haben
     kundenkarte = BooleanField('Kundenkarte beantragen')
     newsletter = BooleanField('Newsletter aktivieren')
     agb = BooleanField('Zustimmung der ScannerMarket AGBs', validators=[DataRequired()])
