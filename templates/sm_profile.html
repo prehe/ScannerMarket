@@ -15,7 +15,7 @@
             <div class="title">
                 <h1>Profil bearbeiten:</h1>
             </div>
-            <form method="POST" action="{{ url_for('app_customer.registration') }}">
+            <form method="POST" action="{{ url_for('app_customer.profile') }}">
                 <!-- Flash Message Block -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}

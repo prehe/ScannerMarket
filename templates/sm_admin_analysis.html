@@ -1,6 +1,3 @@
-<!-- Combobox zum auswählen der Analyse -->
-<!-- Datenbank einsicht -->
-
 {% extends "sm_default.html" %}
 
 {% block header %}
@@ -8,8 +5,8 @@
 {% endblock %}
 
 {% block content%}
-    <div class = "main-container" id="main-container">
-        <div class = "analysis-navigation">
+    <div class="main-container" id="main-container">
+        <div class="analysis-navigation" id="analysis-navigation">
             <div class="form-group">
                 <label for="dropdownMenuButton">Analyse:</label>
                 <select id="dropdownMenuButton" class="form-control" required>
@@ -25,19 +22,18 @@
             </div>
         </div>
         
-        
-         <!-- Analysen Content -->
-         <div class="analysis-container"> 
-            <iframe id = "Analysen-Feld" src="{{url_for('app_admin.show_umsatz')}}" ></iframe>
-         </div> 
-         <!-- END Analysen Content -->
-         <div class="buttons-inline">
+        <!-- Analysen Content -->
+        <div class="analysis-container" id="analysis-container"> 
+            <iframe id="Analysen-Feld" src="{{url_for('app_admin.show_umsatz')}}"></iframe>
+        </div> 
+        <!-- END Analysen Content -->
+        <div class="buttons-inline" id="analysis-button-line">
             <a href="{{url_for('app_admin.adminMain')}}">
-                <button class="btn btn-secondary" type="button" >Zurück</button> 
+                <button class="btn btn-secondary" type="button">Zurück</button> 
             </a>
         </div>
     </div>
 
-<!-- Flask -->
-<script src="{{ url_for('static', filename='analysen.js') }}"></script>
+    <script src="{{ url_for('static', filename='analysen.js') }}"></script>
+    <script src="../static/adjustHeight.js"></script>
 {% endblock %}

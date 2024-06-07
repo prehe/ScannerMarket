@@ -46,4 +46,4 @@ class EditProfile(FlaskForm):
     Kundenkarte = BooleanField('Kundenkarte beantragen')
     Newsletter = BooleanField('Newsletter aktivieren')
     submit = SubmitField('Änderungen übernehmen')
-
+ 

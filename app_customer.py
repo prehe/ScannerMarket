@@ -33,7 +33,7 @@ def clear_flash_messages():
 # Route zum Registrierungsformular
 @cust.route('/registration', methods=['GET', 'POST'])
 def registration():
-    clear_flash_messages()
+    # clear_flash_messages()
     form = formulare.RegistrationForm()
     if form.validate_on_submit():
         try:
@@ -176,19 +176,19 @@ def getProdsFromShoppingList(shopping_id):
 # Route zur Profilbearbeitung
 @cust.route('/profile', methods=['GET', 'POST'])
 def profile():
-    clear_flash_messages()
+    # clear_flash_messages()
     user = db.session.query(Nutzer).get(session['userID'])
     form = formulare.EditProfile(obj=user)
     if form.validate_on_submit():
         false_Entry = False
-
+ 
         # Überprüfen, ob die geänderte Email schon in der Datenbank existiert und ob diese zu einem anderen Nutzer gehört
         if (db.session.query(Nutzer).filter(Nutzer.ID != user.ID, Nutzer.Email==form.Email.data).first()):
             flash('die Email ist bereits vergeben', 'danger')
             false_Entry = True
         else:
             user.Email = form.Email.data
-
+ 
         # Überprüfen, ob das Datum geändert worden ist
         if form.Passwort.data:
             if form.Passwort.data == user.Passwort:                          # Überprüfen, ob das angegebene alte Passwort in der Datenbank beim Nutzer hinterlegt ist
@@ -196,15 +196,15 @@ def profile():
                     if  (form.Passwort_conf.data != form.Passwort_new.data): # Überprüfen, ob das neue Passwort mit dem Bestätigungsfeld übereinstimmt
                         flash('Felder "neues Passwort" und "Passwort bestätigen" müssen übereinstimmen', 'danger')
                         false_Entry = True
-                    else: 
+                    else:
                         user.Passwort = form.Passwort_new.data
                 else:
                     flash('kein neues Passwort angegeben - ihr altes Passwort wurde nicht verändert', 'danger')
                     false_Entry=True
             else:
-                flash('die Eingabe des aktuellen Passwortes ist falsch', 'danger')   
+                flash('die Eingabe des aktuellen Passwortes ist falsch', 'danger')  
                 false_Entry=True
-
+ 
         # sonstige Änderungen übernehmen
         user.Vorname = form.Vorname.data
         user.Nachname = form.Nachname.data
@@ -212,7 +212,7 @@ def profile():
         user.Kundenkarte = form.Kundenkarte.data
         user.Newsletter = form.Newsletter.data
         db.session.commit()
-
+ 
         if false_Entry:  
             flash('nur fehlerfreie Änderungen wurden übernommen!', 'warning')
         else:

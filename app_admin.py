@@ -116,7 +116,7 @@ def salesVolume_per_month(year, month):
 # liefert die 5 bestverkauftetsten Produkte
 def get_best_seller(year,month):
     start, end = getStartEndDates(year, month)
-    bestSeller = db.session.query(Produkte.Name, Produkte.Bild, func.sum(Warenkorb.Anzahl)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).group_by(Produkte.Name).order_by(func.sum(Warenkorb.Anzahl).desc()).limit(5).all() 
+    bestSeller = db.session.query(Produkte.Name, Produkte.Bild, func.sum(Warenkorb.Anzahl)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).group_by(Produkte.Name, Produkte.Bild).order_by(func.sum(Warenkorb.Anzahl).desc()).limit(5).all() 
     if bestSeller is None:
         return []
     return bestSeller

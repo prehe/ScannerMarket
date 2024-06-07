@@ -21,59 +21,74 @@ function adjustHeight() {
     console.log("availableHeight: ", availableHeight);
 
     // Set the height and width of the main container
-    try {
+    if (mainContainer) {
         mainContainer.style.height = `${availableHeight}px`;
-    } catch (e) {
     }
-
 
     // Ensure footer and basicContainer have the correct width
-    try {
+    if (footer) {
         footer.style.width = `${displayWidth}px`;
-    } catch (e) {
     }
 
-    // // Ensure no element exceeds the intended width
-    try {
-        const elements = [mainContainer, footer, basicContainer];
-        elements.forEach(element => {
-            if (element.offsetWidth > displayWidth) {
-                element.style.width = `${displayWidth}px`;
-            }
-        });
-    } catch (e) {
-    }
-
-
-
+    // Ensure no element exceeds the intended width
+    [mainContainer, footer, basicContainer].forEach(element => {
+        if (element && element.offsetWidth > displayWidth) {
+            element.style.width = `${displayWidth}px`;
+        }
+    });
 
     try {
         // WARENKORB BUTTONS AM ENDE DES WARENKORBES
         const bottomContent = document.getElementById("bottom-content");
-        var bottomContentHeight = bottomContent.offsetHeight;   
+        const bottomContentHeight = bottomContent ? bottomContent.offsetHeight : 0;
 
-        const shoppinglist_title = document.getElementById("shoppinglist_title");
-        var shoppinglist_titleHeight = shoppinglist_title.offsetHeight;
+        const shoppinglistTitle = document.getElementById("shoppinglist_title");
+        const shoppinglistTitleHeight = shoppinglistTitle ? shoppinglistTitle.offsetHeight : 0;
 
-        const item_shopping_list_content = document.getElementById("item-shopping-list-content");
-        item_shopping_list_content.style.height = `${availableHeight - shoppinglist_titleHeight - bottomContentHeight}px`;
+        const itemShoppingListContent = document.getElementById("item-shopping-list-content");
+        if (itemShoppingListContent) {
+            itemShoppingListContent.style.height = `${availableHeight - shoppinglistTitleHeight - bottomContentHeight}px`;
+        }
     } catch (e) {
+        console.log(e);
     }
 
     try {
-        //Scanner anpassen
+        // Scanner anpassen
         const topContent = document.getElementById("title-scanner");
-        var topContentHeight = topContent.offsetHeight;   
+        const topContentHeight = topContent ? topContent.offsetHeight : 0;
 
-        const bottomContent = document.getElementById("scannerBack");
-        var bottomContentHeight = bottomContent.offsetHeight;
-                
+        const scannerBack = document.getElementById("scannerBack");
+        const bottomContentHeight = scannerBack ? scannerBack.offsetHeight : 0;
+
         const reader = document.getElementById("reader");
-        reader.style.height = `${availableHeight - bottomContentHeight -topContentHeight-50}px`;
+        if (reader) {
+            reader.style.height = `${availableHeight - bottomContentHeight - topContentHeight - 50}px`;
+        }
     } catch (e) {
+        console.log(e);
+    }
+
+    try {
+        // ADMIN - Analyse
+        const navigationContent = document.getElementById("analysis-navigation");
+        const navigationContentHeight = navigationContent ? navigationContent.offsetHeight : 0;
+
+        const buttons = document.getElementById("analysis-button-line");
+        const buttonsHeight = buttons ? buttons.offsetHeight : 0;
+
+        const analysis = document.getElementById("analysis-container");
+        if (analysis) {
+            analysis.style.height = `${availableHeight - navigationContentHeight - buttonsHeight}px`;
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
 
 // Call the function on window resize and load
 window.addEventListener('resize', adjustHeight);
 window.addEventListener('load', adjustHeight);
+
+// Ensure the DOM is fully loaded before calling adjustHeight
+document.addEventListener("DOMContentLoaded", adjustHeight);
