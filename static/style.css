@@ -377,7 +377,14 @@ header, body, footer{
     color: black;
     text-decoration: underline;
 }
-
+/* Buttonanpassung für REGISTIERUNG */
+.btn-impressum {
+    display: flex;
+    justify-content: flex-start; /* Linksbündig */
+    position: sticky; /* Fixiert die Position */
+    bottom: 0; /* Am unteren Rand des Containers */
+    padding: 15px; /* Optional: Platz um den Button */
+}
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
 

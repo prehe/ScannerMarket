@@ -66,3 +66,5 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 # app.py ausführen mit STRG+C stoppen und mit dem folgenden Befehl dauerhaft laufen lassen
+
+# gcloud app deploy app.yaml --project test1-424109
