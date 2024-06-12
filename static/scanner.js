@@ -14,52 +14,68 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function success(result) {
-        // console.log(result);
+        // Clear the scanner to avoid multiple scans
         scanner.clear();
-        document.getElementById('result').style.display = "block";
-        document.getElementById('reader').style.display = 'none';
-        document.getElementById('scannerBack').style.display = 'none';
-
-        // Mock result for testing purposes
-        result = "4061458042918"; // This line should be removed in production
-
+   
         $.ajax({
             url: "/getProductFromEan",
             type: "GET",
             data: { ean: result },
             success: function(response) {
-                // console.log(response);
-                window.productId = response.ID;  // Corrected line
-                document.getElementById("manufacturer").innerText = response.Hersteller;
-                document.getElementById("product").innerText = response.Name;
-                document.getElementById("price").innerText = "Preis: " + response.Preis + "€";
-                document.getElementById("weight").innerText = "Menge/Volumen: " + response.Gewicht_Volumen;
-                document.getElementById("productimage").src = response.Bild;
+                if (response.error) {
+                    console.log(response.error);
+                    // Show flash message and set timeout to hide it
+                    window.location.href = response.redirect_url;
 
-                try {
-                    //Scanner anpassen
-                    const mainContainer = document.getElementById("main-container");
-                    const availableHeight = mainContainer.offsetHeight;
+                    setTimeout(() => {
+                        window.location.href = response.redirect_url;
+                    }, 5000); // Redirect after 5 seconds
+                    return;
+                }
+                // Display the product details if data is valid
+                if (response.ID) {
+                    window.productId = response.ID;
+                    document.getElementById('result').style.display = "block";
+                    document.getElementById('reader').style.display = 'none';
+                    document.getElementById('scannerBack').style.display = 'none';
+                    document.getElementById("manufacturer").innerText = response.Hersteller;
+                    document.getElementById("product").innerText = response.Name;
+                    document.getElementById("price").innerText = "Preis: " + response.Preis + "€";
+                    document.getElementById("weight").innerText = "Menge/Volumen: " + response.Gewicht_Volumen;
+                    document.getElementById("productimage").src = response.Bild;
 
-                    const topContent = document.getElementById("title-scanner");
-                    var topContentHeight = topContent.offsetHeight;   
-                         
-                    const btn_scanner_footer = document.getElementById("btn-scanner-footer");
-                    var btn_scanner_footertHeight = btn_scanner_footer.offsetHeight;
-            
-                    const product_element = document.getElementById("product_element");
-                    product_element.style.height = `${availableHeight - topContentHeight - btn_scanner_footertHeight-110}px`;
-                    console.log("product_element.style.height: ", product_element.style.height);
-                } catch (e) {
-                    console.error(error);
+                    document.getElementById('result').style.display = "none";
+                    document.getElementById('reader').style.display = 'block';
+                    document.getElementById('scannerBack').style.display = 'block';
+
+                    try {
+                        // Adjust scanner
+                        const mainContainer = document.getElementById("main-container");
+                        const availableHeight = mainContainer.offsetHeight;
+
+                        const topContent = document.getElementById("title-scanner");
+                        const topContentHeight = topContent.offsetHeight;
+
+                        const btn_scanner_footer = document.getElementById("btn-scanner-footer");
+                        const btn_scanner_footertHeight = btn_scanner_footer.offsetHeight;
+
+                        const product_element = document.getElementById("product_element");
+                        product_element.style.height = `${availableHeight - topContentHeight - btn_scanner_footertHeight - 110}px`;
+                        console.log("product_element.style.height: ", product_element.style.height);
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
             },
             error: function(xhr, status, error) {
                 console.error(error);
+                alert("An error occurred while fetching the product.");
+                // Redirect to scanner page
+                window.location.href = '/scanner';
             }
         });
     }
-
+    
     function error(err) {
         // console.error(err);
     }
@@ -111,14 +127,26 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-    
+
+    // Funktion zum Ausblenden der Flash-Nachricht nach einer Verzögerung
+    function hideFlashMessage() {
+        var alertContainer = document.querySelector('.alert-container');
+        if (alertContainer) {
+            setTimeout(function() {
+                alertContainer.style.display = 'none';
+            }, 3000); // Verzögerung von 3000 Millisekunden (3 Sekunden)
+        }
+    }
 
     // Initialize the scanner when the page loads
     initializeScanner();
+    hideFlashMessage();
 
     // Expose functions to the global scope so they can be called from HTML
     window.rescan = rescan;
     window.decreaseQuantity = decreaseQuantity;
     window.increaseQuantity = increaseQuantity;
     window.addProdToBasket = addProdToBasket;
+    window.hideFlash  = hideFlashMessage;
 });
+

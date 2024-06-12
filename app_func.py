@@ -89,10 +89,11 @@ def getProductFromEan():
         if produkt:
             return jsonify(produkt.to_dict())
         else:
-            return jsonify({'error': 'Produkt nicht gefunden'}), 404
+            flash('Produkt nicht gefunden', 'warning')
+            return jsonify(error="Produkt nicht gefunden", redirect_url=url_for('app_customer.scanner'))
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'danger')
+        return redirect(url_for('app_customer.scanner'))
         
  
  

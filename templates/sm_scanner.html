@@ -13,6 +13,19 @@
     <div class="row">
         <div class="col-sm-6 offset-sm-3 mx-auto">
             <h4 class="title-scanner" id="title-scanner">Produkt scannen:</h4>
+            <!-- Flash Message Block -->
+            <div class="alert-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <!-- END Flash Message Block -->
             <div id="reader"></div>
             <div>
                 <button id="scannerBack" class="btn btn-secondary btn-scannerBack" onclick="location.href='{{ url_for('app_customer.shoppinglist') }}'">zurück zum Warenkorb</button>
@@ -21,10 +34,10 @@
                 <div class="col product-element d-flex justify-content-center" id="product_element"> 
                     <img src="" id="productimage">
                     <div class="product-info"> 
-                        <h3 id="manufacturer">Hersteller</h3>
-                        <h3 id="product">Produktname</h3>
-                        <p id="price">Preis: 10,00€</p> 
-                        <p id="weight">Menge/Volumen: 500g</p>
+                        <h3 id="manufacturer"></h3>
+                        <h3 id="product"></h3>
+                        <p id="price"></p> 
+                        <p id="weight"></p>
                     </div>
                 </div>
                 <div class="col product-buttons justify-content-center" style="padding-bottom  : 20px;">

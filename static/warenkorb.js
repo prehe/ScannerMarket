@@ -102,14 +102,9 @@ function deleteItemFromList() {
 }
 
 function purchase() {
-    // var preisElement= document.getElementById("total-price");
-    // var preis = preisElement.parseInt(preisElement.innerText);
     $.ajax({
         url: "/purchase",
         method: "POST",
-        // data: {
-        //     preis: preis
-        // },
         success: function(response) {
             console.log(response.success)
             console.log(response.redirect_url)

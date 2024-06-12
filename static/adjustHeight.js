@@ -11,14 +11,14 @@ function adjustHeight() {
     const footer = document.getElementById("footer");
     const footerHeight = footer ? footer.offsetHeight : 0;
 
-    console.log("displayHeight: ", displayHeight);
-    console.log("footerHeight: ", footerHeight);
-    console.log("navbar: ", navbarHeight);
+    // console.log("displayHeight: ", displayHeight);
+    // console.log("footerHeight: ", footerHeight);
+    // console.log("navbar: ", navbarHeight);
 
     // Calculate the available height for the main container
     const availableHeight = displayHeight - footerHeight - navbarHeight;
 
-    console.log("availableHeight: ", availableHeight);
+    // console.log("availableHeight: ", availableHeight);
 
     // Set the height and width of the main container
     if (mainContainer) {
@@ -61,9 +61,12 @@ function adjustHeight() {
         const scannerBack = document.getElementById("scannerBack");
         const bottomContentHeight = scannerBack ? scannerBack.offsetHeight : 0;
 
+        var alertContainer = document.querySelector('.alert-container');
+        const alertContainerHeight = alertContainer ? alertContainer.offsetHeight : 0;
+
         const reader = document.getElementById("reader");
         if (reader) {
-            reader.style.height = `${availableHeight - bottomContentHeight - topContentHeight - 50}px`;
+            reader.style.height = `${availableHeight - bottomContentHeight - topContentHeight - alertContainerHeight - 50}px`;
         }
     } catch (e) {
         console.log(e);
