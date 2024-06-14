@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+from sqlalchemy.exc import IntegrityError
 
 db = SQLAlchemy()
 
@@ -21,8 +22,8 @@ class Nutzer(db.Model):
 
     # Methode zum Hinzufügen eines neuen Nutzers
     @classmethod
-    def add_nutzer(cls, vorname, nachname, geburtsdatum, email, passwort, kundenkarte=False, admin=False, newsletter=False):
-        new_nutzer = cls(Vorname=vorname, Nachname=nachname, Geburtsdatum=geburtsdatum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am=date.today())
+    def add_nutzer(cls, vorname, nachname, geburtsdatum, email, passwort, kundenkarte=False, admin=False, newsletter=False, registriert_am=date.today()):
+        new_nutzer = cls(Vorname=vorname, Nachname=nachname, Geburtsdatum=geburtsdatum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am=registriert_am)
         db.session.add(new_nutzer)
         db.session.commit()
         return new_nutzer
@@ -137,13 +138,21 @@ class Warenkorb(db.Model):
     einkauf = relationship("Einkauf")
     produkt = relationship("Produkte")
 
-    # Methode zum Hinzufügen eines Produkts zum Warenkorb
+
+
+    # Methode zum Hinzufügen eines Produkts zum Warenkorb mit Überprüfung
     @classmethod
     def add_to_cart(cls, einkauf_id, produkt_id, anzahl):
+        existing_entry = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
+        if existing_entry:
+            # Eintrag existiert bereits, hier könnte man eine Aktualisierung vornehmen oder eine Exception werfen
+            return existing_entry
+
         warenkorb = cls(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id, Anzahl=anzahl)
         db.session.add(warenkorb)
         db.session.commit()
         return warenkorb
+
 
     # Methode zum Aktualisieren der Anzahl eines Produkts im Warenkorb
     @classmethod

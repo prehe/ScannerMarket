@@ -206,7 +206,7 @@ header, body, footer{
     color: white;
     border-radius: 5px;
     flex: 1; /* Fills the available space */
-    overflow-y: hidden; 
+    overflow-y: auto; 
     overflow-x: hidden;
     padding: 5px;
 }
@@ -270,7 +270,7 @@ header, body, footer{
 
 .main-grid{
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/

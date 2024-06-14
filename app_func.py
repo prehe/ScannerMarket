@@ -3,8 +3,10 @@ import formulare as formulare
 import pandas as pd
 from model import db, Nutzer, Produktkategorien, Produkte, Einkauf, Warenkorb
 import db_service as service
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from sqlalchemy.orm import joinedload
+from faker import Faker
+import random
 
 func = Blueprint(__name__, import_name="app_func")
 
@@ -23,6 +25,86 @@ categoryNames={
     'category-pasta' : "Pasta, Reis & Nüsse",
     'category-sweets' : "Süßwaren"
 }
+
+
+
+############################ TESTDATEN: Kunden ############################
+# ChatGPT
+# Erstelle einen Faker Generator
+fake = Faker()
+# ChatGPT
+# Funktion um ein zufälliges Datum innerhalb eines Bereichs zu generieren
+def random_date(start_date, end_date):
+    return start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
+
+# ChatGPT
+# Funktion um zufällige Kunden zu erstellen
+def create_random_customers(num_customers):
+    for _ in range(num_customers):
+        vorname = fake.first_name()
+        nachname = fake.last_name()
+        geburtsdatum = random_date(date(1950, 1, 1), date(2005, 12, 31))
+        email = f"{vorname[0].lower()}.{nachname.lower()}@example.com"
+        passwort = fake.password()
+        kundenkarte = random.choice([True, False])
+        admin = False
+        newsletter = random.choice([True, False])
+        registriert_am = random_date(date(2020, 1, 1), date.today())
+
+        # Annahme: `Nutzer.add_nutzer` ist die Methode zum Hinzufügen eines Nutzers in die Datenbank
+        Nutzer.add_nutzer(
+            vorname=vorname,
+            nachname=nachname,
+            geburtsdatum=geburtsdatum,
+            email=email,
+            passwort=passwort,
+            kundenkarte=kundenkarte,
+            admin=admin,
+            newsletter=newsletter,
+            registriert_am=registriert_am
+        )
+    
+
+
+############################ TESTDATEN: EINKÄUFE ############################
+# ChatGPT
+# Funktion um ein zufälliges Datum und Zeit zu generieren
+def random_timestamp(start_date, end_date):
+    delta = end_date - start_date
+    random_seconds = random.randint(0, int(delta.total_seconds()))
+    return start_date + timedelta(seconds=random_seconds)
+
+# ChatGPT
+# Funktion um zufällige Einkäufe zu erstellen
+def create_random_purchases(num_purchases, min_user_id, max_user_id):
+    for _ in range(num_purchases):
+        nutzer_id = random.randint(min_user_id, max_user_id)
+        zeitstempel_start = random_timestamp(datetime(2023, 1, 1), datetime.now())
+        zeitstempel_ende = zeitstempel_start + timedelta(hours=random.randint(1, 5))  # Endzeit ist zufällig zwischen 1 und 5 Stunden nach Start
+
+        Einkauf.add_einkauf(nutzer_id, zeitstempel_start, zeitstempel_ende)
+        
+############################ TESTDATEN: WARENKORB ############################
+# ChatGPT
+# Funktion um zufällige Anzahl zwischen 1 und 10 zu generieren
+def random_quantity():
+    return random.randint(1, 10)
+
+# Funktion um zufälliges Datum und Zeit zu generieren
+def random_datetime(start_date, end_date):
+    delta = end_date - start_date
+    random_seconds = random.randint(0, int(delta.total_seconds()))
+    return start_date + timedelta(seconds=random_seconds)
+
+# Funktion um zufällige Produkte für einen Einkauf zu erstellen und sie zum Warenkorb hinzuzufügen
+def add_random_products_to_cart(einkauf_id, min_product_id, max_product_id):
+    num_products = random.randint(5, 15)  # Zufällige Anzahl von Produkten pro Einkauf
+    for _ in range(num_products):
+        produkt_id = random.randint(min_product_id, max_product_id)
+        anzahl = random_quantity()
+        Warenkorb.add_to_cart(einkauf_id, produkt_id, anzahl)
+
+
 
 # Hilfsfunktion zum schnellen Einfügen von Daten zur Datenbank
 @func.route('/insertDB')
@@ -62,21 +144,36 @@ def insertDB():
 
     # # ###############    Nutzer
     # Nutzer.add_nutzer(vorname="Peter", nachname="Muster", geburtsdatum=date(1990, 1, 1), email='hallo.test@email.com', passwort='geheim', kundenkarte=True, admin=False, newsletter=True) 
-    # Nutzer.add_nutzer(vorname="Celli", nachname="Stern", geburtsdatum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=True, newsletter=True)
+    # Nutzer.add_nutzer(vorname="Celli", nachname="Stern", geburtsdatum=date(1990, 1, 1), email='c.Stern@example.com', passwort='Stern', kundenkarte=True, admin=False, newsletter=True, registriert_am=date(2024,2,23))
     
-    # # #################  Einkauf
-    # something = Einkauf(Nutzer_ID = 2)
-    # db.session.add(something)
-    # db.session.commit()
 
-    # products_to_add = [(44,3), (46,3), (100,3),(33,3),(150,3),(200,3), (250,3), (300,3),(290,3),(400,3), (234,3), (287,3), (76,3)]
+    # Erstellen von 60 zufälligen Kunden
+    # create_random_customers(60)
 
-    # # Loop through the list of products and add them to the shopping cart
-    # for produkte_ID, quantity in products_to_add:
-    #     new_item = Warenkorb(Einkauf_ID=2, Produkt_ID=produkte_ID, Anzahl=quantity)
-    #     db.session.add(new_item)
-    # db.session.commit()
-    # Einkauf.resetTable()
+
+
+
+
+    ###################  Einkauf
+    # Beispiel Nutzer IDs von 1 bis 67
+    # min_user_id = 1
+    # max_user_id = 67
+
+    # # Erstellen von 300 zufälligen Einkäufen
+    # create_random_purchases(300, min_user_id, max_user_id)
+
+    ######################### WARENKÖRBE
+    # Beispiel: Min und Max Werte für Einkauf und Produkt IDs
+    min_einkauf_id = 19
+    max_einkauf_id = 308
+    min_produkt_id = 1
+    max_produkt_id = 432
+
+    # Füllen des Warenkorbs mit Testdaten
+    for einkauf_id in range(min_einkauf_id, max_einkauf_id):
+        add_random_products_to_cart(einkauf_id,  min_product_id=min_produkt_id, max_product_id=max_produkt_id)
+
+
 
     return redirect(url_for('app_customer.productcatalog'))
 
