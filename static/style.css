@@ -38,8 +38,8 @@ header, body, footer{
 }
 
 .col-md img {
-    max-height: 100px; /* Hier die gewünschte Höhe für das Bild einstellen */
-    max-width: 100%; /* Damit das Bild seine Proportionen beibehält */
+    max-height: 100px; 
+    max-width: 100%;
 }
 
 /* für die Icons in der Navbar */
@@ -54,7 +54,7 @@ header, body, footer{
     margin-top: 0.25rem;
     font-size: 0.8rem;
     font-weight: 600;
-    text-align: center;  /* Zentriert den Text */
+    text-align: center;  
 }
 
 /*unterstreichen des Schriftzugs, wenn die Maus darüber hovert*/
@@ -380,10 +380,10 @@ header, body, footer{
 /* Buttonanpassung für REGISTIERUNG */
 .btn-impressum {
     display: flex;
-    justify-content: flex-start; /* Linksbündig */
-    position: sticky; /* Fixiert die Position */
-    bottom: 0; /* Am unteren Rand des Containers */
-    padding: 15px; /* Optional: Platz um den Button */
+    justify-content: flex-start; 
+    position: sticky; 
+    bottom: 0; 
+    padding: 15px; 
 }
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -533,7 +533,6 @@ td, th{
 }
 
 
-/*new-Product-Formular*/
 .buttons-inline{
     display:flex;
     justify-content: space-between;
@@ -618,8 +617,8 @@ td, th{
 
 /* WARENKORB-Seite */
 .btn-custom-height {
-    padding: 0.25rem 0.5rem; /* Adjust these values as needed */
-    font-size: 0.875rem;     /* Ensure the font size is appropriate */
+    padding: 0.25rem 0.5rem; 
+    font-size: 0.875rem;    
     color: white;
 }
 

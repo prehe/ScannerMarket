@@ -26,10 +26,13 @@
                 {% endwith %}
             </div>
             <!-- END Flash Message Block -->
+
+            <!-- BARCODE-Leser: READER -->
             <div id="reader"></div>
             <div>
                 <button id="scannerBack" class="btn btn-secondary btn-scannerBack" onclick="location.href='{{ url_for('app_customer.shoppinglist') }}'">zurück zum Warenkorb</button>
             </div>
+            <!-- Scannerergebnis -->
             <div id="result" class="mx-auto" style="display: none;">
                 <div class="col product-element d-flex justify-content-center" id="product_element"> 
                     <img src="" id="productimage">
@@ -65,6 +68,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Scannerergebnis Ende-->
         </div>
     </div>
 </div>

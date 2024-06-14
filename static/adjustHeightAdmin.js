@@ -1,9 +1,9 @@
 function adjustHeight() {
-    // Get the height and width of the viewport
+    // Hole die Höhe und Breite des Viewports
     const displayHeight = window.innerHeight;
     const displayWidth = window.innerWidth;
 
-    // Get the main container element and its height navbar
+    // Hole die Hauptelemente und ihre Höhen, sowie die Höhe der Navigationsleiste
     const mainContainer = document.getElementById("main-container");
     const navbar = document.getElementById("navbar");
     const navbarHeight = navbar ? navbar.offsetHeight : 0;
@@ -11,29 +11,28 @@ function adjustHeight() {
     const footer = document.getElementById("footer");
     const footerHeight = footer ? footer.offsetHeight : 0;
 
-    console.log("displayHeight: ", displayHeight);
-    console.log("footerHeight: ", footerHeight);
-    console.log("navbar: ", navbarHeight);
-
-    // Calculate the available height for the main container
+    // Berechne die verfügbare Höhe für den Hauptcontainer
     const availableHeight = displayHeight - footerHeight - navbarHeight - 30;
 
-    console.log("availableHeight: ", availableHeight);
-
-    // Set the height and width of the main container
+    // Setze die Höhe des Hauptcontainers
     try {
-        mainContainer.style.height = `${availableHeight}px`;
+        if (mainContainer) {
+            mainContainer.style.height = `${availableHeight}px`;
+        }
     } catch (e) {
+        console.error("Fehler beim Setzen der Höhe des Hauptcontainers: ", e);
     }
 
-
-    // Ensure footer and basicContainer have the correct width
+    // Stelle sicher, dass der Footer die korrekte Breite hat
     try {
-        footer.style.width = `${displayWidth}px`;
+        if (footer) {
+            footer.style.width = `${displayWidth}px`;
+        }
     } catch (e) {
+        console.error("Fehler beim Setzen der Breite des Footers: ", e);
     }
 }
 
-// Call the function on window resize and load
+// Rufe die Funktion beim Ändern der Fenstergröße und beim Laden der Seite auf
 window.addEventListener('resize', adjustHeight);
 window.addEventListener('load', adjustHeight);

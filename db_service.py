@@ -5,14 +5,8 @@ import requests
 import time
 import math
 
-def addNewCustomer (vorname, nachname, geb_datum, email, passwort, kundenkarte, admin, newsletter):
-    #einen neuen Kunden in die Datenbank einfügen
-    customer = Nutzer(Vorname=vorname, Nachname=nachname, Geburtsdatum=geb_datum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am = date.today())
-    db.session.add(customer)
-    db.session.commit()
-
+#Kategorien in die Datenbank einfügen
 def addProductCategories (categoryNames):
-    #Kategorien in die Datenbank einfügen
     for name in categoryNames.values():
         category = Produktkategorien(Kategorie = name)
         db.session.add(category)
@@ -39,8 +33,6 @@ def addNewProduct(hersteller, produktname, gewicht_volumen, ean, preis, bild, ka
         db.session.close()
         print("erfolgreich hinzugefügt")
 
-
-    
 
 #Daten eines Produktes über den barcode aus der Datenbank abfragen
 def get_and_save_product_data(barcode, price, categoryId):
@@ -78,7 +70,7 @@ def getDataFromExcel(category):
         print(f"Spalte: '{category}' nicht gefunden")
         return
 
- #Produkte aus Excel-Liste zur Datenbank hinzufügen
+#Produkte aus Excel-Liste zur Datenbank hinzufügen
 def addAllProductsFromExcel (categoryNames):
     id = 1
     for name in categoryNames.values():
@@ -94,5 +86,4 @@ def addAllProductsFromExcel (categoryNames):
                 time.sleep(1)  # Timeout wegen API-Zugriff
             except:
                 print("Fehler bei: ", barcode, price)
-
         id = id+1

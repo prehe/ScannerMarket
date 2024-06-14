@@ -39,8 +39,7 @@
                 {% for product in product_list %}
                 <div class="item row align-items-center" id="product_row_{{ product.product_id }}" style="background-color: {{ 'rgb(24, 115, 180)' if loop.index is divisibleby(2) else 'rgb(20, 95, 148)' }};">
                     <div class="col-9 d-flex align-items-center">
-                        <!-- Add a hidden input field to store product name -->
-                        <input type="hidden" id="productName_{{ product.product_id }}">
+                        <input type="hidden" id="productName_{{ product.product_id }}">             <!-- fügt verstecktes Objekt hinzu, um Produkt-ID zu speichern -->
                         <button class="mx-1 btn btn-secondary btn-sm btn-custom-height" id="delete_{{ product.product_id }}" aria-label="Produkt entfernen" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" onclick="confirmDelete({{ product.shoppingCard_id }}, {{ product.product_id }}, '{{ product.hersteller }}', '{{ product.name}}' )">X</button>
                         <p data-toggle="tooltip" class="mb-0" data-placement="top" title="{{ product.hersteller }} {{ product.name }}">{{ product.name }} - {{ "%.2f"|format(product.price) }}€</p>
                     </div>
@@ -76,7 +75,7 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
+<!-- Produkt entfernen Modal -->
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -95,7 +94,7 @@
     </div>
 </div>
 
-<!-- Purchase Confirmation Modal -->
+<!-- Kauf abschließen Modal -->
 <div class="modal fade" id="purchaseConfirmationModal" tabindex="-1" aria-labelledby="purchaseConfirmationLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

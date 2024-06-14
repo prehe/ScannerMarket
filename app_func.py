@@ -24,6 +24,7 @@ categoryNames={
     'category-sweets' : "Süßwaren"
 }
 
+# Hilfsfunktion zum schnellen Einfügen von Daten zur Datenbank
 @func.route('/insertDB')
 def insertDB():
 
@@ -78,9 +79,9 @@ def insertDB():
     # Einkauf.resetTable()
 
     return redirect(url_for('app_customer.productcatalog'))
- 
- 
- 
+
+
+#  gibt die Produktinformatuionen von einer EAN zurück
 @func.route('/getProductFromEan', methods=["GET"])
 def getProductFromEan():
     search_ean = request.args.get('ean')
@@ -97,7 +98,7 @@ def getProductFromEan():
         return redirect(url_for('app_customer.scanner'))
         
  
- 
+# erhöht die Anzahl eines Produktes im Warenkorb
 @func.route("/increase_cart_amount", methods=["POST"])
 def increase_cart_amount():
     einkauf_id = request.form["einkauf_id"]
@@ -109,6 +110,7 @@ def increase_cart_amount():
         flash('maximale Anzahl pro Produkt erreicht (10)', 'warning')
     return jsonify({"success": response, 'price': price, 'redirect_url':url_for('app_customer.shoppinglist')})
 
+# verringert die Anzahl eines Produktes im Warenkorb
 @func.route("/decrease_cart_amount", methods=["POST"])
 def decrease_cart_amount():
     einkauf_id = request.form["einkauf_id"]
@@ -118,12 +120,7 @@ def decrease_cart_amount():
     price = Produkte.get_product(produkt_id).Preis
     return jsonify({"success": response, 'price': price, 'redirect_url':url_for('app_customer.shoppinglist')})
 
-@func.route("/purchase", methods=["POST"])
-def purchase():
-    response = Einkauf.add_endTimestamp(session.get('shoppingID', None), getTotalBasketPrice(session.get('shoppingID', None)))
-    return jsonify({"success": response, 'redirect_url': url_for('app_customer.shoppingresult')})
-
-
+# fügt ein Produkt zum Warenkorb hinzu
 @func.route("/addProdToBasket", methods=["POST"])
 def addProdToBasket():
     einkauf_id = session.get('shoppingID', None)
@@ -153,7 +150,7 @@ def addProdToBasket():
     flash('Produkt erfolgreich zum Warenkorb hinzugefügt', 'success')
     return jsonify(success=True, redirect_url=url_for('app_customer.shoppinglist'))
 
-
+# entfernt ein Produkt aus dem Warenkorb
 @func.route("/deleteItemFromList", methods=["POST"])
 def deleteItemFromList():
     einkauf_id = request.form["einkauf_id"]
@@ -161,6 +158,13 @@ def deleteItemFromList():
     response = Warenkorb.remove_from_cart(einkauf_id=einkauf_id, produkt_id=produkt_id)
     return jsonify(value=response, redirect_url=url_for('app_customer.shoppinglist'))
 
+# beendet den Einkauf
+@func.route("/purchase", methods=["POST"])
+def purchase():
+    response = Einkauf.add_endTimestamp(session.get('shoppingID', None), getTotalBasketPrice(session.get('shoppingID', None)))
+    return jsonify({"success": response, 'redirect_url': url_for('app_customer.shoppingresult')})
+
+# generiert einen QR-Code für die Bezahlung mit den Daten des Einkaufs
 @func.route("/generateQR", methods=["GET"])
 def generateQR():
     einkauf_id = session.get('shoppingID', None)
@@ -169,6 +173,7 @@ def generateQR():
     session['shoppingID'] = None
     return payment_URL
 
+# HILFSFUNKTION - gibt den Gesamtpreis des Warenkorbs zurück
 def getTotalBasketPrice(einkauf_id):
     items = db.session.query(Warenkorb).\
     outerjoin(Warenkorb.einkauf).\

@@ -109,7 +109,7 @@ def getStartEndDates(year, month):
 # liefert den monatlichen Umsatz
 def salesVolume_per_month(year, month):
     start, end = getStartEndDates(year, month)
-    salesVolume = db.session.query(func.sum(Produkte.Preis*Warenkorb.Anzahl)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).scalar() or 0
+    salesVolume = db.session.query(func.round(func.sum(Produkte.Preis*Warenkorb.Anzahl), 2)).join(Warenkorb).join(Einkauf).filter(Einkauf.Zeitstempel_ende>= start, Einkauf.Zeitstempel_ende<= end).scalar() or 0
     return salesVolume
 
 #ChatGPT

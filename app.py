@@ -46,12 +46,9 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 
 # Initialize SQLAlchemy with the Flask app
 db.init_app(app)
-
 #############################################################################################
 
 
-
- 
 # Define the root route
 @app.route('/')
 def index():
@@ -65,6 +62,5 @@ if __name__ == '__main__':
         db.create_all()
     app.run(debug=True)
 
-# app.py ausführen mit STRG+C stoppen und mit dem folgenden Befehl dauerhaft laufen lassen
 
 # gcloud app deploy app.yaml --project test1-424109

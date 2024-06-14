@@ -24,7 +24,6 @@ function increaseAmount(einkaufId, productId) {
             window.location.href = response.redirect_url;
         },
         error: function(xhr, status, error) {
-            // Handle error
             console.error(error);
         }
     });
@@ -40,10 +39,9 @@ function decreaseAmount(einkaufId, productId) {
             produkt_id: productId
         },
         success: function(response) {
-            // Handle success, update the quantity display
             var spanElement = document.getElementById("quantity_" + productId);
             var currentAmount = parseInt(spanElement.innerText);
-            if (currentAmount >  1){
+            if (currentAmount > 1){
                 spanElement.innerText = currentAmount - 1;
                 var priceElement = document.getElementById("total-price");
                 var currentPrice = parseFloat(priceElement.innerText);
@@ -55,7 +53,6 @@ function decreaseAmount(einkaufId, productId) {
             window.location.href = response.redirect_url;
         },
         error: function(xhr, status, error) {
-            // Handle error
             console.error(error);
         }
     });
@@ -65,20 +62,21 @@ let currentDeleteProductId = null;
 let currentShoppingCardId = null;
 let currentProdName = null;
 
+// Funktion zur Bestätigung der Löschung eines Produkts aus dem Warenkorb
 function confirmDelete(shoppingCardId, productId, hersteller, productName) {
     currentDeleteProductId = productId;
     currentShoppingCardId = shoppingCardId;
-    // Get product name from the hidden input field
+    // Hole den Produktnamen aus dem versteckten Eingabefeld
     var productNameInput = document.getElementById("productName_" + productId);
     if (productNameInput) {
         var currentProdName = hersteller + " " + productName;
         productNameInput.value = currentProdName;
-        // Optionally, display the product name in the modal
+        // Zeige optional den Produktnamen im Modal an
         document.getElementById("productNameDisplay").innerText = currentProdName;
     }
 }
 
-
+// Funktion zum Löschen eines Produkts aus der Liste
 function deleteItemFromList() {
     $.ajax({
         url: "/deleteItemFromList",
@@ -101,11 +99,13 @@ function deleteItemFromList() {
     });
 }
 
+// Funktion zum Abschluss des Kaufs
 function purchase() {
     $.ajax({
         url: "/purchase",
         method: "POST",
         success: function(response) {
+            // Bei Erfolg, schließe das Modal und leite weiter
             console.log(response.success)
             console.log(response.redirect_url)
             if (response.success) {
@@ -121,25 +121,24 @@ function purchase() {
     });
 }
 
-
 // Funktion zum Ausblenden der Flash-Nachricht nach einer Verzögerung
 function hideFlashMessage() {
     var alertContainer = document.querySelector('.alert-container');
     if (alertContainer) {
         setTimeout(function() {
             alertContainer.style.display = 'none';
-        }, 3000); // Verzögerung von 5000 Millisekunden (5 Sekunden)
+        }, 3000); // Verzögerung von 3000 Millisekunden (3 Sekunden)
     }
 }
 
-// Rufen Sie die Funktion zum Ausblenden der Flash-Nachricht auf, wenn die Seite geladen ist
+// Rufe die Funktion zum Ausblenden der Flash-Nachricht auf, wenn die Seite geladen ist
 document.addEventListener("DOMContentLoaded", function() {
     hideFlashMessage();
 });
 
-
-// temporäre Funktion   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Entwicklungsfunktion zum Testen des Warenkorbs (zum Testen in der Entwicklungsumgebung verwendet)    //////////////////////////////////////////////////////////////////////////////////
 function addProductInstant(){
+    // Sende AJAX-Anfrage, um ein Produkt sofort zum Warenkorb hinzuzufügen
     $.ajax({
         url: "/addProdToBasket",
         type: "POST",
@@ -148,18 +147,19 @@ function addProductInstant(){
             quantity: 3
         },
         success: function(response) {
+            // Bei Erfolg, leite zur angegebenen URL weiter
             if (response.success) {
-                // Redirect to the URL provided in the response
                 window.location.href = response.redirect_url;
             } else {
-                // Handle the error case, if needed
+                // Fehlerbehandlung, falls nötig
                 console.error(response.message);
                 alert(response.message);
             }
         },
         error: function(xhr, status, error) {
+            // Fehlerbehandlung
             console.error(error);
         }
     });
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

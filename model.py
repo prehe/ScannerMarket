@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
+# Klasse, die die Nutzer-Tabelle repräsentiert
 class Nutzer(db.Model):
     __tablename__ = 'nutzer'
 
@@ -18,6 +19,7 @@ class Nutzer(db.Model):
     Newsletter = db.Column(db.Boolean)
     Registriert_am = db.Column(db.Date)
 
+    # Methode zum Hinzufügen eines neuen Nutzers
     @classmethod
     def add_nutzer(cls, vorname, nachname, geburtsdatum, email, passwort, kundenkarte=False, admin=False, newsletter=False):
         new_nutzer = cls(Vorname=vorname, Nachname=nachname, Geburtsdatum=geburtsdatum, Email=email, Passwort=passwort, Kundenkarte=kundenkarte, Admin=admin, Newsletter=newsletter, Registriert_am=date.today())
@@ -25,12 +27,14 @@ class Nutzer(db.Model):
         db.session.commit()
         return new_nutzer
 
+# Klasse, die die Produktkategorien-Tabelle repräsentiert
 class Produktkategorien(db.Model):
     __tablename__ = 'produktkategorien'
 
     ID = db.Column(db.Integer, primary_key=True)
     Kategorie = db.Column(db.String(45))
 
+# Klasse, die die Produkte-Tabelle repräsentiert
 class Produkte(db.Model):
     __tablename__ = 'produkte'
 
@@ -45,6 +49,7 @@ class Produkte(db.Model):
 
     produktkategorien = relationship("Produktkategorien")
 
+    # Methode, um Produktdetails als Dictionary zurückzugeben
     def to_dict(self):
         return {
             'ID': self.ID,
@@ -56,12 +61,14 @@ class Produkte(db.Model):
             'Bild': self.Bild,
             'Kategorie_ID': self.Kategorie_ID,
         }
-    
+
+    # Methode, um ein Produkt anhand der Produkt-ID zu holen
     @classmethod
     def get_product(cls, product_id):
         product = Produkte.query.filter_by(ID=product_id).first()
         return product
 
+# Klasse, die die Einkauf-Tabelle repräsentiert
 class Einkauf(db.Model):
     __tablename__ = 'einkauf'
 
@@ -74,6 +81,7 @@ class Einkauf(db.Model):
 
     nutzer = relationship("Nutzer")
 
+    # Methode zum Hinzufügen eines neuen Einkaufs
     @classmethod
     def add_einkauf(cls, nutzer_id, zeitstempel_start=None, zeitstempel_ende=None):
         if zeitstempel_start is None:
@@ -88,7 +96,8 @@ class Einkauf(db.Model):
         db.session.add(neuer_einkauf)
         db.session.commit()
         return neuer_einkauf.ID
-    
+
+    # Methode zum Hinzufügen eines Endzeitstempels und Preises
     @classmethod
     def add_endTimestamp(cls, einkauf_id, preis):
         einkauf = cls.query.filter_by(ID=einkauf_id).first()
@@ -99,7 +108,8 @@ class Einkauf(db.Model):
             return True
         else:
             return False
-        
+
+    # Methode, um einen Einkauf als bezahlt zu markieren
     @classmethod
     def payment_done(cls, einkauf_id):
         einkauf = cls.query.filter_by(ID=einkauf_id).first()
@@ -109,15 +119,14 @@ class Einkauf(db.Model):
             return True
         else:
             return False
-    
+
+    # Methode zum Zurücksetzen der Tabelle (löschen aller Einträge)
     @classmethod
     def resetTable(cls):
-        """Löscht alle Einträge in der Tabelle."""
         cls.query.delete()
         db.session.commit()
 
-
-
+# Klasse, die die Warenkorb-Tabelle repräsentiert
 class Warenkorb(db.Model):
     __tablename__ = 'warenkorb'
 
@@ -128,36 +137,36 @@ class Warenkorb(db.Model):
     einkauf = relationship("Einkauf")
     produkt = relationship("Produkte")
 
+    # Methode zum Hinzufügen eines Produkts zum Warenkorb
     @classmethod
     def add_to_cart(cls, einkauf_id, produkt_id, anzahl):
-        """Fügt ein Produkt zum Warenkorb hinzu."""
         warenkorb = cls(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id, Anzahl=anzahl)
         db.session.add(warenkorb)
         db.session.commit()
         return warenkorb
 
+    # Methode zum Aktualisieren der Anzahl eines Produkts im Warenkorb
     @classmethod
     def update_quantity(cls, einkauf_id, produkt_id, neue_anzahl):
-        """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
         if ware:
             ware.Anzahl = neue_anzahl
             db.session.commit()
 
+    # Methode zum Entfernen eines Produkts aus dem Warenkorb
     @classmethod
     def remove_from_cart(cls, einkauf_id, produkt_id):
-        """Entfernt ein Produkt aus dem Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
         if ware:
             db.session.delete(ware)
             db.session.commit()
             return "removed"
-        else: 
+        else:
             return "item not found"
 
+    # Methode zum Erhöhen der Anzahl eines Produkts im Warenkorb
     @classmethod
     def increase_cart_amount(cls, einkauf_id, produkt_id):
-        """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
         if ware:
             if ware.Anzahl < 10:
@@ -166,10 +175,10 @@ class Warenkorb(db.Model):
                 return "increased"
             else:
                 return "limit reached"
-    
+
+    # Methode zum Verringern der Anzahl eines Produkts im Warenkorb
     @classmethod
     def decrease_cart_amount(cls, einkauf_id, produkt_id):
-        """Aktualisiert die Anzahl eines Produkts im Warenkorb."""
         ware = cls.query.filter_by(Einkauf_ID=einkauf_id, Produkt_ID=produkt_id).first()
         if ware is None:
             return "error"  # handle case where the item is not found
@@ -180,14 +189,13 @@ class Warenkorb(db.Model):
         else:
             return "no change"  # indicate that no change was made because the amount is already 1
 
+    # Methode zum Abrufen des Inhalts des Warenkorbs für einen bestimmten Einkauf
     @classmethod
     def get_cart_contents(cls, einkauf_id):
-        """Gibt den Inhalt des Warenkorbs für einen bestimmten Einkauf zurück."""
         return cls.query.filter_by(Einkauf_ID=einkauf_id).all()
-    
+
+    # Methode zum Zurücksetzen der Tabelle (löschen aller Einträge)
     @classmethod
     def resetTable(cls):
-        """Löscht alle Einträge in der Tabelle."""
         cls.query.delete()
         db.session.commit()
-

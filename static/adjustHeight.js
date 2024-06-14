@@ -1,9 +1,9 @@
 function adjustHeight() {
-    // Get the height and width of the viewport
+    // Hole die Höhe und Breite des Viewports
     const displayHeight = window.innerHeight;
     const displayWidth = window.innerWidth;
 
-    // Get the main container element and its height navbar
+    // Hole das Hauptelement und seine Höhe sowie die Höhe der Navigationsleiste
     const mainContainer = document.getElementById("main-container");
     const navbar = document.getElementById("navbar");
     const navbarHeight = navbar ? navbar.offsetHeight : 0;
@@ -11,26 +11,20 @@ function adjustHeight() {
     const footer = document.getElementById("footer");
     const footerHeight = footer ? footer.offsetHeight : 0;
 
-    // console.log("displayHeight: ", displayHeight);
-    // console.log("footerHeight: ", footerHeight);
-    // console.log("navbar: ", navbarHeight);
-
-    // Calculate the available height for the main container
+    // Berechne die verfügbare Höhe für den Hauptcontainer
     const availableHeight = displayHeight - footerHeight - navbarHeight;
 
-    // console.log("availableHeight: ", availableHeight);
-
-    // Set the height and width of the main container
+    // Setze die Höhe und Breite des Hauptcontainers
     if (mainContainer) {
         mainContainer.style.height = `${availableHeight}px`;
     }
 
-    // Ensure footer and basicContainer have the correct width
+    // Stelle sicher, dass der Footer und der basicContainer die korrekte Breite haben
     if (footer) {
         footer.style.width = `${displayWidth}px`;
     }
 
-    // Ensure no element exceeds the intended width
+    // Stelle sicher, dass kein Element die beabsichtigte Breite überschreitet
     [mainContainer, footer, basicContainer].forEach(element => {
         if (element && element.offsetWidth > displayWidth) {
             element.style.width = `${displayWidth}px`;
@@ -38,7 +32,7 @@ function adjustHeight() {
     });
 
     try {
-        // WARENKORB BUTTONS AM ENDE DES WARENKORBES
+        // WARENKORB: Buttons am unteren Ende fixieren
         const bottomContent = document.getElementById("bottom-content");
         const bottomContentHeight = bottomContent ? bottomContent.offsetHeight : 0;
 

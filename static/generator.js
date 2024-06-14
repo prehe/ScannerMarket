@@ -1,56 +1,42 @@
-
 function generateQR() {
     $.ajax({
-        url: "/generateQR",
-        type: "GET",
+        url: "/generateQR", 
+        type: "GET", 
         success: function(response) {
-            const qrcodeoutput = document.getElementById('qrcodeoutput');
-            const outputElementWidth = qrcodeoutput.offsetWidth;
+            // Erfolgreiche Antwort vom Server erhalten
+            const qrcodeoutput = document.getElementById('qrcodeoutput'); 
+            const outputElementWidth = qrcodeoutput.offsetWidth; 
 
-            const displayHeight = window.innerHeight;
-            const navbar = document.getElementById("navbar").offsetHeight;
-            const footer = document.getElementById("footer").offsetHeight;
+            const displayHeight = window.innerHeight; 
+            const navbar = document.getElementById("navbar").offsetHeight; 
+            const footer = document.getElementById("footer").offsetHeight; 
 
+            // Berechne die maximale Höhe für den QR-Code
             var height1 = displayHeight - navbar - footer - 120;
             if (height1 < outputElementWidth) {
-                outputHeight = height1;
-                console.log("outputHeight height 1:", outputHeight);  // Debugging line
+                outputHeight = height1; // Setze die Höhe, wenn die berechnete Höhe kleiner ist als die Breite des Ausgabe-Elements
             } else {
-                outputHeight = outputElementWidth;
-                console.log("outputHeight:", outputHeight);  // Debugging line
+                outputHeight = outputElementWidth; // Andernfalls setze die Breite des Ausgabe-Elements als Höhe
             }
 
-            // const mainContainer = document.getElementById('main-container');
-            // const mainContainerHeight = mainContainer.offsetWidth;
+            qrcodeoutput.innerHTML = ""; // Lösche den vorherigen QR-Code
 
-            // const top = document.getElementById('title-basket-list');
-            // const topHeight = top.offsetHeight;
-
-            // const bottom = document.getElementById('backToMenuBtn');
-            // const bottomHeight = bottom.offsetHeight;
-
-            // var outputSize = mainContainerHeight - topHeight - bottomHeight;
-
-            // console.log("mainContainerHeight:", mainContainerHeight);  // Debugging line
-            // console.log("topHeight:", topHeight);  // Debugging line
-            // console.log("bottomHeight:", bottomHeight);  // Debugging line
-
-            qrcodeoutput.innerHTML = "";  // Clear the previous QR code
-            
+            // Erstelle einen neuen QR-Code mit den gegebenen Parametern
             new QRCode(qrcodeoutput, {
-                text: response,
-                width: outputHeight,
-                height: outputHeight,
+                text: response, // Textinhalt des QR-Codes (vom Server erhalten)
+                width: outputHeight, 
+                height: outputHeight, 
                 colorDark: '#000',
                 colorLight: '#fff'
             });
         },
         error: function(xhr, status, error) {
-            console.error(error);
+            console.error(error); // Ausgabe des Fehlers in der Konsole
         }
     });
 }
 
+// Rufe die generateQR-Funktion auf, sobald das Dokument vollständig geladen ist
 document.addEventListener("DOMContentLoaded", function() {
     generateQR();
 });
