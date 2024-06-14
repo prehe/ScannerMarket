@@ -26,14 +26,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     console.log(response.error);
                     // Show flash message and set timeout to hide it
                     window.location.href = response.redirect_url;
-
-                    setTimeout(() => {
-                        window.location.href = response.redirect_url;
-                    }, 5000); // Redirect after 5 seconds
-                    return;
                 }
                 // Display the product details if data is valid
-                if (response.ID) {
+                if (!response.error) {
+                    document.getElementById('result').style.display = "none";
+                    document.getElementById('reader').style.display = 'block';
+                    document.getElementById('scannerBack').style.display = 'block';
+                    
                     window.productId = response.ID;
                     document.getElementById('result').style.display = "block";
                     document.getElementById('reader').style.display = 'none';
@@ -43,10 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById("price").innerText = "Preis: " + response.Preis + "€";
                     document.getElementById("weight").innerText = "Menge/Volumen: " + response.Gewicht_Volumen;
                     document.getElementById("productimage").src = response.Bild;
-
-                    document.getElementById('result').style.display = "none";
-                    document.getElementById('reader').style.display = 'block';
-                    document.getElementById('scannerBack').style.display = 'block';
 
                     try {
                         // Adjust scanner
@@ -61,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         const product_element = document.getElementById("product_element");
                         product_element.style.height = `${availableHeight - topContentHeight - btn_scanner_footertHeight - 110}px`;
-                        console.log("product_element.style.height: ", product_element.style.height);
+                        // console.log("product_element.style.height: ", product_element.style.height);
                     } catch (e) {
                         console.error(e);
                     }

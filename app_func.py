@@ -87,6 +87,7 @@ def getProductFromEan():
     try:
         produkt = db.session.query(Produkte).filter_by(EAN=search_ean).first()
         if produkt:
+            print(produkt.to_dict())
             return jsonify(produkt.to_dict())
         else:
             flash('Produkt nicht gefunden', 'warning')

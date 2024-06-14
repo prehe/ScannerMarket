@@ -45,9 +45,12 @@ function adjustHeight() {
         const shoppinglistTitle = document.getElementById("shoppinglist_title");
         const shoppinglistTitleHeight = shoppinglistTitle ? shoppinglistTitle.offsetHeight : 0;
 
+        var alertContainer = document.querySelector('.alert-container');
+        const alertContainerHeight = alertContainer ? alertContainer.offsetHeight : 0;
+
         const itemShoppingListContent = document.getElementById("item-shopping-list-content");
         if (itemShoppingListContent) {
-            itemShoppingListContent.style.height = `${availableHeight - shoppinglistTitleHeight - bottomContentHeight}px`;
+            itemShoppingListContent.style.height = `${availableHeight - shoppinglistTitleHeight - bottomContentHeight - alertContainerHeight}px`;
         }
     } catch (e) {
         console.log(e);
