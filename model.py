@@ -68,6 +68,26 @@ class Produkte(db.Model):
     def get_product(cls, product_id):
         product = Produkte.query.filter_by(ID=product_id).first()
         return product
+    
+    @classmethod
+    def addNewProduct(cls, hersteller, produktname, gewicht_volumen, ean, preis, bild, kategorie):
+        bild = str(bild)
+
+        if bild == 'nan' or bild == 'None' or bild == '':
+            print("Bild is nan or None or empty, skipping insertion.")
+        else:
+            new_product = cls(
+                Hersteller=hersteller,
+                Name=produktname,
+                Gewicht_Volumen=gewicht_volumen,
+                EAN=ean,
+                Preis=preis,
+                Bild=bild,
+                Kategorie_ID=kategorie
+            )
+            db.session.add(new_product)
+            db.session.commit()
+
 
 # Klasse, die die Einkauf-Tabelle repräsentiert
 class Einkauf(db.Model):

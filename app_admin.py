@@ -166,7 +166,7 @@ def newProduct():
             'ean' : form.ean.data,
             'category_id' : str(form.category_ID.data)
         }
-        return redirect(url_for('summeryNewProduct'))
+        return redirect(url_for('app_admin.summeryNewProduct'))
     else:
         for field, errors in form.errors.items(): # falls es Fehler bei validate_on_submit gibt, wird dieser auf der Console ausgegeben
             for error in errors:
@@ -179,10 +179,10 @@ def newProduct():
 def summeryNewProduct():
     product = session.get('newProduct', None)
     if not product:
-        return redirect(url_for('newProduct'))
+        return redirect(url_for('app_admin.newProduct'))
 
     #neues Product in die Datenbank hinzufügen
     gewicht = product['weight'] + ' ' + product['unit']
     product['weight'] = gewicht
-    service.addNewProduct(hersteller=product['manufacturer'], produktname=product['name'], gewicht_volumen=gewicht, ean=product['ean'], preis=product['price'], bild=product['img'], kategorie=product['category_id'])
+    Produkte.addNewProduct(hersteller=product['manufacturer'], produktname=product['name'], gewicht_volumen=gewicht, ean=product['ean'], preis=product['price'], bild=product['img'], kategorie=product['category_id'])
     return render_template('sm_admin_summeryProduct.html', product = product)
